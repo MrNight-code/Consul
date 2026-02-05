@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "yFHMMeBg3rm6hjYsTAk8pWbUcknUoDxWO5NAetRa0r4=",
+  "Source": "Consulcon.API",
+  "BasePath": "_content/Consulcon.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

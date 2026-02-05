@@ -1,0 +1,57 @@
+volumes:
+  mysql_data:
+  cloudbeaver_data:
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: src/Consulcon.API/Dockerfile
+    container_name: consulcon_api
+    restart: always
+    ports:
+      - "5000:8080"
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+    depends_on:
+      - db
+    networks:
+      - consulcon_network
+    volumes:
+      - ./GeneratedReceipts:/app/GeneratedReceipts
+
+  db:
+    image: mysql:8.0
+    container_name: consulcon_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    ports:
+      - "3310:3306"
+    volumes:
+      - ./scripts/database/schema/:/docker-entrypoint-initdb.d/
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    networks:
+      - consulcon_network
+
+  cloudbeaver:
+    image: dbeaver/cloudbeaver:latest
+    container_name: consulcon_cloudbeaver
+    restart: always
+    ports:
+      - "8978:8978"
+    volumes:
+      - cloudbeaver_data:/opt/cloudbeaver/workspace
+    depends_on:
+      - db
+    networks:
+      - consulcon_network
+
+networks:
+  consulcon_network:
+    driver: bridge

@@ -1,0 +1,51 @@
+2026-02-05 10:13:25.687 -04:00 [INF] Executed DbCommand (26ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE WHEN COUNT(*) = 0 THEN FALSE ELSE TRUE END
+FROM information_schema.tables
+WHERE table_type = 'BASE TABLE' AND table_schema = 'db_consulcon_master'
+2026-02-05 10:13:26.055 -04:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM `UsuariosMaster` AS `u`)
+2026-02-05 10:13:26.070 -04:00 [INF] Creating default Super Admin user...
+2026-02-05 10:13:26.585 -04:00 [INF] Executed DbCommand (35ms) [Parameters=[@p0='?' (Size = 150), @p1='?' (DbType = Boolean), @p2='?' (DbType = DateTime), @p3='?' (Size = 255), @p4='?' (Size = 100)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO `UsuariosMaster` (`Email`, `EsSuperAdmin`, `FechaCreacion`, `PasswordHash`, `Username`)
+VALUES (@p0, @p1, @p2, @p3, @p4);
+SELECT `Id`
+FROM `UsuariosMaster`
+WHERE ROW_COUNT() = 1 AND `Id` = LAST_INSERT_ID();
+2026-02-05 10:13:26.625 -04:00 [INF] ✅ Super Admin user created (User: admin, Pass: admin123).
+2026-02-05 10:13:26.625 -04:00 [INF] ✅ Master Database initialized successfully.
+2026-02-05 10:13:26.636 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE WHEN COUNT(*) = 0 THEN FALSE ELSE TRUE END
+FROM information_schema.tables
+WHERE table_type = 'BASE TABLE' AND table_schema = 'db_consulcon_master'
+2026-02-05 10:13:26.749 -04:00 [INF] Executed DbCommand (98ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+
+                CREATE TABLE IF NOT EXISTS `__ExternalMigrationsHistory` (
+                    `MigrationId` varchar(150) NOT NULL,
+                    `AppliedOn` datetime NOT NULL,
+                    PRIMARY KEY (`MigrationId`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+2026-02-05 10:13:26.763 -04:00 [INF] User profile is available. Using '/home/night/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2026-02-05 10:13:26.846 -04:00 [INF] Now listening on: http://localhost:3010
+2026-02-05 10:13:26.846 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-05 10:13:26.847 -04:00 [INF] Hosting environment: Development
+2026-02-05 10:13:26.847 -04:00 [INF] Content root path: /mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.API
+2026-02-05 10:21:00.122 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:3010/swagger - null null
+2026-02-05 10:21:00.193 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:3010/swagger - 301 0 null 72.7046ms
+2026-02-05 10:21:00.208 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:3010/swagger/index.html - null null
+2026-02-05 10:21:00.376 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:3010/swagger/index.html - 200 null text/html;charset=utf-8 168.4721ms
+2026-02-05 10:21:00.431 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:3010/swagger/swagger-ui.css - null null
+2026-02-05 10:21:00.436 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:3010/swagger/swagger-ui-bundle.js - null null
+2026-02-05 10:21:00.436 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:3010/swagger/swagger-ui-standalone-preset.js - null null
+2026-02-05 10:21:00.454 -04:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2026-02-05 10:21:00.454 -04:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2026-02-05 10:21:00.454 -04:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2026-02-05 10:21:00.456 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:3010/swagger/swagger-ui-bundle.js - 200 1061536 text/javascript 19.3628ms
+2026-02-05 10:21:00.456 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:3010/swagger/swagger-ui-standalone-preset.js - 200 312163 text/javascript 19.3533ms
+2026-02-05 10:21:00.456 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:3010/swagger/swagger-ui.css - 200 144929 text/css 24.7384ms
+2026-02-05 10:21:00.696 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:3010/swagger/v1/swagger.json - null null
+2026-02-05 10:21:00.709 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:3010/swagger/favicon-32x32.png - null null
+2026-02-05 10:21:00.711 -04:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2026-02-05 10:21:00.712 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:3010/swagger/favicon-32x32.png - 200 628 image/png 2.7431ms
+2026-02-05 10:21:00.842 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:3010/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 146.0833ms

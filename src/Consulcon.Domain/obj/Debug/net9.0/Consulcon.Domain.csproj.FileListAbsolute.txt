@@ -1,0 +1,15 @@
+/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/bin/Debug/net9.0/Consulcon.Domain.deps.json
+/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/bin/Debug/net9.0/Consulcon.Domain.runtimeconfig.json
+/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/bin/Debug/net9.0/Consulcon.Domain.dll
+/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/bin/Debug/net9.0/Consulcon.Domain.pdb
+/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/obj/Debug/net9.0/Consulcon.Domain.csproj.AssemblyReference.cache
+/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/obj/Debug/net9.0/Consulcon.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/obj/Debug/net9.0/Consulcon.Domain.AssemblyInfoInputs.cache
+/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/obj/Debug/net9.0/Consulcon.Domain.AssemblyInfo.cs
+/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/obj/Debug/net9.0/Consulcon.Domain.csproj.CoreCompileInputs.cache
+/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/obj/Debug/net9.0/Consulcon.Domain.sourcelink.json
+/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/obj/Debug/net9.0/Consulcon.Domain.dll
+/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/obj/Debug/net9.0/refint/Consulcon.Domain.dll
+/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/obj/Debug/net9.0/Consulcon.Domain.pdb
+/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/obj/Debug/net9.0/Consulcon.Domain.genruntimeconfig.cache
+/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/obj/Debug/net9.0/ref/Consulcon.Domain.dll
