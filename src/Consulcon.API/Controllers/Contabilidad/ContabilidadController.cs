@@ -48,6 +48,19 @@ public class ContabilidadController(IContabilidadService service) : ControllerBa
         var result = await service.CreateAutorizacionAsync(dto);
         return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
     }
+
+    [HttpPost("/api/expenses/{id}/void")]
+    public async Task<IActionResult> VoidExpense(int id, [FromBody] VoidExpenseRequest request)
+    {
+        var result = await service.VoidExpenseAsync(id, request);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(new { message = result.Error });
+        }
+
+        return Ok(new { message = "Gasto anulado exitosamente y saldo revertido." });
+    }
 }
 
 

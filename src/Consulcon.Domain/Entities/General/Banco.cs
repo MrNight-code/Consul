@@ -18,6 +18,15 @@ public partial class Banco
     public bool? Activo { get; set; }
 
     public int? IdCuentaContableAsociada { get; set; }
+    
+    public decimal Saldo { get; set; }
+
+    public void Debit(decimal amount)
+    {
+        if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount), "Debit amount must be positive.");
+        // if (Saldo < amount) throw new InvalidOperationException("Insufficient funds."); // logic handled in service optionally
+        Saldo -= amount;
+    }
 
     public virtual ICollection<Egreso> Egresos { get; set; } = [];
 

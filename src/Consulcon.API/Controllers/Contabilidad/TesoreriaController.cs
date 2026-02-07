@@ -5,54 +5,62 @@ namespace Consulcon.API.Controllers.Contabilidad;
 
 [ApiController]
 [Route("api/[controller]")]
-public class TesoreriaController : ControllerBase
+public class TesoreriaController(ITesoreriaService service, Consulcon.Application.Interfaces.Facturacion.IExpenseReceiptGenerationService receiptService) : ControllerBase
 {
-    private readonly ITesoreriaService _service;
-
-    public TesoreriaController(ITesoreriaService service)
-    {
-        _service = service;
-    }
-
     [HttpGet("bancos")]
     public async Task<IActionResult> GetBancos()
     {
-        var result = await _service.GetBancosAsync();
+        var result = await service.GetBancosAsync();
         return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
     }
 
     [HttpPost("bancos")]
     public async Task<IActionResult> CreateBanco([FromBody] BancoDto dto)
     {
-        var result = await _service.CreateBancoAsync(dto);
+        var result = await service.CreateBancoAsync(dto);
         return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
     }
 
     [HttpGet("formaspago")]
     public async Task<IActionResult> GetFormasPago()
     {
-        var result = await _service.GetFormasPagoAsync();
+        var result = await service.GetFormasPagoAsync();
         return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
     }
 
     [HttpPost("formaspago")]
     public async Task<IActionResult> CreateFormaPago([FromBody] FormaPagoDto dto)
     {
-        var result = await _service.CreateFormaPagoAsync(dto);
+        var result = await service.CreateFormaPagoAsync(dto);
         return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
     }
 
     [HttpGet("egresos/condominio/{condominioId}")]
     public async Task<IActionResult> GetEgresos(int condominioId)
     {
-        var result = await _service.GetEgresosByCondominioAsync(condominioId);
+        var result = await service.GetEgresosByCondominioAsync(condominioId);
         return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
     }
 
     [HttpPost("egresos")]
     public async Task<IActionResult> RegistrarEgreso([FromBody] CreateEgresoDto dto)
     {
-        var result = await _service.RegistrarEgresoAsync(dto);
+        var result = await service.RegistrarEgresoAsync(dto);
         return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
+    }
+
+    [HttpGet("egresos/{id}/comprobante")]
+    public async Task<IActionResult> GetComprobante(int id)
+    {
+        try
+        {
+            var stream = await receiptService.GenerateReceiptAsync(id);
+            var fileName = $"Egreso_{id}_{DateTime.UtcNow:yyyyMMddHHmmss}.pdf";
+            return File(stream, "application/pdf", fileName);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }

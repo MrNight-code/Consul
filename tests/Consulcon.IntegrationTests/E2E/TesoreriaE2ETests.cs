@@ -1,6 +1,10 @@
 using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
+using Consulcon.Application.DTOs.Contabilidad;
+using Consulcon.Domain.Common;
+using Microsoft.Extensions.DependencyInjection;
+using Xunit;
 
 namespace Consulcon.IntegrationTests.E2E;
 
@@ -88,9 +92,48 @@ public class TesoreriaE2ETests(E2ETestFixture fixture) : IClassFixture<E2ETestFi
         };
 
         var response = await _fixture.Client.PostAsJsonAsync("/api/contabilidad/asientos", asientoDto);
-        // May fail if plan cuentas doesn't exist (FK constraints)
         response.StatusCode.Should().BeOneOf(HttpStatusCode.Created, HttpStatusCode.OK, HttpStatusCode.BadRequest, HttpStatusCode.NotFound, HttpStatusCode.InternalServerError);
     }
 
+    [Fact]
+    public async Task VoidExpense_WithValidReason_ReturnsOk()
+    {
+        var loginData = new { Email = "admin@consulcon.com", Password = "Password123!" };
+        var authResponse = await _fixture.Client.PostAsJsonAsync("/api/auth/login", loginData);
+        
+        authResponse.EnsureSuccessStatusCode(); 
+
+        var authResult = await authResponse.Content.ReadFromJsonAsync<Dictionary<string, object>>();
+        
+        if (authResult != null && authResult.TryGetValue("token", out var tokenValue))
+        {
+            string token = tokenValue.ToString()!;
+
+            _fixture.Client.DefaultRequestHeaders.Authorization = 
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+        }
+        else 
+        {
+            throw new Xunit.Sdk.XunitException("No se pudo obtener el token de autenticación del login.");
+        }
+
+        var expenseId = 1; 
+        var voidRequest = new VoidExpenseRequest { Reason = "Anulación por rastro de auditoría" };
+        var response = await _fixture.Client.PostAsJsonAsync($"/api/expenses/{expenseId}/void", voidRequest);
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
+
+    [Fact]
+    public async Task VoidExpense_WithShortReason_ReturnsBadRequest()
+    {
+        var expenseId = 1;
+        var voidRequest = new { Reason = "Error" }; 
+
+        var response = await _fixture.Client.PostAsJsonAsync($"/api/expenses/{expenseId}/void", voidRequest);
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+    
     #endregion
 }

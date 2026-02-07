@@ -1,10 +1,9 @@
 using Consulcon.Application.DTOs.Inmuebles;
 using Consulcon.Application.Interfaces.Inmuebles;
-using Consulcon.Domain.Entities.Inmuebles; // Keep for mapping if needed or remove if unused. 
-// We need Master entities
-using Consulcon.Domain.Entities.Master; 
-using Consulcon.Application.Interfaces; // For ITenantDatabaseService
-using System.Security.Cryptography; // not strictly needed unless generating random things
+using Consulcon.Domain.Entities.Inmuebles;
+using Consulcon.Domain.Entities.Master;
+using Consulcon.Application.Interfaces;
+using System.Security.Cryptography;
 
 namespace Consulcon.Application.Services.Inmuebles;
 
@@ -37,7 +36,24 @@ public class CondominioService : ICondominioService
             includeProperties: "Condominio"
         );
 
-        var dtos = userCondos.Select(uc => MapToDto(uc.Condominio)).ToList();
+        var dtos = new List<CondominioDto>();
+        foreach (var uc in userCondos)
+        {
+            // Try to get extended data from tenant DB
+            var dbName = $"db_condominio_{uc.Condominio.TenantId}";
+            var tenantData = await _tenantDatabaseService.GetCondominioAsync(dbName);
+
+            if (tenantData != null)
+            {
+                // Use tenant data (has Direccion, Logo, etc.)
+                dtos.Add(tenantData);
+            }
+            else
+            {
+                // Fallback to basic data from Master
+                dtos.Add(MapToDto(uc.Condominio));
+            }
+        }
         return Result.Ok<IEnumerable<CondominioDto>>(dtos);
     }
 
@@ -52,24 +68,26 @@ public class CondominioService : ICondominioService
 
     public async Task<Result<CondominioDto>> CreateAsync(CondominioDto dto, int userId)
     {
-        // 1. Create CondominioMaster
+        // 1. Create CondominioMaster (basic info only - extended fields stored in Tenant DB)
         var masterEntity = new CondominioMaster
         {
             Nombre = dto.Nombre,
             TenantId = "temp_tenant_id", 
             FechaRegistro = DateTime.UtcNow,
-            ConnectionString = "" 
+            ConnectionString = ""
         };
 
         await _condominioRepository.AddAsync(masterEntity);
 
+        // Fetch Admin User to get the username
+        var adminUser = await _usuarioRepository.GetByIdAsync(userId);
+        var adminName = adminUser?.Username ?? "Administrador";
+
         // Update TenantId based on generated ID to ensure uniqueness
         masterEntity.TenantId = $"condominio_{masterEntity.Id}";
-        var dbName = $"db_{masterEntity.TenantId}";
-        // masterEntity.ConnectionString could be set here if needed, but we rely on naming convention in TenantDatabaseService often.
+        var dbName = $"db_condominio_{masterEntity.TenantId}";
         
         await _condominioRepository.UpdateAsync(masterEntity);
-
 
         // 2. Link to User
         var userLink = new UsuarioCondominio
@@ -88,13 +106,22 @@ public class CondominioService : ICondominioService
             
             // Apply any extra SQL migrations
             await _tenantMigrationService.MigrateTenantDatabaseAsync(dbName);
+
+            // 4. Populate the Tenant Database with the initial Condominio record
+            // We use the service to avoid direct dependency on Infrastructure Context
+            var initialCondominioData = dto;
+            initialCondominioData.IdCondominio = masterEntity.Id;
+            initialCondominioData.AdminNombre = adminName;
+
+            await _tenantDatabaseService.InitializeCondominioAsync(dbName, initialCondominioData);
+
         }
         catch (Exception ex)
         {
              return Result.Fail<CondominioDto>($"Condominio creado, pero falló la configuración de la BD: {ex.Message}");
         }
 
-        return Result.Ok(MapToDto(masterEntity));
+        return Result.Ok(MapToDto(masterEntity, dto));
     }
 
     public async Task<Result<CondominioDto>> UpdateAsync(int id, CondominioDto dto)
@@ -103,8 +130,12 @@ public class CondominioService : ICondominioService
         if (entity == null) return Result.Fail<CondominioDto>("Condominio no encontrado");
 
         entity.Nombre = dto.Nombre;
+        // Note: Direccion, Logo, etc. are stored in Tenant DB, not Master
         
         await _condominioRepository.UpdateAsync(entity);
+        
+        // TODO: Update tenant DB if needed
+        
         return Result.Ok(MapToDto(entity));
     }
 
@@ -117,20 +148,85 @@ public class CondominioService : ICondominioService
         return Result.Ok(true);
     }
 
-    private static CondominioDto MapToDto(CondominioMaster entity)
+    private static CondominioDto MapToDto(CondominioMaster entity, CondominioDto? inputDto = null)
     {
+        // Master entity only has basic info (Id, TenantId, Nombre)
+        // Extended fields (Direccion, Logo, etc.) come from inputDto or Tenant DB
         return new CondominioDto
         {
-            Id = entity.Id,
-            Codigo = entity.TenantId,
+            IdCondominio = entity.Id,
             Nombre = entity.Nombre,
-            // Fields not present in CondominioMaster are returned as null/default/empty
-            Direccion = null,
-            SuperficieTotalM2 = null,
-            IdAdminPersona = 0, 
-            AdminNombre = null,
-            ConfigDiaCobro = null,
-            Logo = null
+            Direccion = inputDto?.Direccion,
+            SuperficieTotalM2 = inputDto?.SuperficieTotalM2,
+            IdAdminPersona = inputDto?.IdAdminPersona ?? 0,
+            AdminNombre = inputDto?.AdminNombre,
+            ConfigDiaCobro = inputDto?.ConfigDiaCobro,
+            Logo = inputDto?.Logo
         };
+    }
+
+    public async Task<Result<bool>> AddUserAsync(int condominioId, AddUserToCondominioDto dto)
+    {
+        // 1. Validate Condominio exists
+        var condominio = await _condominioRepository.GetByIdAsync(condominioId);
+        if (condominio == null) return Result.Fail<bool>("Condominio no encontrado");
+
+        // 2. Validate User exists in Master
+        var user = await _usuarioRepository.GetByIdAsync(dto.UserId);
+        if (user == null) return Result.Fail<bool>("Usuario no encontrado");
+
+        // 3. Check if already linked
+        var existingLink = await _usuarioCondominioRepository.FindAsync(uc => uc.CondominioId == condominioId && uc.UsuarioId == dto.UserId);
+        if (existingLink.Any()) return Result.Fail<bool>("El usuario ya está asignado a este condominio");
+
+        // 4. Create Link
+        var newLink = new UsuarioCondominio
+        {
+            CondominioId = condominioId,
+            UsuarioId = dto.UserId,
+            RolInicial = "Usuario"
+        };
+
+        await _usuarioCondominioRepository.AddAsync(newLink);
+
+        return Result.Ok(true);
+    }
+
+    public async Task<Result<IEnumerable<CondominioUserDto>>> GetUsersAsync(int condominioId)
+    {
+        // Validate condominio exists
+        var condominio = await _condominioRepository.GetByIdAsync(condominioId);
+        if (condominio == null) return Result.Fail<IEnumerable<CondominioUserDto>>("Condominio no encontrado");
+
+        // Get all user links for this condominio
+        var links = await _usuarioCondominioRepository.FindAsync(
+            uc => uc.CondominioId == condominioId,
+            includeProperties: "Usuario"
+        );
+
+        var users = links.Select(link => new CondominioUserDto
+        {
+            UserId = link.UsuarioId,
+            Username = link.Usuario.Username,
+            FullName = link.Usuario.Email, // Note: UsuarioMaster doesn't have FullName, using Email
+            Email = link.Usuario.Email,
+            RolInicial = link.RolInicial ?? "Usuario"
+        });
+
+        return Result.Ok(users);
+    }
+
+    public async Task<Result<bool>> RemoveUserAsync(int condominioId, int userId)
+    {
+        // Find the link
+        var links = await _usuarioCondominioRepository.FindAsync(
+            uc => uc.CondominioId == condominioId && uc.UsuarioId == userId
+        );
+        var link = links.FirstOrDefault();
+
+        if (link == null) return Result.Fail<bool>("El usuario no está asignado a este condominio");
+
+        await _usuarioCondominioRepository.DeleteAsync(link);
+        return Result.Ok(true);
     }
 }

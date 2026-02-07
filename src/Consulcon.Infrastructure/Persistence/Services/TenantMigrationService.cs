@@ -196,10 +196,10 @@ namespace Consulcon.Infrastructure.Persistence.Services
 
         private string GetConnectionStringForDatabase(string databaseName)
         {
-            var dbHost = _configuration["DB_HOST"];
+            var dbHost = _configuration["DB_HOST"] ?? throw new InvalidOperationException("DB_HOST configuration is required.");
             var dbPort = _configuration["DB_PORT"] ?? "3306";
-            var dbUser = _configuration["DB_USER"];
-            var dbPassword = _configuration["DB_PASSWORD"];
+            var dbUser = _configuration["DB_USER"] ?? throw new InvalidOperationException("DB_USER configuration is required.");
+            var dbPassword = _configuration["DB_PASSWORD"] ?? throw new InvalidOperationException("DB_PASSWORD configuration is required.");
 
             return $"Server={dbHost};Port={dbPort};Database={databaseName};User={dbUser};Password={dbPassword};";
         }

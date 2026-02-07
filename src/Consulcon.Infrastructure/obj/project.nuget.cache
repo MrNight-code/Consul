@@ -1,11 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "tWWm+kcUq14=",
+  "dgSpecHash": "oaOLGN0Gbw4=",
   "success": true,
   "projectFilePath": "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Infrastructure/Consulcon.Infrastructure.csproj",
   "expectedPackageFiles": [
     "/home/night/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
     "/home/night/.nuget/packages/dapper/2.1.66/dapper.2.1.66.nupkg.sha512",
+    "/home/night/.nuget/packages/fluentvalidation/12.1.1/fluentvalidation.12.1.1.nupkg.sha512",
+    "/home/night/.nuget/packages/fluentvalidation.dependencyinjectionextensions/12.1.1/fluentvalidation.dependencyinjectionextensions.12.1.1.nupkg.sha512",
     "/home/night/.nuget/packages/microsoft.entityframeworkcore/9.0.0/microsoft.entityframeworkcore.9.0.0.nupkg.sha512",
     "/home/night/.nuget/packages/microsoft.entityframeworkcore.abstractions/9.0.0/microsoft.entityframeworkcore.abstractions.9.0.0.nupkg.sha512",
     "/home/night/.nuget/packages/microsoft.entityframeworkcore.analyzers/9.0.0/microsoft.entityframeworkcore.analyzers.9.0.0.nupkg.sha512",
@@ -28,6 +30,7 @@
     "/home/night/.nuget/packages/microsoft.identitymodel.tokens/8.15.0/microsoft.identitymodel.tokens.8.15.0.nupkg.sha512",
     "/home/night/.nuget/packages/mysqlconnector/2.4.0/mysqlconnector.2.4.0.nupkg.sha512",
     "/home/night/.nuget/packages/pomelo.entityframeworkcore.mysql/9.0.0/pomelo.entityframeworkcore.mysql.9.0.0.nupkg.sha512",
+    "/home/night/.nuget/packages/qrcoder/1.6.0/qrcoder.1.6.0.nupkg.sha512",
     "/home/night/.nuget/packages/questpdf/2025.12.1/questpdf.2025.12.1.nupkg.sha512",
     "/home/night/.nuget/packages/system.identitymodel.tokens.jwt/8.15.0/system.identitymodel.tokens.jwt.8.15.0.nupkg.sha512"
   ],

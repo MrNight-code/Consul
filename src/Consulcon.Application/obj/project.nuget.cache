@@ -1,10 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "fR08CUYrGOw=",
+  "dgSpecHash": "mgpqZQvG6rs=",
   "success": true,
   "projectFilePath": "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Application/Consulcon.Application.csproj",
   "expectedPackageFiles": [
     "/home/night/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
+    "/home/night/.nuget/packages/fluentvalidation/12.1.1/fluentvalidation.12.1.1.nupkg.sha512",
+    "/home/night/.nuget/packages/fluentvalidation.dependencyinjectionextensions/12.1.1/fluentvalidation.dependencyinjectionextensions.12.1.1.nupkg.sha512",
     "/home/night/.nuget/packages/microsoft.entityframeworkcore/9.0.0/microsoft.entityframeworkcore.9.0.0.nupkg.sha512",
     "/home/night/.nuget/packages/microsoft.entityframeworkcore.abstractions/9.0.0/microsoft.entityframeworkcore.abstractions.9.0.0.nupkg.sha512",
     "/home/night/.nuget/packages/microsoft.entityframeworkcore.analyzers/9.0.0/microsoft.entityframeworkcore.analyzers.9.0.0.nupkg.sha512",

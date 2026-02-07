@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Consulcon.IntegrationTests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+93229562db51444ce28b18d4747db1ed6ccdd4d0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f03096a8ee9291395a61e327054d75eabfc652aa")]
 [assembly: System.Reflection.AssemblyProductAttribute("Consulcon.IntegrationTests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Consulcon.IntegrationTests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

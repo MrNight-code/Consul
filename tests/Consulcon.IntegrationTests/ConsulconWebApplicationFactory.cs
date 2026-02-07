@@ -34,6 +34,7 @@ public class ConsulconWebApplicationFactory : WebApplicationFactory<Program>
         public Task CreateDatabaseAsync(string databaseName) => Task.CompletedTask;
         public Task InitializeDatabaseAsync(string databaseName) => Task.CompletedTask;
         public Task DeleteDatabaseAsync(string databaseName) => Task.CompletedTask;
+        public Task InitializeCondominioAsync(string databaseName, Consulcon.Application.DTOs.Inmuebles.CondominioDto initialData) => Task.CompletedTask;
     }
 
     private class NoOpTenantMigrationService : Consulcon.Application.Interfaces.ITenantMigrationService

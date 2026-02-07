@@ -1,0 +1,18 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Port=3310;Database=db_consulcon_master;User=YOUR_USER;Password=YOUR_PASSWORD;TreatTinyAsBoolean=true"
+  },
+  "JwtSettings": {
+    "Secret": "YOUR_JWT_SECRET_MIN_32_CHARS_REPLACE_IN_PRODUCTION",
+    "Issuer": "ConsulconAPI",
+    "Audience": "ConsulconClient",
+    "ExpiryMinutes": 60
+  }
+}

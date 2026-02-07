@@ -9,4 +9,7 @@ public interface ICondominioService
     Task<Result<CondominioDto>> CreateAsync(CondominioDto dto, int userId);
     Task<Result<CondominioDto>> UpdateAsync(int id, CondominioDto dto);
     Task<Result<bool>> DeleteAsync(int id);
+    Task<Result<bool>> AddUserAsync(int condominioId, AddUserToCondominioDto dto);
+    Task<Result<IEnumerable<CondominioUserDto>>> GetUsersAsync(int condominioId);
+    Task<Result<bool>> RemoveUserAsync(int condominioId, int userId);
 }

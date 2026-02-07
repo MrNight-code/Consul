@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Consulcon.Application\Consulcon.Application.csproj" />
     <ProjectReference Include="..\Consulcon.Domain\Consulcon.Domain.csproj" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>
@@ -11,6 +12,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.0" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
     <PackageReference Include="QuestPDF" Version="2025.12.1" />
+    <PackageReference Include="QRCoder" Version="1.6.0" />
   </ItemGroup>
 
   <PropertyGroup>

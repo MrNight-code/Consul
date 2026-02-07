@@ -51,6 +51,9 @@ public partial class ConsulconDbContext : DbContext
     public virtual DbSet<DeudaCabecera> DeudaCabeceras { get; set; } = null!;
     public virtual DbSet<DeudaDetalle> DeudaDetalles { get; set; } = null!;
     public virtual DbSet<Egreso> Egresos { get; set; } = null!;
+    public virtual DbSet<EgresoDetalle> EgresoDetalles { get; set; } = null!;
+    public virtual DbSet<AccountTransactionHistory> AccountTransactionHistories { get; set; } = null!;
+    public virtual DbSet<ExpenseAttachment> ExpenseAttachments { get; set; } = null!;
     public virtual DbSet<FormaPago> FormaPagos { get; set; } = null!;
     public virtual DbSet<LecturaServicio> LecturaServicios { get; set; } = null!;
     public virtual DbSet<Manzano> Manzanos { get; set; } = null!;

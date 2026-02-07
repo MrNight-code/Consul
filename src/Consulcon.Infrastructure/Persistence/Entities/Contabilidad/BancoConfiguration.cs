@@ -1,4 +1,4 @@
-using Consulcon.Domain.Entities.Contabilidad;
+using Consulcon.Domain.Entities.General;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -29,6 +29,14 @@ public class BancoConfiguration : IEntityTypeConfiguration<Banco>
         builder.Property(e => e.NumeroCuenta)
             .HasMaxLength(50)
             .HasColumnName("numero_cuenta");
+        builder.Property(e => e.Tipo)
+            .HasMaxLength(50)
+            .HasDefaultValue("BANCO")
+            .HasColumnName("tipo");
+        builder.Property(e => e.Saldo)
+            .HasPrecision(18, 2)
+            .HasDefaultValue(0m)
+            .HasColumnName("saldo");
 
         builder.HasOne(d => d.IdCuentaContableAsociadaNavigation).WithMany(p => p.Bancos)
             .HasForeignKey(d => d.IdCuentaContableAsociada)

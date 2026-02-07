@@ -37,7 +37,7 @@ public class CondominioControllerTests : IntegrationTest
         
         var result = await response.Content.ReadFromJsonAsync<CondominioDto>();
         result.Should().NotBeNull();
-        result!.Id.Should().BeGreaterThan(0);
+        result!.IdCondominio.Should().BeGreaterThan(0);
         result.Nombre.Should().Be("Condominio Test");
     }
 

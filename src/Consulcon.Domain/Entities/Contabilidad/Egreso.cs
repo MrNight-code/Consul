@@ -35,7 +35,11 @@ public partial class Egreso
 
     public int IdUsuarioRegistro { get; set; }
 
-    public virtual ICollection<AsientoContable> AsientoContables { get; set; } = new List<AsientoContable>();
+    public virtual ICollection<AsientoContable> AsientoContables { get; set; } = [];
+
+    public virtual ICollection<ExpenseAttachment> Attachments { get; set; } = [];
+
+    public virtual ICollection<EgresoDetalle> EgresoDetalles { get; set; } = [];
 
     public virtual AutorizacionGasto IdAutorizacionNavigation { get; set; } = null!;
 

@@ -20,6 +20,7 @@ using Consulcon.Application.Interfaces.Comunicacion;
 using Consulcon.Application.Services.Comunicacion;
 using Consulcon.Application.Interfaces.Dashboard;
 using Consulcon.Application.Services.Dashboard;
+using FluentValidation;
 
 namespace Consulcon.Application;
 
@@ -41,6 +42,7 @@ public static class DependencyInjection
         // Inmuebles
         services.AddScoped<ICondominioService, CondominioService>();
         services.AddScoped<IPropiedadService, PropiedadService>();
+        services.AddScoped<IManzanoService, ManzanoService>();
 
         // Contratos
         services.AddScoped<IContratoService, ContratoService>();
@@ -54,6 +56,7 @@ public static class DependencyInjection
         services.AddScoped<ITesoreriaService, TesoreriaService>();
         services.AddScoped<IContabilidadService, ContabilidadService>();
         services.AddScoped<IExpenseCalculationService, ExpenseCalculationService>();
+        services.AddScoped<IProveedorService, ProveedorService>();
 
         // Reservas
         services.AddScoped<IReservaService, ReservaService>();
@@ -63,6 +66,9 @@ public static class DependencyInjection
 
         // Dashboard
         services.AddScoped<IDashboardService, DashboardService>();
+
+        // FluentValidation - Auto-register all validators from this assembly
+        services.AddValidatorsFromAssemblyContaining<Validators.Contabilidad.CreateProviderValidator>();
 
         return services;
     }

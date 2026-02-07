@@ -16,9 +16,9 @@ public class OwnershipService(ConsulconDbContext context) : IOwnershipService
     private readonly ConsulconDbContext _context = context;
 
     /// <inheritdoc/>
-    public async Task<Result<OwnershipHistoryDto>> AssignOwnerAsync(AssignOwnerDto dto)
+    public async Task<Result<OwnershipHistoryDto>> AssignParticipantAsync(AssignParticipantDto dto)
     {
-        // Validation: Check property exists
+        // 1. Validations (Common)
         var propiedad = await _context.Propiedads
             .Include(p => p.Contratos)
                 .ThenInclude(c => c.ContratoParticipantes)
@@ -28,21 +28,31 @@ public class OwnershipService(ConsulconDbContext context) : IOwnershipService
         if (propiedad == null)
             return Result.Fail<OwnershipHistoryDto>($"La propiedad con ID {dto.PropiedadId} no existe.");
 
-        // Validation: Check new owner (Persona) exists
-        var nuevoDueno = await _context.Personas.FindAsync(dto.NuevoDuenoId);
-        if (nuevoDueno == null)
-            return Result.Fail<OwnershipHistoryDto>($"La persona con ID {dto.NuevoDuenoId} no existe.");
+        var persona = await _context.Personas.FindAsync(dto.PersonaId);
+        if (persona == null)
+            return Result.Fail<OwnershipHistoryDto>($"La persona con ID {dto.PersonaId} no existe.");
 
-        // Start transaction for atomic operation
+        // 2. Identify Logic Strategy based on Role
+        if (dto.Rol == OwnershipConstants.RolTitular)
+        {
+            return await HandleOwnerAssignment(propiedad, dto, persona);
+        }
+        else
+        {
+            return await HandleParticipantAssignment(propiedad, dto, persona);
+        }
+    }
+
+    private async Task<Result<OwnershipHistoryDto>> HandleOwnerAssignment(Propiedad propiedad, AssignParticipantDto dto, Persona nuevoDueno)
+    {
         await using var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
-            // Find active contract for the property
+            // Find active contract or create one
             var activeContract = propiedad.Contratos
                 .OrderByDescending(c => c.FechaInicio)
                 .FirstOrDefault(c => c.Estado == OwnershipConstants.EstadoVigente || c.Estado == null);
 
-            // If no active contract, create one
             if (activeContract == null)
             {
                 activeContract = new Contrato
@@ -56,7 +66,7 @@ public class OwnershipService(ConsulconDbContext context) : IOwnershipService
                 await _context.SaveChangesAsync();
             }
 
-            // Find current active "Titular" (owner) in the contract
+            // Find current active "Titular"
             var currentOwner = activeContract.ContratoParticipantes
                 .FirstOrDefault(cp => cp.RolContrato == OwnershipConstants.RolTitular && cp.FechaBaja == null);
 
@@ -67,19 +77,18 @@ public class OwnershipService(ConsulconDbContext context) : IOwnershipService
                     $"La fecha de inicio ({dto.FechaInicio:yyyy-MM-dd}) no puede ser anterior a la fecha de alta del dueño actual ({currentOwner.FechaAlta.Value:yyyy-MM-dd}).");
             }
 
-            // Close the existing ownership record (set FechaBaja)
+            // Close existing owner record
             if (currentOwner != null)
             {
-                // Set end date to the day before new ownership starts (no overlap)
                 currentOwner.FechaBaja = dto.FechaInicio.AddDays(-1);
                 currentOwner.Activo = false;
             }
 
-            // Create new ownership record
+            // Create new owner record
             var newOwnership = new ContratoParticipante
             {
                 IdContrato = activeContract.IdContrato,
-                IdPersona = dto.NuevoDuenoId,
+                IdPersona = dto.PersonaId,
                 RolContrato = OwnershipConstants.RolTitular,
                 FechaAlta = dto.FechaInicio,
                 FechaBaja = null,
@@ -87,28 +96,68 @@ public class OwnershipService(ConsulconDbContext context) : IOwnershipService
             };
             _context.ContratoParticipantes.Add(newOwnership);
 
-            // Save and commit transaction
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
 
-            // Build response DTO
-            var result = new OwnershipHistoryDto
+            return Result.Ok(new OwnershipHistoryDto
             {
                 ContratoId = activeContract.IdContrato,
-                PersonaId = dto.NuevoDuenoId,
+                PersonaId = dto.PersonaId,
                 NombrePersona = nuevoDueno.NombreCompleto,
                 FechaInicio = dto.FechaInicio,
                 FechaFin = null,
                 EsVigente = true
-            };
-
-            return Result.Ok(result);
+            });
         }
         catch (Exception ex)
         {
             await transaction.RollbackAsync();
             return Result.Fail<OwnershipHistoryDto>($"Error al asignar propietario: {ex.Message}");
         }
+    }
+
+    private async Task<Result<OwnershipHistoryDto>> HandleParticipantAssignment(Propiedad propiedad, AssignParticipantDto dto, Persona persona)
+    {
+        Contrato? targetContract = null;
+
+        if (dto.ContratoId.HasValue)
+        {
+            targetContract = propiedad.Contratos.FirstOrDefault(c => c.IdContrato == dto.ContratoId.Value);
+            if (targetContract == null)
+                return Result.Fail<OwnershipHistoryDto>($"El contrato especificado {dto.ContratoId} no pertenece a la propiedad o no existe.");
+        }
+        else
+        {
+            targetContract = propiedad.Contratos
+                .OrderByDescending(c => c.FechaInicio)
+                .FirstOrDefault(c => c.Estado == OwnershipConstants.EstadoVigente || c.Estado == null);
+            
+            if (targetContract == null)
+                return Result.Fail<OwnershipHistoryDto>($"No se encontró un contrato vigente para la propiedad. Cree un propietario primero o especifique un contrato.");
+        }
+
+        var newParticipant = new ContratoParticipante
+        {
+            IdContrato = targetContract.IdContrato,
+            IdPersona = dto.PersonaId,
+            RolContrato = dto.Rol,
+            FechaAlta = dto.FechaInicio,
+            FechaBaja = dto.FechaFin,
+            Activo = dto.FechaFin == null || dto.FechaFin > DateOnly.FromDateTime(DateTime.Now)
+        };
+
+        _context.ContratoParticipantes.Add(newParticipant);
+        await _context.SaveChangesAsync();
+
+        return Result.Ok(new OwnershipHistoryDto
+        {
+            ContratoId = targetContract.IdContrato,
+            PersonaId = dto.PersonaId,
+            NombrePersona = persona.NombreCompleto,
+            FechaInicio = dto.FechaInicio,
+            FechaFin = dto.FechaFin,
+            EsVigente = newParticipant.Activo ?? false
+        });
     }
 
     /// <inheritdoc/>

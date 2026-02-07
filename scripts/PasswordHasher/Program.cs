@@ -9,16 +9,15 @@ namespace Scripts.PasswordHasher
     {
         static async Task Main(string[] args)
         {
-            // Allow passing DB connection info via args, or default
-            var host = "localhost";
-            var port = "3310";
-            var user = "admin";
-            var pass = "root";
+            LoadEnv();
+
+            var host = Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost";
+            var port = Environment.GetEnvironmentVariable("DB_PORT") ?? "3310";
+            var user = Environment.GetEnvironmentVariable("DB_USER") ?? "admin";
+            var pass = Environment.GetEnvironmentVariable("DB_PASS") ?? "root";
 
             if (args.Length > 0)
             {
-                // Minimal arg parsing for integration
-                // usage: PasswordHasher.exe [host] [port] [user] [pass]
                 if (args.Length >= 1) host = args[0];
                 if (args.Length >= 2) port = args[1];
                 if (args.Length >= 3) user = args[2];
@@ -130,6 +129,21 @@ namespace Scripts.PasswordHasher
             {
                 Console.WriteLine($"Fatal Error: {ex.Message}");
                 Environment.Exit(1);
+            }
+        }
+
+        static void LoadEnv()
+        {
+            var root = Directory.GetCurrentDirectory();
+            var dotenv = Path.Combine(root, ".env");
+            if (!File.Exists(dotenv)) return;
+
+            foreach (var line in File.ReadAllLines(dotenv))
+            {
+                if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#")) continue;
+                var parts = line.Split('=', 2);
+                if (parts.Length != 2) continue;
+                Environment.SetEnvironmentVariable(parts[0].Trim(), parts[1].Trim());
             }
         }
     }

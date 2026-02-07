@@ -13,10 +13,14 @@ public interface IOwnershipService
     /// </summary>
     /// <param name="dto">The assignment details.</param>
     /// <returns>The new ownership record.</returns>
-    Task<Result<OwnershipHistoryDto>> AssignOwnerAsync(AssignOwnerDto dto);
+    /// <summary>
+    /// Assigns a participant (Owner, Tenant, etc.) to a property.
+    /// Uses role-based logic to determine if it's a replacement (Owner) or addition (Tenant).
+    /// </summary>
+    Task<Result<OwnershipHistoryDto>> AssignParticipantAsync(AssignParticipantDto dto);
 
     /// <summary>
-    /// Gets the complete ownership history for a property.
+    /// Gets the complete chronological ownership history for a property.
     /// </summary>
     /// <param name="propiedadId">The property ID.</param>
     /// <returns>Chronological list of ownership records.</returns>

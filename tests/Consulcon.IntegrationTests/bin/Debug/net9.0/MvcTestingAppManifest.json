@@ -1,0 +1,6 @@
+{
+  "Consulcon.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "\/mnt\/night_projects\/Work\/Consulcon\/Backend-Consulcon\/src\/Consulcon.API",
+  "Consulcon.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "\/mnt\/night_projects\/Work\/Consulcon\/Backend-Consulcon\/src\/Consulcon.Application",
+  "Consulcon.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "\/mnt\/night_projects\/Work\/Consulcon\/Backend-Consulcon\/src\/Consulcon.Domain",
+  "Consulcon.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "\/mnt\/night_projects\/Work\/Consulcon\/Backend-Consulcon\/src\/Consulcon.Infrastructure"
+}

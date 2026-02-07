@@ -14,21 +14,21 @@ public class OwnershipController(IOwnershipService ownershipService) : Controlle
     private readonly IOwnershipService _ownershipService = ownershipService;
 
     /// <summary>
-    /// Assigns a new owner to a property. Closes the previous ownership record transactionally.
+    /// Assigns a participant (Owner, Tenant, etc.) to a property.
     /// </summary>
     /// <param name="dto">The assignment details.</param>
-    /// <returns>The new ownership record.</returns>
-    [HttpPost("assign-owner")]
-    public async Task<IActionResult> AssignOwner([FromBody] AssignOwnerDto dto)
+    /// <returns>The created assignment or ownership record.</returns>
+    [HttpPost("assign-participant")]
+    public async Task<IActionResult> AssignParticipant([FromBody] AssignParticipantDto dto)
     {
-        var result = await _ownershipService.AssignOwnerAsync(dto);
+        var result = await _ownershipService.AssignParticipantAsync(dto);
 
         if (result.IsFailure)
         {
             return BadRequest(new { IsSuccess = false, result.Error });
         }
 
-        return Ok(new { IsSuccess = true, Data = result.Value, Message = "Propietario asignado exitosamente." });
+        return Ok(new { IsSuccess = true, Data = result.Value, Message = "Participante asignado exitosamente." });
     }
 
     /// <summary>

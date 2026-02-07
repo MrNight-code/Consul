@@ -50,3 +50,4 @@ Ubicación: `src/Consulcon.Infrastructure/Services/[Name]Service.cs`
 - Implementa `I[Name]Service`.
 - **Funcionalidad**: [Describe the business logic handled here].
 - **Interacción DB**: [Describe how it interacts with the database, repositories used, etc.].
+Egreso.cs
