@@ -1,4 +1,4 @@
-﻿{
+{
   "info": {
     "_postman_id": "b3e9c1c0-0e1a-4b1e-9c1c-0e1a4b1e9c1c",
     "name": "Consulcon Full CRUD (Smarter Data)",
@@ -38,24 +38,24 @@
                 "exec": [
                   "var jsonData = pm.response.json();",
                   "",
-                  "if (jsonData.data \u0026\u0026 jsonData.data.token) {",
-                  "    pm.collectionVariables.set(\u0027authToken\u0027, jsonData.data.token);",
-                  "    console.log(\u0027Token saved!\u0027);",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('authToken', jsonData.data.token);",
+                  "    console.log('Token saved!');",
                   "}",
                   "",
                   "// Save first tenant ID if available",
-                  "if (jsonData.data \u0026\u0026 jsonData.data.tenants \u0026\u0026 jsonData.data.tenants.length \u003e 0) {",
+                  "if (jsonData.data && jsonData.data.tenants && jsonData.data.tenants.length > 0) {",
                   "    var firstTenant = jsonData.data.tenants[0];",
-                  "    pm.collectionVariables.set(\u0027tenantId\u0027, firstTenant.tenantId);",
-                  "    console.log(\u0027Tenant ID saved: \u0027 + firstTenant.tenantId);",
+                  "    pm.collectionVariables.set('tenantId', firstTenant.tenantId);",
+                  "    console.log('Tenant ID saved: ' + firstTenant.tenantId);",
                   "}",
                   "",
                   "// Save first tenant ID (int) for endpoints needing it",
-                  "if (jsonData.data \u0026\u0026 jsonData.data.tenants \u0026\u0026 jsonData.data.tenants.length \u003e 0) {",
+                  "if (jsonData.data && jsonData.data.tenants && jsonData.data.tenants.length > 0) {",
                   "    var firstTenant = jsonData.data.tenants[0];",
                   "    if (firstTenant.id) {",
-                  "        pm.collectionVariables.set(\u0027condominioId\u0027, firstTenant.id);",
-                  "        console.log(\u0027Condominio ID (int) saved: \u0027 + firstTenant.id);",
+                  "        pm.collectionVariables.set('condominioId', firstTenant.id);",
+                  "        console.log('Condominio ID (int) saved: ' + firstTenant.id);",
                   "    }",
                   "}"
                 ]
@@ -84,8 +84,8 @@
                 "type": "text"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -112,8 +112,8 @@
                 "type": "text"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -136,8 +136,8 @@
                 "type": "text"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -166,8 +166,8 @@
                 "type": "text"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -196,8 +196,8 @@
                 "type": "text"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -242,8 +242,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -276,8 +276,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -309,8 +309,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -337,8 +337,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -366,8 +366,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -401,8 +401,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -434,8 +434,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -462,8 +462,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -491,8 +491,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -520,8 +520,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -553,8 +553,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -581,8 +581,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -597,7 +597,917 @@
           ]
         },
         {
-          "name": "Egreso",
+          "name": "PlanCuenta",
+          "item": [
+            {
+              "name": "Get All PlanCuentas",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/Contabilidad/plancuentas",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Contabilidad", "plancuentas"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create PlanCuenta",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"IdCuenta\": 1,\n    \"CodigoCuenta\": \"test_data\",\n    \"Nombre\": \"test_data\",\n    \"IdCuentaPadre\": 1,\n    \"NivelJerarquia\": 1,\n    \"EsImputable\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/Contabilidad/plancuentas",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Contabilidad", "plancuentas"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update PlanCuenta",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"IdCuenta\": 1,\n    \"CodigoCuenta\": \"test_data\",\n    \"Nombre\": \"test_data\",\n    \"IdCuentaPadre\": 1,\n    \"NivelJerarquia\": 1,\n    \"EsImputable\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/PlanCuenta/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "PlanCuenta", "1"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete PlanCuenta",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/PlanCuenta/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "PlanCuenta", "1"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "CatalogoServicio",
+          "item": [
+            {
+              "name": "Get All CatalogoServicios",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/CatalogoServicio",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "CatalogoServicio"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create CatalogoServicio",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"IdServicio\": 1,\n    \"Nombre\": \"test_data\",\n    \"CostoBase\": 10.5,\n    \"EsRecurrente\": true,\n    \"Activo\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/CatalogoServicio",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "CatalogoServicio"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update CatalogoServicio",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"IdServicio\": 1,\n    \"Nombre\": \"test_data\",\n    \"CostoBase\": 10.5,\n    \"EsRecurrente\": true,\n    \"Activo\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/CatalogoServicio/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "CatalogoServicio", "1"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete CatalogoServicio",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/CatalogoServicio/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "CatalogoServicio", "1"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Contrato",
+          "item": [
+            {
+              "name": "Get All Contratos",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/Contrato",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Contrato"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Contrato",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"IdContrato\": 1,\n    \"IdPropiedad\": 1,\n    \"FechaFirma\": \"test_data\",\n    \"FechaInicio\": \"test_data\",\n    \"FechaFin\": \"test_data\",\n    \"FechaIngresoReal\": \"test_data\",\n    \"MontoExpensaPactada\": 10.5,\n    \"Estado\": \"AC\",\n    \"MotivoBaja\": \"test_data\",\n    \"IdUsuarioCreador\": 1\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/Contrato",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Contrato"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Contrato",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"IdContrato\": 1,\n    \"IdPropiedad\": 1,\n    \"FechaFirma\": \"test_data\",\n    \"FechaInicio\": \"test_data\",\n    \"FechaFin\": \"test_data\",\n    \"FechaIngresoReal\": \"test_data\",\n    \"MontoExpensaPactada\": 10.5,\n    \"Estado\": \"AC\",\n    \"MotivoBaja\": \"test_data\",\n    \"IdUsuarioCreador\": 1\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/Contrato/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Contrato", "1"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Contrato",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/Contrato/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Contrato", "1"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Condominio",
+          "item": [
+            {
+              "name": "Get All Condominios",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "type": "text",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "type": "text",
+                    "value": "Bearer {{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/Condominio",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Condominio"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Condominio",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "type": "text",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "type": "text",
+                    "value": "Bearer {{authToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"Nombre\": \"Condominio Las Palmas\",\n    \"Direccion\": \"Av. Principal 123\",\n    \"SuperficieTotalM2\": 1500.5,\n    \"IdAdminPersona\": 1,\n    \"ConfigDiaCobro\": \"5\",\n    \"Logo\": \"https://example.com/logo.png\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/Condominio",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Condominio"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Condominio",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "type": "text",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "type": "text",
+                    "value": "Bearer {{authToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"IdCondominio\": 1,\n    \"Codigo\": \"test_data\",\n    \"Nombre\": \"test_data\",\n    \"Direccion\": \"123456\",\n    \"SuperficieTotalM2\": 10.5,\n    \"IdAdminPersona\": 1,\n    \"ConfigDiaCobro\": \"5\",\n    \"Logo\": \"https://example.com/logo.png\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/Condominio/{{condominioId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Condominio", "{{condominioId}}"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Condominio",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "type": "text",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "type": "text",
+                    "value": "Bearer {{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/Condominio/{{condominioId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Condominio", "{{condominioId}}"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Add User to Condominio",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "type": "text",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "type": "text",
+                    "value": "Bearer {{authToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": 1\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/Condominio/{{condominioId}}/usuarios",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Condominio", "{{condominioId}}", "usuarios"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Users of Condominio",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "type": "text",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "type": "text",
+                    "value": "Bearer {{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/Condominio/{{condominioId}}/usuarios",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Condominio", "{{condominioId}}", "usuarios"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Remove User from Condominio",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "type": "text",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "type": "text",
+                    "value": "Bearer {{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/Condominio/{{condominioId}}/usuarios/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": [
+                    "api",
+                    "Condominio",
+                    "{{condominioId}}",
+                    "usuarios",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Usuario",
+          "item": [
+            {
+              "name": "Get All Usuarios",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "type": "text",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "type": "text",
+                    "value": "Bearer {{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/Usuario",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Usuario"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Usuario",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "type": "text",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "type": "text",
+                    "value": "Bearer {{authToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"username\": \"nuevo_usuario\",\n    \"password\": \"Password123\",\n    \"email\": \"usuario@email.com\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/Usuario",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Usuario"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Usuario",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "type": "text",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "type": "text",
+                    "value": "Bearer {{authToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"IdUsuario\": 1,\n    \"IdPersona\": 1,\n    \"Username\": \"test_data\",\n    \"PasswordHash\": \"test_data\",\n    \"FechaCreacion\": \"2024-01-01T12:00:00\",\n    \"EstaHabilitado\": true,\n    \"IdRolPrincipal\": 1\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/Usuario/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Usuario", "1"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Usuario",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "type": "text",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "type": "text",
+                    "value": "Bearer {{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/Usuario/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Usuario", "1"]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tesoreria",
+      "item": [
+        {
+          "name": "Bancos",
+          "item": [
+            {
+              "name": "Get Balance History (Projected)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/Accounts/{{accountId}}/balance-history?from=2024-01-01&to=2026-12-31",
+                  "host": ["{{baseUrl}}"],
+                  "path": [
+                    "api",
+                    "Accounts",
+                    "{{accountId}}",
+                    "balance-history"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "2024-01-01",
+                      "description": "Fecha inicio (opcional)"
+                    },
+                    {
+                      "key": "to",
+                      "value": "2026-12-31",
+                      "description": "Fecha fin (opcional, si es hoy proyecta saldo actual)"
+                    }
+                  ]
+                },
+                "description": "Obtiene el historial de saldos diarios. Si la fecha final es hoy, el sistema proyecta el saldo real."
+              }
+            },
+            {
+              "name": "Get All Accounts",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/Accounts?activeOnly=true",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Accounts"],
+                  "query": [
+                    {
+                      "key": "activeOnly",
+                      "value": "true",
+                      "description": "Filtrar solo activas"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get Account By Id",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/Accounts/{{accountId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Accounts", "{{accountId}}"]
+                }
+              }
+            },
+            {
+              "name": "Create Account",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Banco Ganadero\",\n  \"accountNumber\": \"100-00-12345\",\n  \"type\": \"BANCO\",\n  \"isActive\": true,\n  \"balance\": 1000.00\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/Accounts",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Accounts"]
+                }
+              }
+            },
+            {
+              "name": "Update Account",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Banco Ganadero Updated\",\n  \"accountNumber\": \"100-00-12345\",\n  \"type\": \"BANCO\",\n  \"isActive\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/Accounts/{{accountId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Accounts", "{{accountId}}"]
+                }
+              }
+            },
+            {
+              "name": "Delete Account",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/Accounts/{{accountId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Accounts", "{{accountId}}"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "FormasPago",
+          "item": [
+            {
+              "name": "Get FormasPago",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/Tesoreria/formaspago",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Tesoreria", "formaspago"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create FormaPago",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"descripcion\": \"Transferencia QR\",\n    \"codigo\": \"QR\",\n    \"esBancarizado\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/Tesoreria/formaspago",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "Tesoreria", "formaspago"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Egresos",
           "item": [
             {
               "name": "Get All Egresos",
@@ -610,8 +1520,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -645,8 +1555,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -678,8 +1588,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -706,8 +1616,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -735,8 +1645,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -763,8 +1673,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -797,8 +1707,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -821,8 +1731,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -831,12 +1741,30 @@
                   "host": ["{{baseUrl}}"],
                   "path": ["api", "attachments"],
                   "query": [
-                    { "key": "ExpenseId", "value": "" },
-                    { "key": "UploadedFrom", "value": "" },
-                    { "key": "UploadedTo", "value": "" },
-                    { "key": "ContentType", "value": "" },
-                    { "key": "PageNumber", "value": "1" },
-                    { "key": "PageSize", "value": "20" }
+                    {
+                      "key": "ExpenseId",
+                      "value": ""
+                    },
+                    {
+                      "key": "UploadedFrom",
+                      "value": ""
+                    },
+                    {
+                      "key": "UploadedTo",
+                      "value": ""
+                    },
+                    {
+                      "key": "ContentType",
+                      "value": ""
+                    },
+                    {
+                      "key": "PageNumber",
+                      "value": "1"
+                    },
+                    {
+                      "key": "PageSize",
+                      "value": "20"
+                    }
                   ]
                 }
               },
@@ -853,8 +1781,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -888,8 +1816,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -901,976 +1829,6 @@
                   "raw": "{{baseUrl}}/api/expenses",
                   "host": ["{{baseUrl}}"],
                   "path": ["api", "expenses"]
-                }
-              },
-              "response": []
-            }
-          ]
-        },
-        {
-          "name": "PlanCuenta",
-          "item": [
-            {
-              "name": "Get All PlanCuentas",
-              "request": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/Contabilidad/plancuentas",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Contabilidad", "plancuentas"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Create PlanCuenta",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"IdCuenta\": 1,\n    \"CodigoCuenta\": \"test_data\",\n    \"Nombre\": \"test_data\",\n    \"IdCuentaPadre\": 1,\n    \"NivelJerarquia\": 1,\n    \"EsImputable\": true\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/Contabilidad/plancuentas",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Contabilidad", "plancuentas"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Update PlanCuenta",
-              "request": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"IdCuenta\": 1,\n    \"CodigoCuenta\": \"test_data\",\n    \"Nombre\": \"test_data\",\n    \"IdCuentaPadre\": 1,\n    \"NivelJerarquia\": 1,\n    \"EsImputable\": true\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/PlanCuenta/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "PlanCuenta", "1"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Delete PlanCuenta",
-              "request": {
-                "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/PlanCuenta/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "PlanCuenta", "1"]
-                }
-              },
-              "response": []
-            }
-          ]
-        },
-        {
-          "name": "CatalogoServicio",
-          "item": [
-            {
-              "name": "Get All CatalogoServicios",
-              "request": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/CatalogoServicio",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "CatalogoServicio"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Create CatalogoServicio",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"IdServicio\": 1,\n    \"Nombre\": \"test_data\",\n    \"CostoBase\": 10.5,\n    \"EsRecurrente\": true,\n    \"Activo\": true\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/CatalogoServicio",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "CatalogoServicio"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Update CatalogoServicio",
-              "request": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"IdServicio\": 1,\n    \"Nombre\": \"test_data\",\n    \"CostoBase\": 10.5,\n    \"EsRecurrente\": true,\n    \"Activo\": true\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/CatalogoServicio/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "CatalogoServicio", "1"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Delete CatalogoServicio",
-              "request": {
-                "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/CatalogoServicio/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "CatalogoServicio", "1"]
-                }
-              },
-              "response": []
-            }
-          ]
-        },
-        {
-          "name": "Contrato",
-          "item": [
-            {
-              "name": "Get All Contratos",
-              "request": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/Contrato",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Contrato"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Create Contrato",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"IdContrato\": 1,\n    \"IdPropiedad\": 1,\n    \"FechaFirma\": \"test_data\",\n    \"FechaInicio\": \"test_data\",\n    \"FechaFin\": \"test_data\",\n    \"FechaIngresoReal\": \"test_data\",\n    \"MontoExpensaPactada\": 10.5,\n    \"Estado\": \"AC\",\n    \"MotivoBaja\": \"test_data\",\n    \"IdUsuarioCreador\": 1\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/Contrato",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Contrato"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Update Contrato",
-              "request": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"IdContrato\": 1,\n    \"IdPropiedad\": 1,\n    \"FechaFirma\": \"test_data\",\n    \"FechaInicio\": \"test_data\",\n    \"FechaFin\": \"test_data\",\n    \"FechaIngresoReal\": \"test_data\",\n    \"MontoExpensaPactada\": 10.5,\n    \"Estado\": \"AC\",\n    \"MotivoBaja\": \"test_data\",\n    \"IdUsuarioCreador\": 1\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/Contrato/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Contrato", "1"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Delete Contrato",
-              "request": {
-                "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/Contrato/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Contrato", "1"]
-                }
-              },
-              "response": []
-            }
-          ]
-        },
-
-        {
-          "name": "Condominio",
-          "item": [
-            {
-              "name": "Get All Condominios",
-              "request": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/Condominio",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Condominio"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Create Condominio",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"Nombre\": \"Condominio Las Palmas\",\n    \"Direccion\": \"Av. Principal 123\",\n    \"SuperficieTotalM2\": 1500.5,\n    \"IdAdminPersona\": 1,\n    \"ConfigDiaCobro\": \"5\",\n    \"Logo\": \"https://example.com/logo.png\"\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/Condominio",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Condominio"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Update Condominio",
-              "request": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"IdCondominio\": 1,\n    \"Codigo\": \"test_data\",\n    \"Nombre\": \"test_data\",\n    \"Direccion\": \"123456\",\n    \"SuperficieTotalM2\": 10.5,\n    \"IdAdminPersona\": 1,\n    \"ConfigDiaCobro\": \"5\",\n    \"Logo\": \"https://example.com/logo.png\"\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/Condominio/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Condominio", "1"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Delete Condominio",
-              "request": {
-                "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/Condominio/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Condominio", "1"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Add User to Condominio",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"userId\": 1\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/Condominio/{{condominioId}}/usuarios",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Condominio", "{{condominioId}}", "usuarios"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Get Users of Condominio",
-              "request": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/Condominio/{{condominioId}}/usuarios",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Condominio", "{{condominioId}}", "usuarios"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Remove User from Condominio",
-              "request": {
-                "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/Condominio/{{condominioId}}/usuarios/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": [
-                    "api",
-                    "Condominio",
-                    "{{condominioId}}",
-                    "usuarios",
-                    "1"
-                  ]
-                }
-              },
-              "response": []
-            }
-          ]
-        },
-
-        {
-          "name": "Reserva",
-          "item": [
-            {
-              "name": "Get All Reservas",
-              "request": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/Reserva",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Reserva"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Create Reserva",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"IdReserva\": 1,\n    \"IdRecurso\": 1,\n    \"IdContrato\": 1,\n    \"FechaInicio\": \"2024-01-01T12:00:00\",\n    \"FechaFin\": \"2024-01-01T12:00:00\",\n    \"CantidadInvitados\": 1,\n    \"Motivo\": \"test_data\",\n    \"AmenizadoPor\": \"test_data\",\n    \"MontoTotalCobrado\": 10.5,\n    \"Estado\": \"AC\"\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/Reserva",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Reserva"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Update Reserva",
-              "request": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"IdReserva\": 1,\n    \"IdRecurso\": 1,\n    \"IdContrato\": 1,\n    \"FechaInicio\": \"2024-01-01T12:00:00\",\n    \"FechaFin\": \"2024-01-01T12:00:00\",\n    \"CantidadInvitados\": 1,\n    \"Motivo\": \"test_data\",\n    \"AmenizadoPor\": \"test_data\",\n    \"MontoTotalCobrado\": 10.5,\n    \"Estado\": \"AC\"\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/Reserva/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Reserva", "1"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Delete Reserva",
-              "request": {
-                "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/Reserva/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Reserva", "1"]
-                }
-              },
-              "response": []
-            }
-          ]
-        },
-        {
-          "name": "Usuario",
-          "item": [
-            {
-              "name": "Get All Usuarios",
-              "request": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/Usuario",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Usuario"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Create Usuario",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"IdUsuario\": 1,\n    \"IdPersona\": 1,\n    \"Username\": \"test_data\",\n    \"PasswordHash\": \"test_data\",\n    \"FechaCreacion\": \"2024-01-01T12:00:00\",\n    \"EstaHabilitado\": true,\n    \"IdRolPrincipal\": 1\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/Usuario",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Usuario"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Update Usuario",
-              "request": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"IdUsuario\": 1,\n    \"IdPersona\": 1,\n    \"Username\": \"test_data\",\n    \"PasswordHash\": \"test_data\",\n    \"FechaCreacion\": \"2024-01-01T12:00:00\",\n    \"EstaHabilitado\": true,\n    \"IdRolPrincipal\": 1\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/Usuario/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Usuario", "1"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Delete Usuario",
-              "request": {
-                "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/Usuario/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Usuario", "1"]
-                }
-              },
-              "response": []
-            }
-          ]
-        }
-      ]
-    },
-
-    {
-      "name": "Tesoreria",
-      "item": [
-        {
-          "name": "Bancos",
-          "item": [
-            {
-              "name": "Get Bancos",
-              "request": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/Tesoreria/bancos",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Tesoreria", "bancos"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Create Banco",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"nombreEntidad\": \"Banco Nacional\",\n    \"numeroCuenta\": \"12345678\",\n    \"moneda\": \"BOB\",\n    \"tipo\": \"Cuenta Corriente\"\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/Tesoreria/bancos",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Tesoreria", "bancos"]
-                }
-              },
-              "response": []
-            }
-          ]
-        },
-        {
-          "name": "FormasPago",
-          "item": [
-            {
-              "name": "Get FormasPago",
-              "request": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/Tesoreria/formaspago",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Tesoreria", "formaspago"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Create FormaPago",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"descripcion\": \"Transferencia QR\",\n    \"codigo\": \"QR\",\n    \"esBancarizado\": true\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/Tesoreria/formaspago",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Tesoreria", "formaspago"]
-                }
-              },
-              "response": []
-            }
-          ]
-        },
-        {
-          "name": "Egresos",
-          "item": [
-            {
-              "name": "Get Egresos (Por Condominio)",
-              "request": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/Tesoreria/egresos/condominio/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Tesoreria", "egresos", "condominio", "1"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Registrar Egreso",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{authToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"idCondominio\": 1,\n    \"idProveedor\": 1,\n    \"idAutorizacion\": 1,\n    \"idBancoOrigen\": 1,\n    \"idFormaPago\": 1,\n    \"concepto\": \"Compra Insumos Limpieza\",\n    \"montoTotal\": 150.5,\n    \"nroFacturaProveedor\": \"FAC-001\",\n    \"idUsuarioRegistro\": 1\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/Tesoreria/egresos",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "Tesoreria", "egresos"]
                 }
               },
               "response": []
@@ -1891,8 +1849,8 @@
                     "type": "text"
                   },
                   {
-                    "key": "X-Tenant-Id",
-                    "value": "{{tenantId}}",
+                    "key": "X-Condominio-Id",
+                    "value": "{{condominioId}}",
                     "type": "text"
                   }
                 ],
@@ -1966,9 +1924,9 @@
                     "value": "Bearer {{authToken}}"
                   },
                   {
-                    "key": "X-Tenant-Id",
+                    "key": "X-Condominio-Id",
                     "type": "text",
-                    "value": "{{tenantId}}"
+                    "value": "{{condominioId}}"
                   }
                 ]
               },
@@ -2004,9 +1962,9 @@
                     "value": "Bearer {{authToken}}"
                   },
                   {
-                    "key": "X-Tenant-Id",
+                    "key": "X-Condominio-Id",
                     "type": "text",
-                    "value": "{{tenantId}}"
+                    "value": "{{condominioId}}"
                   }
                 ]
               },
@@ -2038,9 +1996,9 @@
                     "value": "Bearer {{authToken}}"
                   },
                   {
-                    "key": "X-Tenant-Id",
+                    "key": "X-Condominio-Id",
                     "type": "text",
-                    "value": "{{tenantId}}"
+                    "value": "{{condominioId}}"
                   }
                 ]
               },
@@ -2076,9 +2034,9 @@
                     "value": "Bearer {{authToken}}"
                   },
                   {
-                    "key": "X-Tenant-Id",
+                    "key": "X-Condominio-Id",
                     "type": "text",
-                    "value": "{{tenantId}}"
+                    "value": "{{condominioId}}"
                   }
                 ]
               },
@@ -2109,9 +2067,9 @@
                     "value": "Bearer {{authToken}}"
                   },
                   {
-                    "key": "X-Tenant-Id",
+                    "key": "X-Condominio-Id",
                     "type": "text",
-                    "value": "{{tenantId}}"
+                    "value": "{{condominioId}}"
                   }
                 ]
               },
@@ -2133,9 +2091,9 @@
                     "value": "Bearer {{authToken}}"
                   },
                   {
-                    "key": "X-Tenant-Id",
+                    "key": "X-Condominio-Id",
                     "type": "text",
-                    "value": "{{tenantId}}"
+                    "value": "{{condominioId}}"
                   }
                 ]
               },
@@ -2160,8 +2118,8 @@
                 "type": "text"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2190,8 +2148,8 @@
                 "type": "text"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2220,8 +2178,8 @@
                 "type": "text"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2244,8 +2202,8 @@
                 "type": "text"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               },
               {
@@ -2277,8 +2235,8 @@
                 "type": "text"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               },
               {
@@ -2310,8 +2268,8 @@
                 "type": "text"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2344,8 +2302,8 @@
                 "type": "text"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2372,8 +2330,8 @@
                 "type": "text"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2401,8 +2359,8 @@
                 "type": "text"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2425,8 +2383,8 @@
                 "type": "text"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2440,7 +2398,6 @@
         }
       ]
     },
-
     {
       "name": "Persona",
       "item": [
@@ -2454,8 +2411,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2476,8 +2433,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2502,8 +2459,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2532,8 +2489,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2558,8 +2515,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2585,8 +2542,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2607,8 +2564,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2629,8 +2586,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2655,8 +2612,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2685,8 +2642,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2711,8 +2668,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2738,8 +2695,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2760,8 +2717,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2782,8 +2739,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2808,8 +2765,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2838,8 +2795,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2864,8 +2821,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2891,8 +2848,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2932,8 +2889,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -2970,8 +2927,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -3013,8 +2970,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -3045,8 +3002,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -3077,8 +3034,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -3105,8 +3062,8 @@
                 "value": "Bearer {{authToken}}"
               },
               {
-                "key": "X-Tenant-Id",
-                "value": "{{tenantId}}",
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
                 "type": "text"
               }
             ],
@@ -3116,6 +3073,434 @@
               "path": ["api", "providers", "{{providerId}}"]
             },
             "description": "Elimina (soft delete) un proveedor. Marca activo=false en lugar de eliminar físicamente."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Deuda",
+      "item": [
+        {
+          "name": "Get Deudas Pendientes",
+          "request": {
+            "method": "GET",
+            "url": {
+              "host": ["{{baseUrl}}"],
+              "raw": "{{baseUrl}}/api/Deuda/pendiente",
+              "path": ["api", "Deuda", "pendiente"]
+            },
+            "header": [
+              {
+                "key": "X-Condominio-Id",
+                "type": "text",
+                "value": "{{condominioId}}"
+              },
+              {
+                "key": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "type": "text",
+                "value": "Bearer {{authToken}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Get Deuda por Contrato",
+          "request": {
+            "method": "GET",
+            "url": {
+              "host": ["{{baseUrl}}"],
+              "raw": "{{baseUrl}}/api/Deuda/contrato/1",
+              "path": ["api", "Deuda", "contrato", "1"]
+            },
+            "header": [
+              {
+                "key": "X-Condominio-Id",
+                "type": "text",
+                "value": "{{condominioId}}"
+              },
+              {
+                "key": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "type": "text",
+                "value": "Bearer {{authToken}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Get Deuda por ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "host": ["{{baseUrl}}"],
+              "raw": "{{baseUrl}}/api/Deuda/1",
+              "path": ["api", "Deuda", "1"]
+            },
+            "header": [
+              {
+                "key": "X-Condominio-Id",
+                "type": "text",
+                "value": "{{condominioId}}"
+              },
+              {
+                "key": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "type": "text",
+                "value": "Bearer {{authToken}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Generar Deuda",
+          "request": {
+            "url": {
+              "host": ["{{baseUrl}}"],
+              "raw": "{{baseUrl}}/api/Deuda/generar",
+              "path": ["api", "Deuda", "generar"]
+            },
+            "method": "POST",
+            "body": {
+              "raw": "{\"contratoId\": 1, \"monto\": 100.00, \"concepto\": \"Cuota mensual\", \"fechaVencimiento\": \"2026-03-01\"}",
+              "mode": "raw"
+            },
+            "header": [
+              {
+                "key": "X-Condominio-Id",
+                "type": "text",
+                "value": "{{condominioId}}"
+              },
+              {
+                "key": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "type": "text",
+                "value": "Bearer {{authToken}}"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reservas",
+      "item": [
+        {
+          "name": "Get Recursos por Condominio",
+          "request": {
+            "method": "GET",
+            "url": {
+              "host": ["{{baseUrl}}"],
+              "raw": "{{baseUrl}}/api/Reserva/recursos/condominio/{{condominioId}}",
+              "path": [
+                "api",
+                "Reserva",
+                "recursos",
+                "condominio",
+                "{{condominioId}}"
+              ]
+            },
+            "header": [
+              {
+                "key": "X-Condominio-Id",
+                "type": "text",
+                "value": "{{condominioId}}"
+              },
+              {
+                "key": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "type": "text",
+                "value": "Bearer {{authToken}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Crear Recurso",
+          "request": {
+            "url": {
+              "host": ["{{baseUrl}}"],
+              "raw": "{{baseUrl}}/api/Reserva/recursos",
+              "path": ["api", "Reserva", "recursos"]
+            },
+            "method": "POST",
+            "body": {
+              "raw": "{\"nombre\": \"Salón de eventos\", \"descripcion\": \"Salón principal\", \"idCondominio\": 1, \"precioReserva\": 50.00}",
+              "mode": "raw"
+            },
+            "header": [
+              {
+                "key": "X-Condominio-Id",
+                "type": "text",
+                "value": "{{condominioId}}"
+              },
+              {
+                "key": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "type": "text",
+                "value": "Bearer {{authToken}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Get Reservas por Condominio",
+          "request": {
+            "method": "GET",
+            "url": {
+              "host": ["{{baseUrl}}"],
+              "raw": "{{baseUrl}}/api/Reserva/condominio/{{condominioId}}",
+              "path": ["api", "Reserva", "condominio", "{{condominioId}}"]
+            },
+            "header": [
+              {
+                "key": "X-Condominio-Id",
+                "type": "text",
+                "value": "{{condominioId}}"
+              },
+              {
+                "key": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "type": "text",
+                "value": "Bearer {{authToken}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Crear Reserva",
+          "request": {
+            "url": {
+              "host": ["{{baseUrl}}"],
+              "raw": "{{baseUrl}}/api/Reserva",
+              "path": ["api", "Reserva"]
+            },
+            "method": "POST",
+            "body": {
+              "raw": "{\"idRecurso\": 1, \"idContrato\": 1, \"fechaInicio\": \"2026-03-01T10:00:00\", \"fechaFin\": \"2026-03-01T14:00:00\"}",
+              "mode": "raw"
+            },
+            "header": [
+              {
+                "key": "X-Condominio-Id",
+                "type": "text",
+                "value": "{{condominioId}}"
+              },
+              {
+                "key": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "type": "text",
+                "value": "Bearer {{authToken}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Confirmar Reserva",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "host": ["{{baseUrl}}"],
+              "raw": "{{baseUrl}}/api/Reserva/1/confirmar",
+              "path": ["api", "Reserva", "1", "confirmar"]
+            },
+            "header": [
+              {
+                "key": "X-Condominio-Id",
+                "type": "text",
+                "value": "{{condominioId}}"
+              },
+              {
+                "key": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "type": "text",
+                "value": "Bearer {{authToken}}"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "FiscalPeriods",
+      "item": [
+        {
+          "name": "Close Period",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"year\": 2026,\n  \"month\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/fiscal-periods/close",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "fiscal-periods", "close"]
+            },
+            "description": "Cierra un período fiscal. Infiere el condominio del header X-Condominio-Id."
+          },
+          "response": []
+        },
+        {
+          "name": "Reopen Period",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"year\": 2026,\n  \"month\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/fiscal-periods/reopen",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "fiscal-periods", "reopen"]
+            },
+            "description": "Reabre un período fiscal previamente cerrado."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Closed Periods",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/fiscal-periods",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "fiscal-periods"]
+            },
+            "description": "Obtiene la lista de períodos cerrados para el condominio especificado en el header."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Period Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/fiscal-periods/status/2026/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "fiscal-periods", "status", "2026", "1"]
+            },
+            "description": "Verifica si un período específico (año/mes) está cerrado."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Audit Log",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Condominio-Id",
+                "value": "{{condominioId}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/fiscal-periods/audit-log",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "fiscal-periods", "audit-log"]
+            },
+            "description": "Obtiene el registro de auditoría de cierres y reaperturas de período."
           },
           "response": []
         }
@@ -3134,7 +3519,7 @@
       "type": "string"
     },
     {
-      "key": "tenantId",
+      "key": "condominioId",
       "value": "",
       "type": "string"
     },

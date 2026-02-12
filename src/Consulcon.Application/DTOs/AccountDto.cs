@@ -3,9 +3,10 @@ namespace Consulcon.Application.DTOs
     public class AccountDto
     {
         public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string Type { get; set; } = "BANCO"; // 'BANCO', 'EFECTIVO'
+        public required string Name { get; set; }
+        public required string Type { get; set; }
         public string? AccountNumber { get; set; }
         public bool IsActive { get; set; }
+        public decimal Balance { get; set; }
     }
 }

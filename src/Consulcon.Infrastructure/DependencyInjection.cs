@@ -27,14 +27,14 @@ namespace Consulcon.Infrastructure
                     var config = serviceProvider.GetRequiredService<IConfiguration>();
                     var tenantService = serviceProvider.GetService<ICurrentTenantService>();
                     var defaultConnectionString = config.GetConnectionString("DefaultConnection");
-                    
+
                     // Read from environment variables (required in production)
                     var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
                     var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
                     var dbUser = Environment.GetEnvironmentVariable("DB_USER");
                     var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
                     var envName = Environment.GetEnvironmentVariable("DB_NAME");
-                    
+
                     // Fallback: Parse from DefaultConnection if env vars not set (local dev with appsettings)
                     if (string.IsNullOrEmpty(dbHost) && !string.IsNullOrEmpty(defaultConnectionString))
                     {
@@ -44,14 +44,14 @@ namespace Consulcon.Infrastructure
                             .Select(p => p.Split('=', 2))
                             .Where(p => p.Length == 2)
                             .ToDictionary(p => p[0].Trim(), p => p[1].Trim(), StringComparer.OrdinalIgnoreCase);
-                        
+
                         if (parts.TryGetValue("Server", out var server)) dbHost = server;
                         if (parts.TryGetValue("Port", out var port)) dbPort = port;
                         if (parts.TryGetValue("User", out var user)) dbUser = user;
                         if (parts.TryGetValue("Password", out var password)) dbPassword = password;
                         if (parts.TryGetValue("Database", out var database) && string.IsNullOrEmpty(envName)) envName = database;
                     }
-                    
+
                     // Validate required configuration
                     if (string.IsNullOrEmpty(dbHost) || string.IsNullOrEmpty(dbUser) || string.IsNullOrEmpty(dbPassword))
                     {
@@ -59,17 +59,17 @@ namespace Consulcon.Infrastructure
                             "Database configuration is missing. Set environment variables: DB_HOST, DB_USER, DB_PASSWORD " +
                             "(or provide a valid ConnectionStrings:DefaultConnection in appsettings.json for local development).");
                     }
-                    
+
                     // Default port if not specified
                     if (string.IsNullOrEmpty(dbPort)) dbPort = "3306";
                     
-                    // Determine Database Name
+                    // Determine Database Name based on TenantId (contains sanitized name like "bosques_colina")
                     string? dbName = null;
-                    if (tenantService?.TenantId != null && !string.IsNullOrEmpty(tenantService.TenantId))
+                    if (!string.IsNullOrEmpty(tenantService?.TenantId))
                     {
-                        dbName = tenantService.TenantId.StartsWith("db_") ? tenantService.TenantId : $"db_condominio_{tenantService.TenantId}";
+                        dbName = $"db_condominio_{tenantService.TenantId}";
                     }
-                    
+
                     if (string.IsNullOrEmpty(dbName) && !string.IsNullOrEmpty(envName))
                     {
                         dbName = envName;
@@ -92,9 +92,9 @@ namespace Consulcon.Infrastructure
                             UserID = dbUser,
                             Password = dbPassword
                         };
-                        
+
                         if (uint.TryParse(dbPort, out uint port)) builder.Port = port;
-                        
+
                         // Always override database if we determined one
                         if (!string.IsNullOrEmpty(dbName))
                         {
@@ -117,10 +117,10 @@ namespace Consulcon.Infrastructure
             }
 
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
-            
+
             // Specialized Repositories
             services.AddScoped<Consulcon.Application.Interfaces.Contabilidad.IProviderRepository, Consulcon.Infrastructure.Persistence.Repositories.ProviderRepository>();
-            
+
             services.AddScoped<DatabaseMigrationInitializer>();
             services.AddScoped<ITenantDatabaseService, TenantDatabaseService>();
             services.AddScoped<ITenantMigrationService, TenantMigrationService>();
@@ -155,16 +155,21 @@ namespace Consulcon.Infrastructure
             // Expense Attachments
             services.AddScoped<Consulcon.Infrastructure.Services.Storage.IFileStorageStrategy, Consulcon.Infrastructure.Services.Storage.LocalFileStorageStrategy>();
             services.AddScoped<Consulcon.Application.Interfaces.Contabilidad.IExpenseAttachmentService, Consulcon.Infrastructure.Services.Contabilidad.ExpenseAttachmentService>();
-            
+
             // Expenses (Registration)
             services.AddScoped<Consulcon.Application.Interfaces.Contabilidad.IExpenseService, Consulcon.Infrastructure.Services.Contabilidad.ExpenseService>();
-            
+
             // Expense Receipts (PDF Generation)
             services.AddScoped<Consulcon.Application.Interfaces.Facturacion.IExpenseReceiptGenerationService, Consulcon.Infrastructure.Services.Facturacion.ExpenseReceiptGenerationService>();
-            
+
             // Cash Book (Libro de Caja)
             services.AddScoped<Consulcon.Application.Interfaces.Contabilidad.ICashBookService, Consulcon.Infrastructure.Services.Contabilidad.CashBookService>();
-            
+            // Registro del Job Nocturno de Snapshots de Saldo
+            services.AddHostedService<Consulcon.Infrastructure.Services.AccountSnapshotBackgroundService>();         
+               
+            // Fiscal Period Closure (In-Memory)
+            services.AddSingleton<Consulcon.Infrastructure.Services.Contabilidad.InMemoryFiscalPeriodStore>();
+            services.AddScoped<Consulcon.Application.Interfaces.Contabilidad.IFiscalPeriodService, Consulcon.Infrastructure.Services.Contabilidad.FiscalPeriodService>();
             return services;
         }
     }

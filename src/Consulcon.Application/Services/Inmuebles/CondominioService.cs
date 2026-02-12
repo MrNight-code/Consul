@@ -39,13 +39,14 @@ public class CondominioService : ICondominioService
         var dtos = new List<CondominioDto>();
         foreach (var uc in userCondos)
         {
-            // Try to get extended data from tenant DB
+            // Try to get extended data from tenant DB (using TenantId which has sanitized name)
             var dbName = $"db_condominio_{uc.Condominio.TenantId}";
             var tenantData = await _tenantDatabaseService.GetCondominioAsync(dbName);
 
             if (tenantData != null)
             {
-                // Use tenant data (has Direccion, Logo, etc.)
+                // Use tenant data (has Direccion, Logo, etc.) but preserve Master Id
+                tenantData.IdCondominio = uc.Condominio.Id;
                 dtos.Add(tenantData);
             }
             else
@@ -72,9 +73,9 @@ public class CondominioService : ICondominioService
         var masterEntity = new CondominioMaster
         {
             Nombre = dto.Nombre,
-            TenantId = "temp_tenant_id", 
+            TenantId = "pending", // Will be updated with sanitized name
             FechaRegistro = DateTime.UtcNow,
-            ConnectionString = ""
+            ConnectionString = "" // Will be updated after processing
         };
 
         await _condominioRepository.AddAsync(masterEntity);
@@ -83,9 +84,18 @@ public class CondominioService : ICondominioService
         var adminUser = await _usuarioRepository.GetByIdAsync(userId);
         var adminName = adminUser?.Username ?? "Administrador";
 
-        // Update TenantId based on generated ID to ensure uniqueness
-        masterEntity.TenantId = $"condominio_{masterEntity.Id}";
-        var dbName = $"db_condominio_{masterEntity.TenantId}";
+        // Generate DB name from Nombre: lowercase, spaces to underscores, remove special chars
+        var sanitizedName = SanitizeDatabaseName(dto.Nombre);
+        var dbName = $"db_condominio_{sanitizedName}";
+        
+        // Build connection string using environment variables (same pattern as DependencyInjection)
+        var dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost";
+        var dbPort = Environment.GetEnvironmentVariable("DB_PORT") ?? "3306";
+        var dbUser = Environment.GetEnvironmentVariable("DB_USER") ?? "root";
+        var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "";
+        
+        masterEntity.TenantId = sanitizedName; // Use sanitized name as TenantId
+        masterEntity.ConnectionString = $"Server={dbHost};Port={dbPort};Database={dbName};User={dbUser};Password={dbPassword};";
         
         await _condominioRepository.UpdateAsync(masterEntity);
 
@@ -163,6 +173,36 @@ public class CondominioService : ICondominioService
             ConfigDiaCobro = inputDto?.ConfigDiaCobro,
             Logo = inputDto?.Logo
         };
+    }
+
+    /// <summary>
+    /// Sanitizes a condominio name to be valid as a database name.
+    /// Converts to lowercase, replaces spaces with underscores, removes special characters.
+    /// </summary>
+    private static string SanitizeDatabaseName(string nombre)
+    {
+        if (string.IsNullOrWhiteSpace(nombre))
+            return "unnamed";
+        
+        // Normalize: lowercase, replace spaces with underscores
+        var sanitized = nombre.ToLowerInvariant()
+            .Replace(" ", "_")
+            .Replace("-", "_");
+        
+        // Remove any characters that aren't alphanumeric or underscore
+        sanitized = System.Text.RegularExpressions.Regex.Replace(sanitized, @"[^a-z0-9_]", "");
+        
+        // Remove consecutive underscores
+        sanitized = System.Text.RegularExpressions.Regex.Replace(sanitized, @"_+", "_");
+        
+        // Trim underscores from start/end
+        sanitized = sanitized.Trim('_');
+        
+        // Ensure it's not empty and not too long (MySQL limit is 64 chars)
+        if (string.IsNullOrEmpty(sanitized))
+            return "unnamed";
+        
+        return sanitized.Length > 50 ? sanitized.Substring(0, 50) : sanitized;
     }
 
     public async Task<Result<bool>> AddUserAsync(int condominioId, AddUserToCondominioDto dto)

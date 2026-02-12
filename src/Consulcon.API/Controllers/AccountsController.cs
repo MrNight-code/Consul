@@ -49,5 +49,16 @@ namespace Consulcon.API.Controllers
             if (!result.IsSuccess) return BadRequest(result.Error); // 400 Bad Request for Integrity violation
             return Ok(new { IsSuccess = true });
         }
+
+        [HttpGet("{id}/balance-history")]
+        public async Task<IActionResult> GetBalanceHistory(int id, [FromQuery] DateTime? from, [FromQuery] DateTime? to)
+        {
+            var result = await service.GetBalanceHistoryAsync(id, from, to);
+            
+            if (!result.IsSuccess)
+                return BadRequest(result.Error);
+
+            return Ok(result.Value);
+        }
     }
 }

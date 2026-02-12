@@ -20,11 +20,13 @@ public partial class ConsulconDbContext : DbContext
 {
     public ConsulconDbContext()
     {
+        AccountDailyBalances = Set<AccountDailyBalance>();
     }
 
     public ConsulconDbContext(DbContextOptions<ConsulconDbContext> options)
         : base(options)
     {
+        AccountDailyBalances = Set<AccountDailyBalance>();
     }
 
     // Master Entities
@@ -68,6 +70,7 @@ public partial class ConsulconDbContext : DbContext
     public virtual DbSet<Rol> Rols { get; set; } = null!;
     public virtual DbSet<TransaccionPago> TransaccionPagos { get; set; } = null!;
     public virtual DbSet<Usuario> Usuarios { get; set; } = null!;
+    public DbSet<AccountDailyBalance> AccountDailyBalances { get; set; }
     
     // Facturacion
     // public virtual DbSet<Recibo> Recibos { get; set; } = null!; // REFACTORED: Integrated into TransaccionPago

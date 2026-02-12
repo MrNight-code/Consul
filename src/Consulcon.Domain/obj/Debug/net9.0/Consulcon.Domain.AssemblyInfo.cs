@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Consulcon.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f03096a8ee9291395a61e327054d75eabfc652aa")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e5b4e26a1b85d84d1e57a052e314f0068a8dd196")]
 [assembly: System.Reflection.AssemblyProductAttribute("Consulcon.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Consulcon.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

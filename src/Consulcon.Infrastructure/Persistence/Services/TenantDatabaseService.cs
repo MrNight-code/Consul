@@ -49,58 +49,81 @@ namespace Consulcon.Infrastructure.Persistence.Services
 
         private string GetMasterConnectionString()
         {
-            // Connect without specifying a database to run CREATE DATABASE
-            var dbHost = _configuration["DB_HOST"] ?? throw new InvalidOperationException("DB_HOST configuration is required.");
-            var dbPort = _configuration["DB_PORT"] ?? "3306";
-            var dbUser = _configuration["DB_USER"] ?? throw new InvalidOperationException("DB_USER configuration is required.");
-            var dbPassword = _configuration["DB_PASSWORD"] ?? throw new InvalidOperationException("DB_PASSWORD configuration is required.");
+            // Use environment variables first (Docker), fallback to configuration (local dev)
+            var dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? _configuration["DB_HOST"];
+            var dbPort = Environment.GetEnvironmentVariable("DB_PORT") ?? _configuration["DB_PORT"] ?? "3306";
+            var dbUser = Environment.GetEnvironmentVariable("DB_USER") ?? _configuration["DB_USER"];
+            var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? _configuration["DB_PASSWORD"];
+
+            if (string.IsNullOrEmpty(dbHost) || string.IsNullOrEmpty(dbUser) || string.IsNullOrEmpty(dbPassword))
+            {
+                throw new InvalidOperationException("Database configuration is required. Set DB_HOST, DB_USER, DB_PASSWORD.");
+            }
 
             return $"Server={dbHost};Port={dbPort};User={dbUser};Password={dbPassword};";
         }
 
         private string GetConnectionStringForDatabase(string databaseName)
         {
-            var dbHost = _configuration["DB_HOST"] ?? throw new InvalidOperationException("DB_HOST configuration is required.");
-            var dbPort = _configuration["DB_PORT"] ?? "3306";
-            var dbUser = _configuration["DB_USER"] ?? throw new InvalidOperationException("DB_USER configuration is required.");
-            var dbPassword = _configuration["DB_PASSWORD"] ?? throw new InvalidOperationException("DB_PASSWORD configuration is required.");
+            // Use environment variables first (Docker), fallback to configuration (local dev)
+            var dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? _configuration["DB_HOST"];
+            var dbPort = Environment.GetEnvironmentVariable("DB_PORT") ?? _configuration["DB_PORT"] ?? "3306";
+            var dbUser = Environment.GetEnvironmentVariable("DB_USER") ?? _configuration["DB_USER"];
+            var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? _configuration["DB_PASSWORD"];
 
-            /*
-                Note: We are manually constructing the connection string here.
-                We ensure consistency with DependencyInjection logic but targeted at a specific DB.
-            */
+            if (string.IsNullOrEmpty(dbHost) || string.IsNullOrEmpty(dbUser) || string.IsNullOrEmpty(dbPassword))
+            {
+                throw new InvalidOperationException("Database configuration is required. Set DB_HOST, DB_USER, DB_PASSWORD.");
+            }
+
             return $"Server={dbHost};Port={dbPort};Database={databaseName};User={dbUser};Password={dbPassword};";
         }
 
         public async Task InitializeCondominioAsync(string databaseName, Application.DTOs.Inmuebles.CondominioDto initialData)
         {
-            var connectionString = GetConnectionStringForDatabase(databaseName);
-            
-            var optionsBuilder = new DbContextOptionsBuilder<ConsulconDbContext>();
-            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-
-            using var context = new ConsulconDbContext(optionsBuilder.Options); 
-            
-            // Create initial Admin Persona to satisfy FK constraint
-            var adminPersona = new Domain.Entities.General.Persona
+            try
             {
-                NombreCompleto = !string.IsNullOrEmpty(initialData.AdminNombre) ? initialData.AdminNombre : "Administrador Inicial",
-                EsActivo = true
-            };
+                Console.WriteLine($"[TenantDatabaseService] Initializing condominio in {databaseName}");
+                var connectionString = GetConnectionStringForDatabase(databaseName);
+                
+                var optionsBuilder = new DbContextOptionsBuilder<ConsulconDbContext>();
+                optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 
-            var tenantCondominio = new Domain.Entities.Inmuebles.Condominio
+                using var context = new ConsulconDbContext(optionsBuilder.Options); 
+                
+                // Create initial Admin Persona to satisfy FK constraint
+                var adminPersona = new Domain.Entities.General.Persona
+                {
+                    NombreCompleto = !string.IsNullOrEmpty(initialData.AdminNombre) ? initialData.AdminNombre : "Administrador Inicial",
+                    EsActivo = true
+                };
+
+                // First save the Persona to get its ID
+                context.Personas.Add(adminPersona);
+                await context.SaveChangesAsync();
+                Console.WriteLine($"[TenantDatabaseService] Created admin persona with ID: {adminPersona.IdPersona}");
+
+                var tenantCondominio = new Domain.Entities.Inmuebles.Condominio
+                {
+                    // Don't set IdCondominio - let DB auto-generate it
+                    Nombre = initialData.Nombre,
+                    Direccion = initialData.Direccion,
+                    SuperficieTotalM2 = initialData.SuperficieTotalM2,
+                    IdAdminPersona = adminPersona.IdPersona,
+                    ConfigDiaCobro = initialData.ConfigDiaCobro,
+                    Logo = initialData.Logo
+                };
+
+                context.Condominios.Add(tenantCondominio);
+                await context.SaveChangesAsync();
+                Console.WriteLine($"[TenantDatabaseService] Created tenant condominio with ID: {tenantCondominio.IdCondominio}");
+            }
+            catch (Exception ex)
             {
-                IdCondominio = initialData.IdCondominio,
-                Nombre = initialData.Nombre,
-                Direccion = initialData.Direccion,
-                SuperficieTotalM2 = initialData.SuperficieTotalM2,
-                IdAdminPersonaNavigation = adminPersona,
-                ConfigDiaCobro = initialData.ConfigDiaCobro,
-                Logo = initialData.Logo
-            };
-
-            context.Condominios.Add(tenantCondominio);
-            await context.SaveChangesAsync();
+                Console.WriteLine($"[TenantDatabaseService] ERROR initializing condominio: {ex.Message}");
+                Console.WriteLine($"[TenantDatabaseService] Stack: {ex.StackTrace}");
+                throw; // Re-throw to let caller handle
+            }
         }
 
         public async Task<Application.DTOs.Inmuebles.CondominioDto?> GetCondominioAsync(string databaseName)

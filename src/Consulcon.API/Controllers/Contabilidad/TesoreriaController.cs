@@ -7,19 +7,7 @@ namespace Consulcon.API.Controllers.Contabilidad;
 [Route("api/[controller]")]
 public class TesoreriaController(ITesoreriaService service, Consulcon.Application.Interfaces.Facturacion.IExpenseReceiptGenerationService receiptService) : ControllerBase
 {
-    [HttpGet("bancos")]
-    public async Task<IActionResult> GetBancos()
-    {
-        var result = await service.GetBancosAsync();
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
 
-    [HttpPost("bancos")]
-    public async Task<IActionResult> CreateBanco([FromBody] BancoDto dto)
-    {
-        var result = await service.CreateBancoAsync(dto);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
 
     [HttpGet("formaspago")]
     public async Task<IActionResult> GetFormasPago()

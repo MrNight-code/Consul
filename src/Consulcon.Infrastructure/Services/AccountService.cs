@@ -1,5 +1,6 @@
 using Consulcon.Application.DTOs;
 using Consulcon.Application.Interfaces;
+using Consulcon.Application.DTOs.Contabilidad;
 using Consulcon.Domain.Common;
 using Consulcon.Domain.Entities.General;
 using Consulcon.Infrastructure.Persistence;
@@ -10,7 +11,9 @@ using System.Threading.Tasks;
 
 namespace Consulcon.Infrastructure.Services
 {
-    public class AccountService(ConsulconDbContext context) : IAccountService
+    public class AccountService(
+        ConsulconDbContext context, 
+        IRepository<Consulcon.Domain.Entities.Contabilidad.Egreso> egresoRepository) : IAccountService
     {
 
         public async Task<Result<List<AccountDto>>> GetAllAccountsAsync(bool activeOnly = true)
@@ -27,7 +30,8 @@ namespace Consulcon.Infrastructure.Services
                     Name = b.NombreEntidad,
                     Type = b.Tipo,
                     AccountNumber = b.NumeroCuenta,
-                    IsActive = b.Activo ?? false
+                    IsActive = b.Activo ?? false,
+                    Balance = b.Saldo
                 })
                 .ToListAsync();
 
@@ -45,7 +49,8 @@ namespace Consulcon.Infrastructure.Services
                 Name = banco.NombreEntidad,
                 Type = banco.Tipo,
                 AccountNumber = banco.NumeroCuenta,
-                IsActive = banco.Activo ?? false
+                IsActive = banco.Activo ?? false,
+                Balance = banco.Saldo
             });
         }
 
@@ -57,12 +62,27 @@ namespace Consulcon.Infrastructure.Services
                 Tipo = accountDto.Type,
                 NumeroCuenta = accountDto.AccountNumber,
                 Activo = accountDto.IsActive,
+                Saldo = accountDto.Balance
                 // Defaulting potentially required fields if not in DTO or nullable
                 // Moneda? IdCuentaContable?
             };
 
             context.Bancos.Add(banco);
             await context.SaveChangesAsync();
+
+            if (accountDto.Balance != 0)
+            {
+                var transaction = new Consulcon.Domain.Entities.Contabilidad.AccountTransactionHistory
+                {
+                    AccountId = banco.IdBanco,
+                    Amount = accountDto.Balance,
+                    Date = DateTime.Now,
+                    Description = "Saldo Inicial / Apertura",
+                    ReferenceId = "INIT"
+                };
+                context.AccountTransactionHistories.Add(transaction);
+                await context.SaveChangesAsync();
+            }
 
             return Result.Ok(banco.IdBanco);
         }
@@ -97,6 +117,37 @@ namespace Consulcon.Infrastructure.Services
             await context.SaveChangesAsync();
 
             return Result.Ok(true);
+        }
+
+        public async Task<Result<IEnumerable<BalanceHistoryDto>>> GetBalanceHistoryAsync(int id, DateTime? from, DateTime? to)
+        {
+            var startDate = from ?? DateTime.Now.AddDays(-30); // Default to last 30 days if not specified
+            var endDate = to ?? DateTime.Now;
+
+            // Query Egresos for this account
+            var egresos = await egresoRepository.FindAsync(e => 
+                e.IdBancoOrigen == id && 
+                e.FechaEgreso >= startDate && 
+                e.FechaEgreso <= endDate,
+                includeProperties: "IdProveedorNavigation,IdPersonaBeneficiarioNavigation");
+
+            var history = egresos.Select(e => new BalanceHistoryDto
+            {
+                Date = e.FechaEgreso ?? DateTime.Now,
+                // For now, balance is not calculated per row, but we return the transaction amount
+                Balance = 0, // Placeholder or calculated if needed
+                AccountName = "Banco", // Could fetch actual name if needed, but context implies it
+                Type = "Egreso",
+                
+                // Transaction Details
+                TransactionId = e.IdEgreso,
+                Description = e.Concepto,
+                Amount = e.MontoTotal,
+                Beneficiary = e.IdProveedorNavigation?.RazonSocial ?? e.IdPersonaBeneficiarioNavigation?.NombreCompleto,
+                TransactionType = "Egreso"
+            }).OrderByDescending(x => x.Date).ToList();
+
+            return Result.Ok<IEnumerable<BalanceHistoryDto>>(history);
         }
     }
 }

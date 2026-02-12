@@ -12,5 +12,6 @@ namespace Consulcon.Application.Interfaces
         Task<Result<int>> CreateAccountAsync(AccountDto accountDto);
         Task<Result<bool>> UpdateAccountAsync(int id, AccountDto accountDto);
         Task<Result<bool>> DeleteAccountAsync(int id);
+        Task<Result<IEnumerable<BalanceHistoryDto>>> GetBalanceHistoryAsync(int id, DateTime? from, DateTime? to);
     }
 }

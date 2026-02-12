@@ -4,7 +4,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace Consulcon.API.Swagger;
 
 /// <summary>
-/// Adds X-Tenant-Id header parameter to all Swagger operations.
+/// Adds X-Condominio-Id header parameter to all Swagger operations.
 /// </summary>
 public class TenantHeaderOperationFilter : IOperationFilter
 {
@@ -14,14 +14,14 @@ public class TenantHeaderOperationFilter : IOperationFilter
 
         operation.Parameters.Add(new OpenApiParameter
         {
-            Name = "X-Tenant-Id",
+            Name = "X-Condominio-Id",
             In = ParameterLocation.Header,
             Required = true,
-            Description = "Tenant identifier (e.g., 'bosques')",
+            Description = "Condominio ID (integer, e.g., 1)",
             Schema = new OpenApiSchema
             {
-                Type = "string",
-                Default = new Microsoft.OpenApi.Any.OpenApiString("bosques")
+                Type = "integer",
+                Default = new Microsoft.OpenApi.Any.OpenApiInteger(1)
             }
         });
     }
