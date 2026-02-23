@@ -1,0 +1,898 @@
+2026-02-19 10:18:53.274 -04:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-02-19 10:18:53.353 -04:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT GET_LOCK('__db_consulcon_master_EFMigrationsLock', 259200)
+2026-02-19 10:18:53.481 -04:00 [INF] Executed DbCommand (29ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS `__EFMigrationsHistory` (
+    `MigrationId` varchar(150) CHARACTER SET utf8mb4 NOT NULL,
+    `ProductVersion` varchar(32) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK___EFMigrationsHistory` PRIMARY KEY (`MigrationId`)
+) CHARACTER SET=utf8mb4;
+2026-02-19 10:18:53.561 -04:00 [INF] Executed DbCommand (41ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='db_consulcon_master' AND TABLE_NAME='__EFMigrationsHistory';
+2026-02-19 10:18:53.565 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2026-02-19 10:18:53.575 -04:00 [INF] Applying migration '20260218193938_InitialPostgres_Final'.
+2026-02-19 10:18:53.814 -04:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER DATABASE CHARACTER SET utf8mb4;
+2026-02-19 10:18:53.828 -04:00 [ERR] Failed executing DbCommand (12ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `autorizacion_gasto` (
+    `id_autorizacion` int NOT NULL AUTO_INCREMENT,
+    `descripcion` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Niveles de firma para gastos',
+    `activo` tinyint(1) NULL DEFAULT '1',
+    CONSTRAINT `PRIMARY` PRIMARY KEY (`id_autorizacion`)
+) CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+2026-02-19 10:23:24.744 -04:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-02-19 10:23:24.825 -04:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT GET_LOCK('__db_consulcon_master_EFMigrationsLock', 259200)
+2026-02-19 10:23:24.935 -04:00 [INF] Executed DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS `__EFMigrationsHistory` (
+    `MigrationId` varchar(150) CHARACTER SET utf8mb4 NOT NULL,
+    `ProductVersion` varchar(32) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK___EFMigrationsHistory` PRIMARY KEY (`MigrationId`)
+) CHARACTER SET=utf8mb4;
+2026-02-19 10:23:24.971 -04:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='db_consulcon_master' AND TABLE_NAME='__EFMigrationsHistory';
+2026-02-19 10:23:24.976 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2026-02-19 10:23:24.987 -04:00 [INF] Applying migration '20260218193938_InitialPostgres_Final'.
+2026-02-19 10:23:25.190 -04:00 [INF] Executed DbCommand (40ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER DATABASE CHARACTER SET utf8mb4;
+2026-02-19 10:23:25.195 -04:00 [ERR] Failed executing DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `autorizacion_gasto` (
+    `id_autorizacion` int NOT NULL AUTO_INCREMENT,
+    `descripcion` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Niveles de firma para gastos',
+    `activo` tinyint(1) NULL DEFAULT '1',
+    CONSTRAINT `PRIMARY` PRIMARY KEY (`id_autorizacion`)
+) CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+2026-02-19 10:25:59.870 -04:00 [ERR] Failed executing DbCommand (53ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-02-19 10:28:01.662 -04:00 [ERR] Failed executing DbCommand (23ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-02-19 17:02:41.881 -04:00 [ERR] Failed executing DbCommand (23ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-02-19 17:02:42.336 -04:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-02-19 17:02:42.356 -04:00 [INF] Applying migration '20260219210210_InitialPostgres'.
+2026-02-19 17:02:42.517 -04:00 [ERR] Failed executing DbCommand (20ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE catalogo_servicio (
+    id_servicio integer GENERATED BY DEFAULT AS IDENTITY,
+    nombre character varying(100) NOT NULL,
+    costo_base numeric(10,2) DEFAULT ('0.00'),
+    es_recurrente boolean DEFAULT ('1'),
+    activo boolean DEFAULT ('1'),
+    CONSTRAINT "PRIMARY" PRIMARY KEY (id_servicio)
+);
+COMMENT ON COLUMN catalogo_servicio.id_servicio IS 'Antes: serviciopago';
+COMMENT ON COLUMN catalogo_servicio.nombre IS 'Agua, Luz, Multa, Expensa';
+2026-02-19 17:21:01.511 -04:00 [INF] Executed DbCommand (21ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-02-19 17:21:32.955 -04:00 [INF] Executed DbCommand (20ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-02-19 17:21:33.382 -04:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" character varying(150) NOT NULL,
+    "ProductVersion" character varying(32) NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+2026-02-19 17:21:33.392 -04:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-02-19 17:21:33.393 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2026-02-19 17:21:33.394 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-02-19 17:21:33.404 -04:00 [INF] Applying migration '20260219212117_InitialPostgres'.
+2026-02-19 17:21:33.540 -04:00 [INF] Executed DbCommand (15ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE autorizacion_gasto (
+    id_autorizacion integer GENERATED BY DEFAULT AS IDENTITY,
+    descripcion character varying(100) NOT NULL,
+    activo boolean DEFAULT ('1'),
+    CONSTRAINT "PK_autorizacion_gasto" PRIMARY KEY (id_autorizacion)
+);
+COMMENT ON COLUMN autorizacion_gasto.descripcion IS 'Niveles de firma para gastos';
+2026-02-19 17:21:33.545 -04:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE catalogo_servicio (
+    id_servicio integer GENERATED BY DEFAULT AS IDENTITY,
+    nombre character varying(100) NOT NULL,
+    costo_base numeric(10,2) DEFAULT ('0.00'),
+    es_recurrente boolean DEFAULT ('1'),
+    activo boolean DEFAULT ('1'),
+    CONSTRAINT "PK_catalogo_servicio" PRIMARY KEY (id_servicio)
+);
+COMMENT ON COLUMN catalogo_servicio.id_servicio IS 'Antes: serviciopago';
+COMMENT ON COLUMN catalogo_servicio.nombre IS 'Agua, Luz, Multa, Expensa';
+2026-02-19 17:21:33.553 -04:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "CondominiosMaster" (
+    "Id" integer GENERATED BY DEFAULT AS IDENTITY,
+    "TenantId" character varying(50) NOT NULL,
+    "Nombre" character varying(150) NOT NULL,
+    "ConnectionString" character varying(500),
+    "FechaRegistro" timestamp with time zone NOT NULL,
+    CONSTRAINT "PK_CondominiosMaster" PRIMARY KEY ("Id")
+);
+2026-02-19 17:21:33.559 -04:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE permiso (
+    id_permiso integer GENERATED BY DEFAULT AS IDENTITY,
+    descripcion character varying(100) NOT NULL,
+    CONSTRAINT "PK_permiso" PRIMARY KEY (id_permiso)
+);
+COMMENT ON COLUMN permiso.descripcion IS 'Antes: permiso';
+2026-02-19 17:21:33.569 -04:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE persona (
+    id_persona integer GENERATED BY DEFAULT AS IDENTITY,
+    nombre_completo character varying(150) NOT NULL,
+    ci character varying(20),
+    fecha_nacimiento date,
+    sexo character(1),
+    estado_civil character varying(20),
+    es_activo boolean DEFAULT ('1'),
+    id_familiar_responsable integer,
+    CONSTRAINT "PK_persona" PRIMARY KEY (id_persona),
+    CONSTRAINT fk_persona_familiar FOREIGN KEY (id_familiar_responsable) REFERENCES persona (id_persona)
+);
+COMMENT ON COLUMN persona.nombre_completo IS 'Antes: nombre';
+COMMENT ON COLUMN persona.id_familiar_responsable IS 'Recursiva: Para hijos/dependientes';
+2026-02-19 17:21:33.576 -04:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE plan_cuentas (
+    id_cuenta integer GENERATED BY DEFAULT AS IDENTITY,
+    codigo_cuenta character varying(20) NOT NULL,
+    nombre character varying(100) NOT NULL,
+    id_cuenta_padre integer,
+    nivel_jerarquia integer DEFAULT ('1'),
+    es_imputable boolean DEFAULT ('1'),
+    CONSTRAINT "PK_plan_cuentas" PRIMARY KEY (id_cuenta),
+    CONSTRAINT fk_pc_padre FOREIGN KEY (id_cuenta_padre) REFERENCES plan_cuentas (id_cuenta)
+);
+COMMENT ON COLUMN plan_cuentas.codigo_cuenta IS 'Ej: 1.1.01';
+COMMENT ON COLUMN plan_cuentas.id_cuenta_padre IS 'Recursiva';
+COMMENT ON COLUMN plan_cuentas.es_imputable IS 'Si/No';
+2026-02-19 17:21:33.581 -04:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE proveedor (
+    id_proveedor integer GENERATED BY DEFAULT AS IDENTITY,
+    razon_social character varying(150) NOT NULL,
+    nit character varying(30),
+    contacto character varying(100),
+    direccion character varying(200),
+    activo boolean DEFAULT ('1'),
+    CONSTRAINT "PK_proveedor" PRIMARY KEY (id_proveedor)
+);
+2026-02-19 17:21:33.588 -04:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE rol (
+    id_rol integer GENERATED BY DEFAULT AS IDENTITY,
+    nombre character varying(50) NOT NULL,
+    CONSTRAINT "PK_rol" PRIMARY KEY (id_rol)
+);
+COMMENT ON COLUMN rol.id_rol IS 'Antes: tipousuario';
+COMMENT ON COLUMN rol.nombre IS 'Admin, Guardia, Vecino';
+2026-02-19 17:21:33.597 -04:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "UsuariosMaster" (
+    "Id" integer GENERATED BY DEFAULT AS IDENTITY,
+    "Username" character varying(100) NOT NULL,
+    "PasswordHash" character varying(255) NOT NULL,
+    "Email" character varying(150),
+    "FechaCreacion" timestamp with time zone NOT NULL,
+    "EsSuperAdmin" boolean NOT NULL,
+    CONSTRAINT "PK_UsuariosMaster" PRIMARY KEY ("Id")
+);
+2026-02-19 17:21:33.609 -04:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE condominio (
+    id_condominio integer GENERATED BY DEFAULT AS IDENTITY,
+    codigo character varying(20),
+    nombre character varying(100) NOT NULL,
+    direccion character varying(200),
+    superficie_total_m2 numeric(12,2),
+    id_admin_persona integer NOT NULL,
+    config_dia_cobro character varying(50),
+    logo character varying(255),
+    CONSTRAINT "PK_condominio" PRIMARY KEY (id_condominio),
+    CONSTRAINT fk_condominio_admin FOREIGN KEY (id_admin_persona) REFERENCES persona (id_persona)
+);
+2026-02-19 17:21:33.616 -04:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE medio_contacto (
+    id_contacto integer GENERATED BY DEFAULT AS IDENTITY,
+    id_persona integer NOT NULL,
+    tipo character varying(50) NOT NULL,
+    valor character varying(100) NOT NULL,
+    es_principal boolean DEFAULT ('0'),
+    CONSTRAINT "PK_medio_contacto" PRIMARY KEY (id_contacto),
+    CONSTRAINT fk_contacto_persona FOREIGN KEY (id_persona) REFERENCES persona (id_persona) ON DELETE CASCADE
+);
+COMMENT ON COLUMN medio_contacto.tipo IS 'Telefono, Celular, Email, Facebook';
+COMMENT ON COLUMN medio_contacto.valor IS 'El numero o correo';
+2026-02-19 17:21:33.623 -04:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE banco (
+    id_banco integer GENERATED BY DEFAULT AS IDENTITY,
+    nombre_entidad character varying(100) NOT NULL,
+    numero_cuenta character varying(50),
+    moneda character varying(10) DEFAULT ('BOB'),
+    tipo character varying(50) NOT NULL DEFAULT 'BANCO',
+    activo boolean DEFAULT ('1'),
+    id_cuenta_contable_asociada integer,
+    saldo numeric(18,2) NOT NULL DEFAULT 0.0,
+    CONSTRAINT "PK_banco" PRIMARY KEY (id_banco),
+    CONSTRAINT fk_banco_cuenta FOREIGN KEY (id_cuenta_contable_asociada) REFERENCES plan_cuentas (id_cuenta)
+);
+2026-02-19 17:21:33.632 -04:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE config_contable_servicio (
+    id_servicio integer NOT NULL,
+    id_cuenta_ingreso integer NOT NULL,
+    CONSTRAINT "PK_config_contable_servicio" PRIMARY KEY (id_servicio, id_cuenta_ingreso),
+    CONSTRAINT fk_ccs_cuenta FOREIGN KEY (id_cuenta_ingreso) REFERENCES plan_cuentas (id_cuenta),
+    CONSTRAINT fk_ccs_servicio FOREIGN KEY (id_servicio) REFERENCES catalogo_servicio (id_servicio)
+);
+2026-02-19 17:21:33.639 -04:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE forma_pago (
+    id_forma_pago integer GENERATED BY DEFAULT AS IDENTITY,
+    descripcion character varying(50) NOT NULL,
+    id_cuenta_contable_asociada integer,
+    CONSTRAINT "PK_forma_pago" PRIMARY KEY (id_forma_pago),
+    CONSTRAINT fk_fp_cuenta FOREIGN KEY (id_cuenta_contable_asociada) REFERENCES plan_cuentas (id_cuenta)
+);
+COMMENT ON COLUMN forma_pago.descripcion IS 'Efectivo, Cheque, Transferencia';
+2026-02-19 17:21:33.645 -04:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE rol_permiso (
+    id_rol integer NOT NULL,
+    id_permiso integer NOT NULL,
+    CONSTRAINT "PK_rol_permiso" PRIMARY KEY (id_rol, id_permiso),
+    CONSTRAINT fk_rp_permiso FOREIGN KEY (id_permiso) REFERENCES permiso (id_permiso) ON DELETE CASCADE,
+    CONSTRAINT fk_rp_rol FOREIGN KEY (id_rol) REFERENCES rol (id_rol) ON DELETE CASCADE
+);
+2026-02-19 17:21:33.652 -04:00 [ERR] Failed executing DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE usuario (
+    pk_usuario integer GENERATED BY DEFAULT AS IDENTITY,
+    id_persona integer NOT NULL,
+    username character varying(50) NOT NULL,
+    password_hash character varying(255) NOT NULL,
+    fecha_creacion datetime DEFAULT (CURRENT_TIMESTAMP),
+    esta_habilitado boolean DEFAULT ('1'),
+    id_rol_principal integer,
+    CONSTRAINT "PK_usuario" PRIMARY KEY (pk_usuario),
+    CONSTRAINT fk_usuario_persona FOREIGN KEY (id_persona) REFERENCES persona (id_persona),
+    CONSTRAINT fk_usuario_rol FOREIGN KEY (id_rol_principal) REFERENCES rol (id_rol)
+);
+COMMENT ON COLUMN usuario.password_hash IS 'Antes: contrasena';
+2026-02-19 17:25:43.001 -04:00 [INF] Executed DbCommand (20ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-02-19 17:26:07.191 -04:00 [INF] Executed DbCommand (22ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-02-19 17:26:07.622 -04:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" character varying(150) NOT NULL,
+    "ProductVersion" character varying(32) NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+2026-02-19 17:26:07.635 -04:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-02-19 17:26:07.637 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2026-02-19 17:26:07.638 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-02-19 17:26:07.651 -04:00 [INF] Applying migration '20260219212554_InitialPostgres'.
+2026-02-19 17:26:07.815 -04:00 [INF] Executed DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE autorizacion_gasto (
+    id_autorizacion integer GENERATED BY DEFAULT AS IDENTITY,
+    descripcion character varying(100) NOT NULL,
+    activo boolean DEFAULT ('1'),
+    CONSTRAINT "PK_autorizacion_gasto" PRIMARY KEY (id_autorizacion)
+);
+COMMENT ON COLUMN autorizacion_gasto.descripcion IS 'Niveles de firma para gastos';
+2026-02-19 17:26:07.825 -04:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE catalogo_servicio (
+    id_servicio integer GENERATED BY DEFAULT AS IDENTITY,
+    nombre character varying(100) NOT NULL,
+    costo_base numeric(10,2) DEFAULT ('0.00'),
+    es_recurrente boolean DEFAULT ('1'),
+    activo boolean DEFAULT ('1'),
+    CONSTRAINT "PK_catalogo_servicio" PRIMARY KEY (id_servicio)
+);
+COMMENT ON COLUMN catalogo_servicio.id_servicio IS 'Antes: serviciopago';
+COMMENT ON COLUMN catalogo_servicio.nombre IS 'Agua, Luz, Multa, Expensa';
+2026-02-19 17:26:07.841 -04:00 [INF] Executed DbCommand (15ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "CondominiosMaster" (
+    "Id" integer GENERATED BY DEFAULT AS IDENTITY,
+    "TenantId" character varying(50) NOT NULL,
+    "Nombre" character varying(150) NOT NULL,
+    "ConnectionString" character varying(500),
+    "FechaRegistro" timestamp with time zone NOT NULL,
+    CONSTRAINT "PK_CondominiosMaster" PRIMARY KEY ("Id")
+);
+2026-02-19 17:26:07.852 -04:00 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE permiso (
+    id_permiso integer GENERATED BY DEFAULT AS IDENTITY,
+    descripcion character varying(100) NOT NULL,
+    CONSTRAINT "PK_permiso" PRIMARY KEY (id_permiso)
+);
+COMMENT ON COLUMN permiso.descripcion IS 'Antes: permiso';
+2026-02-19 17:26:07.869 -04:00 [INF] Executed DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE persona (
+    id_persona integer GENERATED BY DEFAULT AS IDENTITY,
+    nombre_completo character varying(150) NOT NULL,
+    ci character varying(20),
+    fecha_nacimiento date,
+    sexo character(1),
+    estado_civil character varying(20),
+    es_activo boolean DEFAULT ('1'),
+    id_familiar_responsable integer,
+    CONSTRAINT "PK_persona" PRIMARY KEY (id_persona),
+    CONSTRAINT fk_persona_familiar FOREIGN KEY (id_familiar_responsable) REFERENCES persona (id_persona)
+);
+COMMENT ON COLUMN persona.nombre_completo IS 'Antes: nombre';
+COMMENT ON COLUMN persona.id_familiar_responsable IS 'Recursiva: Para hijos/dependientes';
+2026-02-19 17:26:07.885 -04:00 [INF] Executed DbCommand (15ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE plan_cuentas (
+    id_cuenta integer GENERATED BY DEFAULT AS IDENTITY,
+    codigo_cuenta character varying(20) NOT NULL,
+    nombre character varying(100) NOT NULL,
+    id_cuenta_padre integer,
+    nivel_jerarquia integer DEFAULT ('1'),
+    es_imputable boolean DEFAULT ('1'),
+    CONSTRAINT "PK_plan_cuentas" PRIMARY KEY (id_cuenta),
+    CONSTRAINT fk_pc_padre FOREIGN KEY (id_cuenta_padre) REFERENCES plan_cuentas (id_cuenta)
+);
+COMMENT ON COLUMN plan_cuentas.codigo_cuenta IS 'Ej: 1.1.01';
+COMMENT ON COLUMN plan_cuentas.id_cuenta_padre IS 'Recursiva';
+COMMENT ON COLUMN plan_cuentas.es_imputable IS 'Si/No';
+2026-02-19 17:26:07.895 -04:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE proveedor (
+    id_proveedor integer GENERATED BY DEFAULT AS IDENTITY,
+    razon_social character varying(150) NOT NULL,
+    nit character varying(30),
+    contacto character varying(100),
+    direccion character varying(200),
+    activo boolean DEFAULT ('1'),
+    CONSTRAINT "PK_proveedor" PRIMARY KEY (id_proveedor)
+);
+2026-02-19 17:26:07.906 -04:00 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE rol (
+    id_rol integer GENERATED BY DEFAULT AS IDENTITY,
+    nombre character varying(50) NOT NULL,
+    CONSTRAINT "PK_rol" PRIMARY KEY (id_rol)
+);
+COMMENT ON COLUMN rol.id_rol IS 'Antes: tipousuario';
+COMMENT ON COLUMN rol.nombre IS 'Admin, Guardia, Vecino';
+2026-02-19 17:26:07.957 -04:00 [INF] Executed DbCommand (13ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "UsuariosMaster" (
+    "Id" integer GENERATED BY DEFAULT AS IDENTITY,
+    "Username" character varying(100) NOT NULL,
+    "PasswordHash" character varying(255) NOT NULL,
+    "Email" character varying(150),
+    "FechaCreacion" timestamp with time zone NOT NULL,
+    "EsSuperAdmin" boolean NOT NULL,
+    CONSTRAINT "PK_UsuariosMaster" PRIMARY KEY ("Id")
+);
+2026-02-19 17:26:07.974 -04:00 [INF] Executed DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE condominio (
+    id_condominio integer GENERATED BY DEFAULT AS IDENTITY,
+    codigo character varying(20),
+    nombre character varying(100) NOT NULL,
+    direccion character varying(200),
+    superficie_total_m2 numeric(12,2),
+    id_admin_persona integer NOT NULL,
+    config_dia_cobro character varying(50),
+    logo character varying(255),
+    CONSTRAINT "PK_condominio" PRIMARY KEY (id_condominio),
+    CONSTRAINT fk_condominio_admin FOREIGN KEY (id_admin_persona) REFERENCES persona (id_persona)
+);
+2026-02-19 17:26:07.994 -04:00 [INF] Executed DbCommand (19ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE medio_contacto (
+    id_contacto integer GENERATED BY DEFAULT AS IDENTITY,
+    id_persona integer NOT NULL,
+    tipo character varying(50) NOT NULL,
+    valor character varying(100) NOT NULL,
+    es_principal boolean DEFAULT ('0'),
+    CONSTRAINT "PK_medio_contacto" PRIMARY KEY (id_contacto),
+    CONSTRAINT fk_contacto_persona FOREIGN KEY (id_persona) REFERENCES persona (id_persona) ON DELETE CASCADE
+);
+COMMENT ON COLUMN medio_contacto.tipo IS 'Telefono, Celular, Email, Facebook';
+COMMENT ON COLUMN medio_contacto.valor IS 'El numero o correo';
+2026-02-19 17:26:08.014 -04:00 [INF] Executed DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE banco (
+    id_banco integer GENERATED BY DEFAULT AS IDENTITY,
+    nombre_entidad character varying(100) NOT NULL,
+    numero_cuenta character varying(50),
+    moneda character varying(10) DEFAULT ('BOB'),
+    tipo character varying(50) NOT NULL DEFAULT 'BANCO',
+    activo boolean DEFAULT ('1'),
+    id_cuenta_contable_asociada integer,
+    saldo numeric(18,2) NOT NULL DEFAULT 0.0,
+    CONSTRAINT "PK_banco" PRIMARY KEY (id_banco),
+    CONSTRAINT fk_banco_cuenta FOREIGN KEY (id_cuenta_contable_asociada) REFERENCES plan_cuentas (id_cuenta)
+);
+2026-02-19 17:26:08.029 -04:00 [INF] Executed DbCommand (13ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE config_contable_servicio (
+    id_servicio integer NOT NULL,
+    id_cuenta_ingreso integer NOT NULL,
+    CONSTRAINT "PK_config_contable_servicio" PRIMARY KEY (id_servicio, id_cuenta_ingreso),
+    CONSTRAINT fk_ccs_cuenta FOREIGN KEY (id_cuenta_ingreso) REFERENCES plan_cuentas (id_cuenta),
+    CONSTRAINT fk_ccs_servicio FOREIGN KEY (id_servicio) REFERENCES catalogo_servicio (id_servicio)
+);
+2026-02-19 17:26:08.044 -04:00 [INF] Executed DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE forma_pago (
+    id_forma_pago integer GENERATED BY DEFAULT AS IDENTITY,
+    descripcion character varying(50) NOT NULL,
+    id_cuenta_contable_asociada integer,
+    CONSTRAINT "PK_forma_pago" PRIMARY KEY (id_forma_pago),
+    CONSTRAINT fk_fp_cuenta FOREIGN KEY (id_cuenta_contable_asociada) REFERENCES plan_cuentas (id_cuenta)
+);
+COMMENT ON COLUMN forma_pago.descripcion IS 'Efectivo, Cheque, Transferencia';
+2026-02-19 17:26:08.061 -04:00 [INF] Executed DbCommand (13ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE rol_permiso (
+    id_rol integer NOT NULL,
+    id_permiso integer NOT NULL,
+    CONSTRAINT "PK_rol_permiso" PRIMARY KEY (id_rol, id_permiso),
+    CONSTRAINT fk_rp_permiso FOREIGN KEY (id_permiso) REFERENCES permiso (id_permiso) ON DELETE CASCADE,
+    CONSTRAINT fk_rp_rol FOREIGN KEY (id_rol) REFERENCES rol (id_rol) ON DELETE CASCADE
+);
+2026-02-19 17:26:08.077 -04:00 [INF] Executed DbCommand (15ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE usuario (
+    pk_usuario integer GENERATED BY DEFAULT AS IDENTITY,
+    id_persona integer NOT NULL,
+    username character varying(50) NOT NULL,
+    password_hash character varying(255) NOT NULL,
+    fecha_creacion timestamp without time zone DEFAULT (CURRENT_TIMESTAMP),
+    esta_habilitado boolean DEFAULT ('1'),
+    id_rol_principal integer,
+    CONSTRAINT "PK_usuario" PRIMARY KEY (pk_usuario),
+    CONSTRAINT fk_usuario_persona FOREIGN KEY (id_persona) REFERENCES persona (id_persona),
+    CONSTRAINT fk_usuario_rol FOREIGN KEY (id_rol_principal) REFERENCES rol (id_rol)
+);
+COMMENT ON COLUMN usuario.password_hash IS 'Antes: contrasena';
+2026-02-19 17:26:08.091 -04:00 [INF] Executed DbCommand (12ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "UsuarioCondominio" (
+    "Id" integer GENERATED BY DEFAULT AS IDENTITY,
+    "UsuarioId" integer NOT NULL,
+    "CondominioId" integer NOT NULL,
+    "RolInicial" character varying(50) NOT NULL,
+    CONSTRAINT "PK_UsuarioCondominio" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_UsuarioCondominio_CondominiosMaster_CondominioId" FOREIGN KEY ("CondominioId") REFERENCES "CondominiosMaster" ("Id") ON DELETE CASCADE,
+    CONSTRAINT "FK_UsuarioCondominio_UsuariosMaster_UsuarioId" FOREIGN KEY ("UsuarioId") REFERENCES "UsuariosMaster" ("Id") ON DELETE CASCADE
+);
+2026-02-19 17:26:08.107 -04:00 [INF] Executed DbCommand (15ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE charge_concept (
+    id integer GENERATED BY DEFAULT AS IDENTITY,
+    condominium_id integer NOT NULL,
+    name character varying(150) NOT NULL,
+    code character varying(50),
+    is_recurrent boolean NOT NULL,
+    is_active boolean NOT NULL,
+    CONSTRAINT "PK_charge_concept" PRIMARY KEY (id),
+    CONSTRAINT "FK_charge_concept_condominio_condominium_id" FOREIGN KEY (condominium_id) REFERENCES condominio (id_condominio) ON DELETE RESTRICT
+);
+2026-02-19 17:26:08.128 -04:00 [INF] Executed DbCommand (19ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE comunicado_blog (
+    id_blog integer GENERATED BY DEFAULT AS IDENTITY,
+    id_condominio integer NOT NULL,
+    fecha_publicacion timestamp without time zone DEFAULT (CURRENT_TIMESTAMP),
+    titulo character varying(200) NOT NULL,
+    contenido_html text,
+    url_imagen character varying(255),
+    url_archivo_adjunto character varying(255),
+    activo boolean DEFAULT ('1'),
+    CONSTRAINT "PK_comunicado_blog" PRIMARY KEY (id_blog),
+    CONSTRAINT fk_blog_condominio FOREIGN KEY (id_condominio) REFERENCES condominio (id_condominio)
+);
+2026-02-19 17:26:08.148 -04:00 [INF] Executed DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE config_aviso_cobranza (
+    id_config integer GENERATED BY DEFAULT AS IDENTITY,
+    id_condominio integer NOT NULL,
+    texto_header text,
+    texto_footer text,
+    dias_vencimiento_defecto integer DEFAULT ('10'),
+    CONSTRAINT "PK_config_aviso_cobranza" PRIMARY KEY (id_config),
+    CONSTRAINT fk_aviso_condominio FOREIGN KEY (id_condominio) REFERENCES condominio (id_condominio)
+);
+COMMENT ON COLUMN config_aviso_cobranza.id_config IS 'Antes: confaviso';
+2026-02-19 17:26:08.163 -04:00 [INF] Executed DbCommand (13ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE financial_config (
+    id integer GENERATED BY DEFAULT AS IDENTITY,
+    condominium_id integer NOT NULL,
+    monthly_interest_rate numeric(5,2) NOT NULL,
+    grace_days integer NOT NULL,
+    CONSTRAINT "PK_financial_config" PRIMARY KEY (id),
+    CONSTRAINT "FK_financial_config_condominio_condominium_id" FOREIGN KEY (condominium_id) REFERENCES condominio (id_condominio) ON DELETE RESTRICT
+);
+2026-02-19 17:26:08.176 -04:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE manzano (
+    id_manzano integer GENERATED BY DEFAULT AS IDENTITY,
+    id_condominio integer NOT NULL,
+    codigo character varying(20) NOT NULL,
+    nombre character varying(50),
+    CONSTRAINT "PK_manzano" PRIMARY KEY (id_manzano),
+    CONSTRAINT fk_manzano_condominio FOREIGN KEY (id_condominio) REFERENCES condominio (id_condominio)
+);
+2026-02-19 17:26:08.190 -04:00 [INF] Executed DbCommand (13ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE recurso_comun (
+    id_recurso integer GENERATED BY DEFAULT AS IDENTITY,
+    id_condominio integer NOT NULL,
+    nombre character varying(100) NOT NULL,
+    costo_reserva numeric(10,2) DEFAULT ('0.00'),
+    costo_garantia numeric(10,2) DEFAULT ('0.00'),
+    color_calendario character varying(20),
+    CONSTRAINT "PK_recurso_comun" PRIMARY KEY (id_recurso),
+    CONSTRAINT fk_recurso_condominio FOREIGN KEY (id_condominio) REFERENCES condominio (id_condominio)
+);
+COMMENT ON COLUMN recurso_comun.nombre IS 'Churrasquera, Salon';
+COMMENT ON COLUMN recurso_comun.color_calendario IS 'Antes en tabla evento';
+2026-02-19 17:26:08.210 -04:00 [INF] Executed DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "AccountDailyBalances" (
+    "Id" integer GENERATED BY DEFAULT AS IDENTITY,
+    "IdBanco" integer NOT NULL,
+    "Balance" numeric NOT NULL,
+    "Date" timestamp with time zone NOT NULL,
+    "BancoIdBanco" integer NOT NULL,
+    CONSTRAINT "PK_AccountDailyBalances" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_AccountDailyBalances_banco_BancoIdBanco" FOREIGN KEY ("BancoIdBanco") REFERENCES banco (id_banco) ON DELETE CASCADE
+);
+2026-02-19 17:26:08.236 -04:00 [INF] Executed DbCommand (25ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE egreso (
+    id_egreso integer GENERATED BY DEFAULT AS IDENTITY,
+    id_condominio integer NOT NULL,
+    id_proveedor integer,
+    id_persona_beneficiario integer,
+    id_autorizacion integer NOT NULL,
+    id_banco_origen integer NOT NULL,
+    id_forma_pago integer NOT NULL,
+    concepto character varying(300) NOT NULL,
+    monto_total numeric(12,2) NOT NULL,
+    fecha_egreso timestamp without time zone DEFAULT (CURRENT_TIMESTAMP),
+    nro_factura_proveedor character varying(50),
+    id_usuario_registro integer NOT NULL,
+    CONSTRAINT "PK_egreso" PRIMARY KEY (id_egreso),
+    CONSTRAINT fk_egreso_aut FOREIGN KEY (id_autorizacion) REFERENCES autorizacion_gasto (id_autorizacion),
+    CONSTRAINT fk_egreso_banco FOREIGN KEY (id_banco_origen) REFERENCES banco (id_banco),
+    CONSTRAINT fk_egreso_condominio FOREIGN KEY (id_condominio) REFERENCES condominio (id_condominio),
+    CONSTRAINT fk_egreso_fp FOREIGN KEY (id_forma_pago) REFERENCES forma_pago (id_forma_pago),
+    CONSTRAINT fk_egreso_persona FOREIGN KEY (id_persona_beneficiario) REFERENCES persona (id_persona),
+    CONSTRAINT fk_egreso_proveedor FOREIGN KEY (id_proveedor) REFERENCES proveedor (id_proveedor),
+    CONSTRAINT fk_egreso_usuario FOREIGN KEY (id_usuario_registro) REFERENCES usuario (pk_usuario)
+);
+COMMENT ON COLUMN egreso.id_proveedor IS 'Opcional';
+COMMENT ON COLUMN egreso.id_persona_beneficiario IS 'Opcional';
+2026-02-19 17:26:08.255 -04:00 [INF] Executed DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE propiedad (
+    id_propiedad integer GENERATED BY DEFAULT AS IDENTITY,
+    id_manzano integer NOT NULL,
+    codigo_unidad character varying(20) NOT NULL,
+    nombre_funcional character varying(100),
+    superficie_m2 numeric(10,2),
+    porcentaje_participacion numeric(5,4),
+    expensa_base_defecto numeric(10,2),
+    tipo character varying(50),
+    activo boolean DEFAULT ('1'),
+    saldo_deudor numeric(12,2) NOT NULL DEFAULT ('0.00'),
+    CONSTRAINT "PK_propiedad" PRIMARY KEY (id_propiedad),
+    CONSTRAINT fk_propiedad_manzano FOREIGN KEY (id_manzano) REFERENCES manzano (id_manzano)
+);
+COMMENT ON COLUMN propiedad.porcentaje_participacion IS 'Para prorrateo';
+COMMENT ON COLUMN propiedad.tipo IS 'Casa, Depto, Lote';
+2026-02-19 17:26:08.277 -04:00 [INF] Executed DbCommand (22ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "AccountTransactionHistory" (
+    "Id" uuid NOT NULL,
+    "AccountId" integer NOT NULL,
+    "ExpenseId" integer,
+    "Amount" numeric(18,2) NOT NULL,
+    "Date" timestamp with time zone NOT NULL,
+    "Description" character varying(500) NOT NULL,
+    "ReferenceId" character varying(100) NOT NULL,
+    CONSTRAINT "PK_AccountTransactionHistory" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_AccountTransactionHistory_banco_AccountId" FOREIGN KEY ("AccountId") REFERENCES banco (id_banco) ON DELETE RESTRICT,
+    CONSTRAINT "FK_AccountTransactionHistory_egreso_ExpenseId" FOREIGN KEY ("ExpenseId") REFERENCES egreso (id_egreso) ON DELETE SET NULL
+);
+2026-02-19 17:26:08.289 -04:00 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE egreso_detalle (
+    id_egreso_detalle integer GENERATED BY DEFAULT AS IDENTITY,
+    id_egreso integer NOT NULL,
+    concepto character varying(255) NOT NULL,
+    cantidad integer NOT NULL,
+    precio_unitario numeric(12,2) NOT NULL,
+    subtotal numeric(12,2) NOT NULL,
+    CONSTRAINT "PK_egreso_detalle" PRIMARY KEY (id_egreso_detalle),
+    CONSTRAINT fk_egreso_detalle_egreso FOREIGN KEY (id_egreso) REFERENCES egreso (id_egreso) ON DELETE CASCADE
+);
+2026-02-19 17:26:08.309 -04:00 [INF] Executed DbCommand (19ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "ExpenseAttachments" (
+    "Id" uuid NOT NULL,
+    "EgresoId" integer NOT NULL,
+    "FileName" character varying(255) NOT NULL,
+    "StoredFileName" character varying(255) NOT NULL,
+    "ContentType" character varying(100) NOT NULL,
+    "Size" bigint NOT NULL,
+    "StoragePath" character varying(500) NOT NULL,
+    "UploadedAt" timestamp with time zone NOT NULL,
+    "UploadedBy" integer NOT NULL,
+    "TenantId" integer NOT NULL,
+    CONSTRAINT "PK_ExpenseAttachments" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_ExpenseAttachments_egreso_EgresoId" FOREIGN KEY ("EgresoId") REFERENCES egreso (id_egreso) ON DELETE CASCADE
+);
+2026-02-19 17:26:08.328 -04:00 [INF] Executed DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE contrato (
+    id_contrato integer GENERATED BY DEFAULT AS IDENTITY,
+    id_propiedad integer NOT NULL,
+    fecha_firma date,
+    fecha_inicio date NOT NULL,
+    fecha_fin date,
+    fecha_ingreso_real date,
+    monto_expensa_pactada numeric(10,2) NOT NULL,
+    estado character varying(20) DEFAULT ('Vigente'),
+    motivo_baja character varying(255),
+    id_usuario_creador integer,
+    CONSTRAINT "PK_contrato" PRIMARY KEY (id_contrato),
+    CONSTRAINT fk_contrato_creador FOREIGN KEY (id_usuario_creador) REFERENCES usuario (pk_usuario),
+    CONSTRAINT fk_contrato_propiedad FOREIGN KEY (id_propiedad) REFERENCES propiedad (id_propiedad)
+);
+COMMENT ON COLUMN contrato.estado IS 'Vigente, Finalizado, Rescindido';
+2026-02-19 17:26:08.343 -04:00 [INF] Executed DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE contrato_participante (
+    id_contrato integer NOT NULL,
+    id_persona integer NOT NULL,
+    rol_contrato character varying(50) NOT NULL,
+    fecha_alta date,
+    fecha_baja date,
+    activo boolean DEFAULT ('1'),
+    CONSTRAINT "PK_contrato_participante" PRIMARY KEY (id_contrato, id_persona),
+    CONSTRAINT fk_cp_contrato FOREIGN KEY (id_contrato) REFERENCES contrato (id_contrato),
+    CONSTRAINT fk_cp_persona FOREIGN KEY (id_persona) REFERENCES persona (id_persona)
+);
+COMMENT ON COLUMN contrato_participante.rol_contrato IS 'Titular, Inquilino, Garante';
+2026-02-19 17:26:08.361 -04:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE contrato_servicio_suscrito (
+    id_suscripcion integer GENERATED BY DEFAULT AS IDENTITY,
+    id_contrato integer NOT NULL,
+    id_servicio integer NOT NULL,
+    costo_personalizado numeric(10,2),
+    activo boolean DEFAULT ('1'),
+    CONSTRAINT "PK_contrato_servicio_suscrito" PRIMARY KEY (id_suscripcion),
+    CONSTRAINT fk_css_contrato FOREIGN KEY (id_contrato) REFERENCES contrato (id_contrato),
+    CONSTRAINT fk_css_servicio FOREIGN KEY (id_servicio) REFERENCES catalogo_servicio (id_servicio)
+);
+COMMENT ON COLUMN contrato_servicio_suscrito.id_suscripcion IS 'Antes: servicio_contrato';
+COMMENT ON COLUMN contrato_servicio_suscrito.costo_personalizado IS 'Si difiere del base';
+2026-02-19 17:26:08.379 -04:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE deuda_cabecera (
+    id_deuda integer GENERATED BY DEFAULT AS IDENTITY,
+    id_contrato integer NOT NULL,
+    anio_periodo integer NOT NULL,
+    mes_periodo integer NOT NULL,
+    fecha_emision date,
+    fecha_vencimiento date,
+    total_deuda numeric(12,2) DEFAULT ('0.00'),
+    total_pagado numeric(12,2) DEFAULT ('0.00'),
+    estado_pago character varying(20) DEFAULT ('PENDIENTE'),
+    id_usuario_generador integer,
+    CONSTRAINT "PK_deuda_cabecera" PRIMARY KEY (id_deuda),
+    CONSTRAINT fk_deuda_contrato FOREIGN KEY (id_contrato) REFERENCES contrato (id_contrato),
+    CONSTRAINT fk_deuda_usuario FOREIGN KEY (id_usuario_generador) REFERENCES usuario (pk_usuario)
+);
+COMMENT ON COLUMN deuda_cabecera.estado_pago IS 'PENDIENTE, PARCIAL, PAGADO, ANULADO';
+2026-02-19 17:26:08.396 -04:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE reserva (
+    id_reserva integer GENERATED BY DEFAULT AS IDENTITY,
+    id_recurso integer NOT NULL,
+    id_contrato integer NOT NULL,
+    fecha_inicio timestamp without time zone NOT NULL,
+    fecha_fin timestamp without time zone NOT NULL,
+    cantidad_invitados integer,
+    motivo character varying(200),
+    amenizado_por character varying(100),
+    monto_total_cobrado numeric(10,2),
+    estado character varying(20) DEFAULT ('PENDIENTE'),
+    CONSTRAINT "PK_reserva" PRIMARY KEY (id_reserva),
+    CONSTRAINT fk_reserva_contrato FOREIGN KEY (id_contrato) REFERENCES contrato (id_contrato),
+    CONSTRAINT fk_reserva_recurso FOREIGN KEY (id_recurso) REFERENCES recurso_comun (id_recurso)
+);
+COMMENT ON COLUMN reserva.id_reserva IS 'Antes: evento';
+COMMENT ON COLUMN reserva.id_contrato IS 'Quien reserva';
+COMMENT ON COLUMN reserva.estado IS 'PENDIENTE, CONFIRMADA, FINALIZADA';
+2026-02-19 17:26:08.412 -04:00 [INF] Executed DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE lectura_servicio (
+    id_lectura integer GENERATED BY DEFAULT AS IDENTITY,
+    id_suscripcion integer NOT NULL,
+    anio integer NOT NULL,
+    mes integer NOT NULL,
+    valor_leido numeric(12,2),
+    monto_calculado numeric(10,2) NOT NULL,
+    fecha_lectura date,
+    CONSTRAINT "PK_lectura_servicio" PRIMARY KEY (id_lectura),
+    CONSTRAINT fk_lectura_suscripcion FOREIGN KEY (id_suscripcion) REFERENCES contrato_servicio_suscrito (id_suscripcion)
+);
+COMMENT ON COLUMN lectura_servicio.valor_leido IS 'Para agua/luz variable';
+2026-02-19 17:26:08.432 -04:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE deuda_detalle (
+    id_deuda_det integer GENERATED BY DEFAULT AS IDENTITY,
+    id_deuda integer NOT NULL,
+    id_servicio integer NOT NULL,
+    concepto character varying(255) NOT NULL,
+    monto_unitario numeric(10,2) NOT NULL,
+    cantidad numeric(10,2) DEFAULT ('1.00'),
+    subtotal numeric(12,2) NOT NULL,
+    CONSTRAINT "PK_deuda_detalle" PRIMARY KEY (id_deuda_det),
+    CONSTRAINT fk_dd_cabecera FOREIGN KEY (id_deuda) REFERENCES deuda_cabecera (id_deuda) ON DELETE CASCADE,
+    CONSTRAINT fk_dd_servicio FOREIGN KEY (id_servicio) REFERENCES catalogo_servicio (id_servicio)
+);
+COMMENT ON COLUMN deuda_detalle.id_servicio IS 'Origen del cobro';
+COMMENT ON COLUMN deuda_detalle.concepto IS 'Ej: Expensa Mayo 2025';
+2026-02-19 17:26:08.458 -04:00 [INF] Executed DbCommand (25ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE transaccion_pago (
+    id_pago integer GENERATED BY DEFAULT AS IDENTITY,
+    id_deuda integer NOT NULL,
+    id_persona_pagador integer NOT NULL,
+    id_banco_destino integer NOT NULL,
+    id_forma_pago integer NOT NULL,
+    fecha_pago timestamp without time zone DEFAULT (CURRENT_TIMESTAMP),
+    monto_abonado numeric(12,2) NOT NULL,
+    tipo_cambio numeric(10,4) DEFAULT ('1.0000'),
+    nro_comprobante_banco character varying(50),
+    estado character varying(20) DEFAULT ('CONFIRMADO'),
+    "Observaciones" text,
+    recibo_url character varying(500),
+    fecha_recibo timestamp with time zone,
+    CONSTRAINT "PK_transaccion_pago" PRIMARY KEY (id_pago),
+    CONSTRAINT fk_tp_banco FOREIGN KEY (id_banco_destino) REFERENCES banco (id_banco),
+    CONSTRAINT fk_tp_deuda FOREIGN KEY (id_deuda) REFERENCES deuda_cabecera (id_deuda),
+    CONSTRAINT fk_tp_forma FOREIGN KEY (id_forma_pago) REFERENCES forma_pago (id_forma_pago),
+    CONSTRAINT fk_tp_persona FOREIGN KEY (id_persona_pagador) REFERENCES persona (id_persona)
+);
+COMMENT ON COLUMN transaccion_pago.id_pago IS 'Antes: cuota';
+COMMENT ON COLUMN transaccion_pago.id_deuda IS 'Pago especifico de una deuda';
+COMMENT ON COLUMN transaccion_pago.estado IS 'CONFIRMADO, RECHAZADO';
+2026-02-19 17:26:08.471 -04:00 [INF] Executed DbCommand (12ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE asiento_contable (
+    id_asiento integer GENERATED BY DEFAULT AS IDENTITY,
+    id_condominio integer NOT NULL,
+    fecha_contable timestamp without time zone NOT NULL,
+    glosa_general character varying(255),
+    tipo_asiento character varying(20),
+    nro_documento_respaldo character varying(50),
+    id_transaccion_origen_pago integer,
+    id_transaccion_origen_egreso integer,
+    CONSTRAINT "PK_asiento_contable" PRIMARY KEY (id_asiento),
+    CONSTRAINT fk_asiento_condominio FOREIGN KEY (id_condominio) REFERENCES condominio (id_condominio),
+    CONSTRAINT fk_asiento_egreso FOREIGN KEY (id_transaccion_origen_egreso) REFERENCES egreso (id_egreso),
+    CONSTRAINT fk_asiento_pago FOREIGN KEY (id_transaccion_origen_pago) REFERENCES transaccion_pago (id_pago)
+);
+COMMENT ON COLUMN asiento_contable.tipo_asiento IS 'Diario, Ajuste, Cierre';
+COMMENT ON COLUMN asiento_contable.id_transaccion_origen_pago IS 'Link a Tesoreria';
+COMMENT ON COLUMN asiento_contable.id_transaccion_origen_egreso IS 'Link a Tesoreria';
+2026-02-19 17:26:08.482 -04:00 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE asiento_detalle (
+    id_asiento_det integer GENERATED BY DEFAULT AS IDENTITY,
+    id_asiento integer NOT NULL,
+    id_cuenta integer NOT NULL,
+    glosa_linea character varying(200),
+    debe numeric(12,2) DEFAULT ('0.00'),
+    haber numeric(12,2) DEFAULT ('0.00'),
+    CONSTRAINT "PK_asiento_detalle" PRIMARY KEY (id_asiento_det),
+    CONSTRAINT fk_ad_asiento FOREIGN KEY (id_asiento) REFERENCES asiento_contable (id_asiento) ON DELETE CASCADE,
+    CONSTRAINT fk_ad_cuenta FOREIGN KEY (id_cuenta) REFERENCES plan_cuentas (id_cuenta)
+);
+2026-02-19 17:26:08.489 -04:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_AccountDailyBalances_BancoIdBanco" ON "AccountDailyBalances" ("BancoIdBanco");
+2026-02-19 17:26:08.494 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_AccountTransactionHistory_AccountId" ON "AccountTransactionHistory" ("AccountId");
+2026-02-19 17:26:08.498 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_AccountTransactionHistory_ExpenseId" ON "AccountTransactionHistory" ("ExpenseId");
+2026-02-19 17:26:08.503 -04:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_asiento_condominio ON asiento_contable (id_condominio);
+2026-02-19 17:26:08.507 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_asiento_egreso ON asiento_contable (id_transaccion_origen_egreso);
+2026-02-19 17:26:08.511 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_asiento_pago ON asiento_contable (id_transaccion_origen_pago);
+2026-02-19 17:26:08.515 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_ad_asiento ON asiento_detalle (id_asiento);
+2026-02-19 17:26:08.520 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_ad_cuenta ON asiento_detalle (id_cuenta);
+2026-02-19 17:26:08.524 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_banco_cuenta ON banco (id_cuenta_contable_asociada);
+2026-02-19 17:26:08.529 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_charge_concept_condominium_id" ON charge_concept (condominium_id);
+2026-02-19 17:26:08.534 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_blog_condominio ON comunicado_blog (id_condominio);
+2026-02-19 17:26:08.538 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_condominio_admin ON condominio (id_admin_persona);
+2026-02-19 17:26:08.542 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX "IX_CondominiosMaster_TenantId" ON "CondominiosMaster" ("TenantId");
+2026-02-19 17:26:08.546 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_aviso_condominio ON config_aviso_cobranza (id_condominio);
+2026-02-19 17:26:08.550 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_ccs_cuenta ON config_contable_servicio (id_cuenta_ingreso);
+2026-02-19 17:26:08.554 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_contrato_creador ON contrato (id_usuario_creador);
+2026-02-19 17:26:08.558 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_contrato_propiedad ON contrato (id_propiedad);
+2026-02-19 17:26:08.562 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_cp_persona ON contrato_participante (id_persona);
+2026-02-19 17:26:08.566 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_css_contrato ON contrato_servicio_suscrito (id_contrato);
+2026-02-19 17:26:08.570 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_css_servicio ON contrato_servicio_suscrito (id_servicio);
+2026-02-19 17:26:08.574 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_deuda_contrato ON deuda_cabecera (id_contrato);
+2026-02-19 17:26:08.577 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_deuda_usuario ON deuda_cabecera (id_usuario_generador);
+2026-02-19 17:26:08.581 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_dd_cabecera ON deuda_detalle (id_deuda);
+2026-02-19 17:26:08.585 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_dd_servicio ON deuda_detalle (id_servicio);
+2026-02-19 17:26:08.589 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_egreso_aut ON egreso (id_autorizacion);
+2026-02-19 17:26:08.593 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_egreso_banco ON egreso (id_banco_origen);
+2026-02-19 17:26:08.596 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_egreso_condominio ON egreso (id_condominio);
+2026-02-19 17:26:08.600 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_egreso_fp ON egreso (id_forma_pago);
+2026-02-19 17:26:08.604 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_egreso_persona ON egreso (id_persona_beneficiario);
+2026-02-19 17:26:08.608 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_egreso_proveedor ON egreso (id_proveedor);
+2026-02-19 17:26:08.611 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_egreso_usuario ON egreso (id_usuario_registro);
+2026-02-19 17:26:08.615 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_egreso_detalle_egreso ON egreso_detalle (id_egreso);
+2026-02-19 17:26:08.618 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_ExpenseAttachments_EgresoId" ON "ExpenseAttachments" ("EgresoId");
+2026-02-19 17:26:08.623 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_financial_config_condominium_id" ON financial_config (condominium_id);
+2026-02-19 17:26:08.626 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_fp_cuenta ON forma_pago (id_cuenta_contable_asociada);
+2026-02-19 17:26:08.630 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_lectura_suscripcion ON lectura_servicio (id_suscripcion);
+2026-02-19 17:26:08.634 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_manzano_condominio ON manzano (id_condominio);
+2026-02-19 17:26:08.637 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_contacto_persona ON medio_contacto (id_persona);
+2026-02-19 17:26:08.641 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_persona_familiar ON persona (id_familiar_responsable);
+2026-02-19 17:26:08.644 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_pc_padre ON plan_cuentas (id_cuenta_padre);
+2026-02-19 17:26:08.647 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_propiedad_manzano ON propiedad (id_manzano);
+2026-02-19 17:26:08.650 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_recurso_condominio ON recurso_comun (id_condominio);
+2026-02-19 17:26:08.653 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_reserva_contrato ON reserva (id_contrato);
+2026-02-19 17:26:08.656 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_reserva_recurso ON reserva (id_recurso);
+2026-02-19 17:26:08.662 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_rp_permiso ON rol_permiso (id_permiso);
+2026-02-19 17:26:08.665 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_tp_banco ON transaccion_pago (id_banco_destino);
+2026-02-19 17:26:08.669 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_tp_deuda ON transaccion_pago (id_deuda);
+2026-02-19 17:26:08.672 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_tp_forma ON transaccion_pago (id_forma_pago);
+2026-02-19 17:26:08.676 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_tp_persona ON transaccion_pago (id_persona_pagador);
+2026-02-19 17:26:08.679 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_usuario_persona ON usuario (id_persona);
+2026-02-19 17:26:08.683 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX fk_usuario_rol ON usuario (id_rol_principal);
+2026-02-19 17:26:08.686 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX username ON usuario (username);
+2026-02-19 17:26:08.690 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_UsuarioCondominio_CondominioId" ON "UsuarioCondominio" ("CondominioId");
+2026-02-19 17:26:08.694 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_UsuarioCondominio_UsuarioId" ON "UsuarioCondominio" ("UsuarioId");
+2026-02-19 17:26:08.698 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX "IX_UsuariosMaster_Username" ON "UsuariosMaster" ("Username");
+2026-02-19 17:26:08.699 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20260219212554_InitialPostgres', '9.0.1');

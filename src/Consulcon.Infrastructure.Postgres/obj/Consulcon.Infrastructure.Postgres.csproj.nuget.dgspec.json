@@ -1,0 +1,337 @@
+{
+  "format": 1,
+  "restore": {
+    "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Infrastructure.Postgres/Consulcon.Infrastructure.Postgres.csproj": {}
+  },
+  "projects": {
+    "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Application/Consulcon.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Application/Consulcon.Application.csproj",
+        "projectName": "Consulcon.Application",
+        "projectPath": "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Application/Consulcon.Application.csproj",
+        "packagesPath": "/home/night/.nuget/packages/",
+        "outputPath": "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Application/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/night/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/Consulcon.Domain.csproj": {
+                "projectPath": "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/Consulcon.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.200"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.0.3, )"
+            },
+            "FluentValidation": {
+              "target": "Package",
+              "version": "[12.1.1, )"
+            },
+            "FluentValidation.DependencyInjectionExtensions": {
+              "target": "Package",
+              "version": "[12.1.1, )"
+            },
+            "Microsoft.Extensions.Configuration.Abstractions": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.Extensions.Options.ConfigurationExtensions": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[8.15.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.203/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/Consulcon.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/Consulcon.Domain.csproj",
+        "projectName": "Consulcon.Domain",
+        "projectPath": "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/Consulcon.Domain.csproj",
+        "packagesPath": "/home/night/.nuget/packages/",
+        "outputPath": "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/night/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.200"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.203/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Infrastructure.Postgres/Consulcon.Infrastructure.Postgres.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Infrastructure.Postgres/Consulcon.Infrastructure.Postgres.csproj",
+        "projectName": "Consulcon.Infrastructure.Postgres",
+        "projectPath": "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Infrastructure.Postgres/Consulcon.Infrastructure.Postgres.csproj",
+        "packagesPath": "/home/night/.nuget/packages/",
+        "outputPath": "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Infrastructure.Postgres/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/night/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Infrastructure/Consulcon.Infrastructure.csproj": {
+                "projectPath": "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Infrastructure/Consulcon.Infrastructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.200"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.203/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Infrastructure/Consulcon.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Infrastructure/Consulcon.Infrastructure.csproj",
+        "projectName": "Consulcon.Infrastructure",
+        "projectPath": "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Infrastructure/Consulcon.Infrastructure.csproj",
+        "packagesPath": "/home/night/.nuget/packages/",
+        "outputPath": "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Infrastructure/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/night/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Application/Consulcon.Application.csproj": {
+                "projectPath": "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Application/Consulcon.Application.csproj"
+              },
+              "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/Consulcon.Domain.csproj": {
+                "projectPath": "/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.Domain/Consulcon.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.200"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.1.66, )"
+            },
+            "DotNetEnv": {
+              "target": "Package",
+              "version": "[3.1.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.InMemory": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.Extensions.Configuration.Binder": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[9.0.3, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "QRCoder": {
+              "target": "Package",
+              "version": "[1.6.0, )"
+            },
+            "QuestPDF": {
+              "target": "Package",
+              "version": "[2025.12.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.203/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
