@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Consulcon.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+92d5e39aa0fafc6ff817f3626cb2929cfacb3462")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+877a3c628b2adf7075c5765ef6d024d5cca8d8c9")]
 [assembly: System.Reflection.AssemblyProductAttribute("Consulcon.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Consulcon.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
