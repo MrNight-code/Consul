@@ -3,7 +3,9 @@ using Consulcon.Application.Interfaces;
 using Consulcon.Domain.Common;
 using Consulcon.Domain.Entities.Facturacion;
 using Consulcon.Domain.Entities.Inmuebles;
+using Consulcon.Domain.Specifications;
 using Consulcon.Infrastructure.Persistence;
+using Consulcon.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -14,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Consulcon.Infrastructure.Services
 {
-    public class CobranzaService(ConsulconDbContext context) : ICobranzaService
+    public class CobranzaService(ConsulconDbContext context, IRepository<TransaccionPago> repository) : ICobranzaService
     {
         private readonly ConsulconDbContext _context = context;
 
@@ -154,6 +156,30 @@ namespace Consulcon.Infrastructure.Services
                 await transaction.RollbackAsync();
                 return Result.Fail<bool>($"Error al registrar cobranza: {ex.Message}");
             }
+        }
+
+        public async Task<Result<PagedResult<CobranzaDto>>> GetPagedAsync(int idCondominio, PaginationParams p)
+        {
+            // 1. Instanciar la especificación con la ruta compleja que armamos
+            var spec = new CobranzaWithFiltersSpec(p, idCondominio);
+
+            // 2. Ejecutar la consulta en la base de datos (repository debe ser IRepository<TransaccionPago>)
+            var pagedData = await repository.GetPagedAsync(spec, p.PageNumber, p.PageSize);
+            // 3. Mapear la entidad al DTO
+            var result = pagedData.Map(x => new CobranzaDto
+            {
+                IdPago = x.IdPago,
+                Monto = x.MontoAbonado,
+                Fecha = x.FechaPago ?? DateTime.MinValue,
+                MetodoPago = x.IdFormaPagoNavigation?.Descripcion,
+                Referencia = x.NroComprobanteBanco,
+                Observaciones = x.Observaciones,
+                Estado = x.Estado,
+                ConceptoDeuda = x.IdDeudaNavigation != null 
+                    ? $"{x.IdDeudaNavigation.MesPeriodo}/{x.IdDeudaNavigation.AnioPeriodo}" 
+                    : string.Empty
+            });
+            return Result.Ok(result);
         }
     }
 }

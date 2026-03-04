@@ -8,14 +8,13 @@ namespace Consulcon.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AccountsController(IAccountService service) : ControllerBase
+    public class AccountsController(IAccountService service) : BaseController
     {
 
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] bool activeOnly = true)
         {
-            var result = await service.GetAllAccountsAsync(activeOnly);
-            return Ok(result.Value);
+            return HandleResult(await service.GetAllAccountsAsync(activeOnly));
         }
 
         [HttpGet("{id}")]
@@ -57,6 +56,19 @@ namespace Consulcon.API.Controllers
             
             if (!result.IsSuccess)
                 return BadRequest(result.Error);
+
+            return Ok(result.Value);
+        }
+
+        [HttpGet("{accountId}/transacciones/paged")]
+        public async Task<IActionResult> GetPagedTransactions(int accountId, [FromQuery] PaginationParams parameters)
+        {
+            var result = await service.GetPagedTransactionHistoryAsync(accountId, parameters);
+            
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error);
+            }
 
             return Ok(result.Value);
         }

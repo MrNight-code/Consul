@@ -1,4 +1,4 @@
-using Consulcon.Application.DTOs.Inmuebles;
+using Consulcon.Application.DTOs;
 
 namespace Consulcon.Application.Interfaces.Inmuebles;
 
@@ -10,4 +10,5 @@ public interface IPropiedadService
     Task<Result<PropiedadDto>> CreateAsync(CreatePropiedadDto dto);
     Task<Result<PropiedadDto>> UpdateAsync(int id, CreatePropiedadDto dto);
     Task<Result<bool>> DeleteAsync(int id);
+    Task<Result<PagedResult<PropiedadDto>>> GetPagedAsync(int idCondominio, PaginationParams parameters);
 }

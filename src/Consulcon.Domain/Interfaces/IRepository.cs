@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Consulcon.Domain.Interfaces;
+using Consulcon.Domain.Common;
 
 namespace Consulcon.Domain.Interfaces
 {
@@ -13,5 +15,6 @@ namespace Consulcon.Domain.Interfaces
         Task AddAsync(T entity);
         Task UpdateAsync(T entity);
         Task DeleteAsync(T entity);
+        Task<PagedResult<T>> GetPagedAsync(ISpecification<T> spec, int pageNumber, int pageSize);
     }
 }

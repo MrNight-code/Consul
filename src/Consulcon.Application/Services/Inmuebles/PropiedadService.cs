@@ -1,6 +1,10 @@
-using Consulcon.Application.DTOs.Inmuebles;
+using Consulcon.Application.DTOs;
 using Consulcon.Application.Interfaces.Inmuebles;
+using Consulcon.Domain.Interfaces;
 using Consulcon.Domain.Constants;
+using Consulcon.Domain.Entities.Inmuebles;
+using Consulcon.Domain.Specifications;
+using Consulcon.Domain.Common;
 
 namespace Consulcon.Application.Services.Inmuebles;
 
@@ -168,5 +172,15 @@ public class PropiedadService(IRepository<Propiedad> repository, IRepository<Man
         }
 
         return dto;
+    }
+
+    public async Task<Result<PagedResult<PropiedadDto>>> GetPagedAsync(int idCondominio, PaginationParams p)
+    {
+        var spec = new PropiedadWithFiltersSpec(p, idCondominio);
+
+        var pagedData = await _repository.GetPagedAsync(spec, p.PageNumber, p.PageSize);
+        var result = pagedData.Map(x => MapToDto(x, []));
+
+        return Result.Ok(result);
     }
 }

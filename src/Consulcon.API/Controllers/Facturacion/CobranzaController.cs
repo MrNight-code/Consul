@@ -1,5 +1,6 @@
 using Consulcon.Application.DTOs;
 using Consulcon.Application.Interfaces;
+using Consulcon.Domain.Common;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Consulcon.API.Controllers.Facturacion;
@@ -22,5 +23,18 @@ public class CobranzaController(ICobranzaService service) : ControllerBase
     {
         var result = await _service.ObtenerHistorialAsync(unitId);
         return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
+    }
+
+    [HttpGet("condominio/{idCondominio}")]
+    public async Task<IActionResult> GetPaged(int idCondominio, [FromQuery] PaginationParams parameters)
+    {
+        var result = await _service.GetPagedAsync(idCondominio, parameters);
+        
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
     }
 }

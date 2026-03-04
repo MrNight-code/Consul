@@ -210,12 +210,4 @@
 /mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.API/bin/Debug/net9.0/zh-Hant/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 /mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.API/bin/Debug/net9.0/FluentValidation.dll
 /mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.API/bin/Debug/net9.0/FluentValidation.DependencyInjectionExtensions.dll
-/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.API/bin/Debug/net9.0/Microsoft.Extensions.Caching.Abstractions.dll
-/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.API/bin/Debug/net9.0/Microsoft.Extensions.Caching.Memory.dll
-/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.API/bin/Debug/net9.0/Npgsql.dll
-/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.API/bin/Debug/net9.0/Npgsql.EntityFrameworkCore.PostgreSQL.dll
 /mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.API/bin/Debug/net9.0/QRCoder.dll
-/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.API/bin/Debug/net9.0/DotNetEnv.dll
-/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.API/bin/Debug/net9.0/Sprache.dll
-/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.API/bin/Debug/net9.0/Consulcon.Infrastructure.Postgres.dll
-/mnt/night_projects/Work/Consulcon/Backend-Consulcon/src/Consulcon.API/bin/Debug/net9.0/Consulcon.Infrastructure.Postgres.pdb

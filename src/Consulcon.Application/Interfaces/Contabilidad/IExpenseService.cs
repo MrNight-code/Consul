@@ -7,5 +7,6 @@ namespace Consulcon.Application.Interfaces.Contabilidad
     public interface IExpenseService
     {
         Task<Result<int>> RegisterExpenseAsync(RegisterExpenseCommand cmd, int userId);
+        Task<Result<PagedResult<EgresoDto>>> GetPagedAsync(int idCondominio, PaginationParams parameters);
     }
 }

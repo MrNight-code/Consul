@@ -2,14 +2,18 @@ using Consulcon.Application.DTOs.Contabilidad.Expenses;
 using Consulcon.Application.Interfaces.Contabilidad;
 using Consulcon.Domain.Common;
 using Consulcon.Domain.Entities.Contabilidad;
+using Consulcon.Domain.Specifications;
+using Consulcon.Application.DTOs.Contabilidad;
 using Consulcon.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Consulcon.Domain.Interfaces;
 using System;
 using System.Threading.Tasks;
 
+
 namespace Consulcon.Infrastructure.Services.Contabilidad
 {
-    public class ExpenseService(ConsulconDbContext context) : IExpenseService
+    public class ExpenseService(ConsulconDbContext context, IRepository<Egreso> repository) : IExpenseService
     {
         public async Task<Result<int>> RegisterExpenseAsync(RegisterExpenseCommand cmd, int userId)
         {
@@ -78,6 +82,33 @@ namespace Consulcon.Infrastructure.Services.Contabilidad
                 await transaction.RollbackAsync();
                 return Result.Fail<int>($"Error al registrar el gasto: {ex.Message}");
             }
+        }
+
+        public async Task<Result<PagedResult<EgresoDto>>> GetPagedAsync(int idCondominio, PaginationParams p)
+        {
+            var spec = new EgresoWithFiltersSpec(p, idCondominio);
+
+            var pagedData = await repository.GetPagedAsync(spec, p.PageNumber, p.PageSize);
+
+            var result = pagedData.Map(x => new EgresoDto
+            {
+                Id = x.IdEgreso,
+                IdCondominio = x.IdCondominio,
+                IdProveedor = x.IdProveedor,
+                ProveedorNombre = x.IdProveedorNavigation?.RazonSocial,
+                IdPersonaBeneficiario = x.IdPersonaBeneficiario,
+                BeneficiarioNombre = x.IdPersonaBeneficiarioNavigation?.NombreCompleto, 
+                IdAutorizacion = x.IdAutorizacion,
+                IdBancoOrigen = x.IdBancoOrigen,
+                BancoNombre = x.IdBancoOrigenNavigation?.NombreEntidad,
+                IdFormaPago = x.IdFormaPago,
+                Concepto = x.Concepto,
+                MontoTotal = x.MontoTotal,
+                FechaEgreso = x.FechaEgreso,
+                NroFacturaProveedor = x.NroFacturaProveedor
+            });
+
+            return Result.Ok(result);
         }
     }
 }

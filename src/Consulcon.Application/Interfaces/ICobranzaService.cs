@@ -8,5 +8,6 @@ namespace Consulcon.Application.Interfaces
     {
         Task<Result<bool>> RegistrarCobranzaAsync(CobranzaRequest request);
         Task<Result<List<CobranzaDto>>> ObtenerHistorialAsync(int unitId);
+        Task<Result<PagedResult<CobranzaDto>>> GetPagedAsync(int idCondominio, PaginationParams parameters);
     }
 }

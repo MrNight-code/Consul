@@ -1,5 +1,6 @@
 using Consulcon.Application.DTOs;
 using Consulcon.Domain.Common;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,5 +14,6 @@ namespace Consulcon.Application.Interfaces
         Task<Result<bool>> UpdateAccountAsync(int id, AccountDto accountDto);
         Task<Result<bool>> DeleteAccountAsync(int id);
         Task<Result<IEnumerable<BalanceHistoryDto>>> GetBalanceHistoryAsync(int id, DateTime? from, DateTime? to);
+        Task<Result<PagedResult<BalanceHistoryDto>>> GetPagedTransactionHistoryAsync(int accountId, PaginationParams parameters);
     }
 }

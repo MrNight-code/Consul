@@ -1,5 +1,6 @@
 using Consulcon.Application.DTOs.Inmuebles;
 using Consulcon.Application.Interfaces.Inmuebles;
+using Consulcon.Domain.Common;
 
 namespace Consulcon.API.Controllers.Inmuebles;
 
@@ -76,5 +77,18 @@ public class PropiedadController(IPropiedadService service) : ControllerBase
     {
         var result = await _service.DeleteAsync(id);
         return result.IsSuccess ? NoContent() : BadRequest(result.Error);
+    }
+
+    [HttpGet("condominio/{condominioId}/paged")]
+    public async Task<IActionResult> GetPaged(int condominioId, [FromQuery] PaginationParams parameters)
+    {
+        var result = await _service.GetPagedAsync(condominioId, parameters);
+        
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
     }
 }

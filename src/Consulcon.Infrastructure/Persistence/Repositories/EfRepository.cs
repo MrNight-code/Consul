@@ -12,6 +12,7 @@ namespace Consulcon.Infrastructure.Persistence.Repositories
     public class EfRepository<T>(ConsulconDbContext context) : IRepository<T> where T : class
     {
         protected readonly ConsulconDbContext _context = context;
+        protected readonly DbSet<T> _dbSet = context.Set<T>();
 
         public async Task<T?> GetByIdAsync(int id)
         {
@@ -60,6 +61,20 @@ namespace Consulcon.Infrastructure.Persistence.Repositories
         {
             _context.Set<T>().Remove(entity);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<PagedResult<T>> GetPagedAsync(ISpecification<T> spec, int pageNumber, int pageSize)
+        {
+            var query = SpecificationEvaluator<T>.GetQuery(_dbSet.AsQueryable(), spec);
+
+            var totalRecords = await query.CountAsync();
+
+            var items = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PagedResult<T>(items, totalRecords, pageNumber, pageSize);
         }
     }
 }

@@ -3,6 +3,7 @@ using Consulcon.Application.Interfaces.Contabilidad;
 using Consulcon.Domain.Entities.General;
 using Consulcon.Domain.Interfaces;
 using Consulcon.Domain.Common;
+using Consulcon.Domain.Specifications;
 
 namespace Consulcon.Application.Services.Contabilidad;
 
@@ -191,6 +192,25 @@ public class ProveedorService : IProveedorService
             Address = entity.Direccion,
             IsActive = entity.Activo ?? false
         };
+    }
+
+    public async Task<Result<PagedResult<ProveedorDto>>> GetAllPagedAsync(PaginationParams p)
+    {
+        var spec = new ProveedorWithFiltersSpec(p);
+
+        var pagedData = await _repository.GetPagedAsync(spec, p.PageNumber, p.PageSize);
+
+        var pagedResultDto = pagedData.Map(x => new ProveedorDto
+        {
+            IdProveedor = x.IdProveedor,
+            RazonSocial = x.RazonSocial,
+            Nit = x.Nit,
+            Direccion = x.Direccion,
+            Contacto = x.Contacto,
+            Activo = x.Activo
+        });
+
+        return Result.Ok(pagedResultDto);
     }
 
     #endregion

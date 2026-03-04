@@ -2,7 +2,9 @@ using Consulcon.Application.DTOs;
 using Consulcon.Application.Interfaces;
 using Consulcon.Application.DTOs.Contabilidad;
 using Consulcon.Domain.Common;
+using Consulcon.Domain.Specifications;
 using Consulcon.Domain.Entities.General;
+using Consulcon.Domain.Interfaces;
 using Consulcon.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -13,9 +15,9 @@ namespace Consulcon.Infrastructure.Services
 {
     public class AccountService(
         ConsulconDbContext context, 
-        IRepository<Consulcon.Domain.Entities.Contabilidad.Egreso> egresoRepository) : IAccountService
+        IRepository<Consulcon.Domain.Entities.Contabilidad.Egreso> egresoRepository,
+        IRepository<Consulcon.Domain.Entities.Contabilidad.AccountTransactionHistory> transactionRepository) : IAccountService
     {
-
         public async Task<Result<List<AccountDto>>> GetAllAccountsAsync(bool activeOnly = true)
         {
             var query = context.Bancos.AsQueryable();
@@ -149,5 +151,24 @@ namespace Consulcon.Infrastructure.Services
 
             return Result.Ok<IEnumerable<BalanceHistoryDto>>(history);
         }
+
+        public async Task<Result<PagedResult<BalanceHistoryDto>>> GetPagedTransactionHistoryAsync(int accountId, PaginationParams p)
+        {
+            var spec = new TransactionHistoryWithFiltersSpec(p, accountId);
+
+            var pagedData = await transactionRepository.GetPagedAsync(spec, p.PageNumber, p.PageSize);
+
+            var result = pagedData.Map(x => new BalanceHistoryDto
+            {
+                Date = x.Date,
+                Amount = x.Amount,
+                Description = x.Description ?? string.Empty
+            
+            });
+
+            return Result.Ok(result);
+        }
     }
+
+    
 }
