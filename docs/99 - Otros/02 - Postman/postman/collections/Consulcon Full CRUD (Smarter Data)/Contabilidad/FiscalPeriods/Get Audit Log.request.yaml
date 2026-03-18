@@ -1,0 +1,8 @@
+$kind: http-request
+description: Obtiene el registro de auditor├¡a de cierres y reaperturas de per├¡odo.
+url: "{{baseUrl}}/api/fiscal-periods/audit-log"
+method: GET
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+order: 5000

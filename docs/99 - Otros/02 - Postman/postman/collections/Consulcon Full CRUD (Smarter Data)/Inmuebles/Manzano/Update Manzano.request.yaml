@@ -1,0 +1,16 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Manzano/{{manzanoId}}"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+body:
+  type: text
+  content: |-
+    {
+      "idCondominio": 1,
+      "codigo": "MZ-A-NEW",
+      "nombre": "Manzano A Updated"
+    }
+order: 5000

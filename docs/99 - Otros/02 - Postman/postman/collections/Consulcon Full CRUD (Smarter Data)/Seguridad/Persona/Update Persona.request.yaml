@@ -1,0 +1,20 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Persona/{{personaId}}"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+body:
+  type: text
+  content: |-
+    {
+      "ci": "12345678",
+      "nombreCompleto": "Juan Perez Updated",
+      "fechaNacimiento": "1990-01-01",
+      "sexo": "M",
+      "estadoCivil": "Casado",
+      "esActivo": true,
+      "medioContactos": []
+    }
+order: 4000

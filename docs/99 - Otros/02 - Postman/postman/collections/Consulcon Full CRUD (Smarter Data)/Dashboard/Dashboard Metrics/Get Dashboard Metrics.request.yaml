@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Dashboard/{{condominioId}}"
+method: GET
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+order: 1000

@@ -21,8 +21,6 @@ public partial class Usuario
 
     public bool? EstaHabilitado { get; set; }
 
-    public int? IdRolPrincipal { get; set; }
-
     public virtual ICollection<Contrato> Contratos { get; set; } = new List<Contrato>();
 
     public virtual ICollection<DeudaCabecera> DeudaCabeceras { get; set; } = new List<DeudaCabecera>();
@@ -30,6 +28,4 @@ public partial class Usuario
     public virtual ICollection<Egreso> Egresos { get; set; } = new List<Egreso>();
 
     public virtual Persona IdPersonaNavigation { get; set; } = null!;
-
-    public virtual Rol? IdRolPrincipalNavigation { get; set; }
 }

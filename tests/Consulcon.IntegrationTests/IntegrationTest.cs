@@ -41,7 +41,6 @@ public abstract class IntegrationTest : IClassFixture<ConsulconWebApplicationFac
                 {
                     Username = "integrationuser",
                     PasswordHash = BCrypt.Net.BCrypt.HashPassword("password123"),
-                    IdRolPrincipal = 1,
                     EstaHabilitado = true,
                     IdPersona = persona.IdPersona,
                     FechaCreacion = DateTime.UtcNow

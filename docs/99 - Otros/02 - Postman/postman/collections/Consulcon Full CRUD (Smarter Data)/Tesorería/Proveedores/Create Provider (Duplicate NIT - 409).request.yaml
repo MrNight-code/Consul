@@ -1,0 +1,19 @@
+$kind: http-request
+description: Intento de crear proveedor con NIT duplicado. Debe retornar 409 Conflict.
+url: "{{baseUrl}}/api/providers"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+body:
+  type: text
+  content: |-
+    {
+      "taxId": "1234567890",
+      "legalName": "Otra Empresa con mismo NIT",
+      "phoneNumber": "77700000",
+      "email": "otro@email.com",
+      "address": "Otra direcci├│n"
+    }
+order: 5000

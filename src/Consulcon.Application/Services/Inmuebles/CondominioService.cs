@@ -7,27 +7,18 @@ using System.Security.Cryptography;
 
 namespace Consulcon.Application.Services.Inmuebles;
 
-public class CondominioService : ICondominioService
+public partial class CondominioService(
+    IRepository<CondominioMaster> condominioRepository,
+    IRepository<UsuarioMaster> usuarioRepository,
+    IRepository<UsuarioCondominio> usuarioCondominioRepository,
+    ITenantDatabaseService tenantDatabaseService,
+    ITenantMigrationService tenantMigrationService) : ICondominioService
 {
-    private readonly IRepository<CondominioMaster> _condominioRepository;
-    private readonly IRepository<UsuarioMaster> _usuarioRepository;
-    private readonly IRepository<UsuarioCondominio> _usuarioCondominioRepository;
-    private readonly ITenantDatabaseService _tenantDatabaseService;
-    private readonly ITenantMigrationService _tenantMigrationService;
-
-    public CondominioService(
-        IRepository<CondominioMaster> condominioRepository,
-        IRepository<UsuarioMaster> usuarioRepository,
-        IRepository<UsuarioCondominio> usuarioCondominioRepository,
-        ITenantDatabaseService tenantDatabaseService,
-        ITenantMigrationService tenantMigrationService)
-    {
-        _condominioRepository = condominioRepository;
-        _usuarioRepository = usuarioRepository;
-        _usuarioCondominioRepository = usuarioCondominioRepository;
-        _tenantDatabaseService = tenantDatabaseService;
-        _tenantMigrationService = tenantMigrationService;
-    }
+    private readonly IRepository<CondominioMaster> _condominioRepository = condominioRepository;
+    private readonly IRepository<UsuarioMaster> _usuarioRepository = usuarioRepository;
+    private readonly IRepository<UsuarioCondominio> _usuarioCondominioRepository = usuarioCondominioRepository;
+    private readonly ITenantDatabaseService _tenantDatabaseService = tenantDatabaseService;
+    private readonly ITenantMigrationService _tenantMigrationService = tenantMigrationService;
 
     public async Task<Result<IEnumerable<CondominioDto>>> GetAllAsync(int userId)
     {
@@ -104,7 +95,7 @@ public class CondominioService : ICondominioService
         {
             UsuarioId = userId,
             CondominioId = masterEntity.Id,
-            RolInicial = "Administrador"
+            IdRol = 2 // Administrador
         };
         await _usuarioCondominioRepository.AddAsync(userLink);
 
@@ -190,10 +181,10 @@ public class CondominioService : ICondominioService
             .Replace("-", "_");
         
         // Remove any characters that aren't alphanumeric or underscore
-        sanitized = System.Text.RegularExpressions.Regex.Replace(sanitized, @"[^a-z0-9_]", "");
+        sanitized = NonAlphanumericRegex().Replace(sanitized, "");
         
         // Remove consecutive underscores
-        sanitized = System.Text.RegularExpressions.Regex.Replace(sanitized, @"_+", "_");
+        sanitized = ConsecutiveUnderscoresRegex().Replace(sanitized, "_");
         
         // Trim underscores from start/end
         sanitized = sanitized.Trim('_');
@@ -202,8 +193,14 @@ public class CondominioService : ICondominioService
         if (string.IsNullOrEmpty(sanitized))
             return "unnamed";
         
-        return sanitized.Length > 50 ? sanitized.Substring(0, 50) : sanitized;
+        return sanitized.Length > 50 ? sanitized[..50] : sanitized;
     }
+
+    [System.Text.RegularExpressions.GeneratedRegex(@"[^a-z0-9_]")]
+    private static partial System.Text.RegularExpressions.Regex NonAlphanumericRegex();
+
+    [System.Text.RegularExpressions.GeneratedRegex(@"_+")]
+    private static partial System.Text.RegularExpressions.Regex ConsecutiveUnderscoresRegex();
 
     public async Task<Result<bool>> AddUserAsync(int condominioId, AddUserToCondominioDto dto)
     {
@@ -224,7 +221,7 @@ public class CondominioService : ICondominioService
         {
             CondominioId = condominioId,
             UsuarioId = dto.UserId,
-            RolInicial = "Usuario"
+            IdRol = 3 // Operador / Default
         };
 
         await _usuarioCondominioRepository.AddAsync(newLink);
@@ -248,9 +245,9 @@ public class CondominioService : ICondominioService
         {
             UserId = link.UsuarioId,
             Username = link.Usuario.Username,
-            FullName = link.Usuario.Email, // Note: UsuarioMaster doesn't have FullName, using Email
+            FullName = link.Usuario.Email,
             Email = link.Usuario.Email,
-            RolInicial = link.RolInicial ?? "Usuario"
+            IdRol = link.IdRol
         });
 
         return Result.Ok(users);

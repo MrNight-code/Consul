@@ -1,0 +1,17 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Accounts/{{accountId}}"
+method: PUT
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "name": "Banco Ganadero Updated",
+      "accountNumber": "100-00-12345",
+      "type": "BANCO",
+      "isActive": true
+    }
+order: 5000

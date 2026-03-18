@@ -1,0 +1,24 @@
+$kind: http-request
+description: Genera deudas de expensas para las unidades del condominio. Incluye
+  detección de brechas mensuales.
+url: "{{baseUrl}}/api/expenses/generar-deuda"
+method: POST
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "fkCondominio": "{{condominioId}}",
+      "montoTotal": 5000,
+      "concepto": "Expensas Abril 2026",
+      "mesPeriodo": 4,
+      "anioPeriodo": 2026,
+      "fechaVencimiento": "2026-04-30",
+      "esMontoFijoPorUnidad": false,
+      "distribucion": [],
+      "forzarGeneracion": false
+    }
+order: 14000

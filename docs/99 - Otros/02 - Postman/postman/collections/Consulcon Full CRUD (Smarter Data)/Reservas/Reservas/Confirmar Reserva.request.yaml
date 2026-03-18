@@ -1,0 +1,8 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Reserva/1/confirmar"
+method: PUT
+headers:
+  X-Condominio-Id: "{{condominioId}}"
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+order: 5000

@@ -1,4 +1,6 @@
 using Consulcon.Application.DTOs.Contabilidad.Expenses;
+using Consulcon.Application.Interfaces;
+using Consulcon.Domain.Common;
 using Consulcon.Infrastructure.Services.Contabilidad;
 using Consulcon.Infrastructure.Persistence;
 using Consulcon.Domain.Entities.General;
@@ -16,6 +18,18 @@ namespace Consulcon.IntegrationTests.Services
         private readonly ConsulconDbContext _context;
         private readonly ExpenseService _service;
 
+        private class DummyExpenseCalculationService : IExpenseCalculationService
+        {
+            public System.Collections.Generic.List<Consulcon.Domain.Entities.Contabilidad.UnitDebtDistribution> CalculateDistribution(
+                Consulcon.Domain.Entities.Contabilidad.Egreso egreso,
+                System.Collections.Generic.List<Consulcon.Domain.Entities.Inmuebles.Propiedad> propiedades,
+                bool validarPorcentajeTotal = true,
+                bool esMontoFijoPorUnidad = false)
+            {
+                return new System.Collections.Generic.List<Consulcon.Domain.Entities.Contabilidad.UnitDebtDistribution>();
+            }
+        }
+
         public ExpenseServiceTests()
         {
             var options = new DbContextOptionsBuilder<ConsulconDbContext>()
@@ -24,7 +38,7 @@ namespace Consulcon.IntegrationTests.Services
                 .Options;
 
             _context = new ConsulconDbContext(options);
-            _service = new ExpenseService(_context, null!);
+            _service = new ExpenseService(_context, null!, new DummyExpenseCalculationService());
         }
 
         [Fact]

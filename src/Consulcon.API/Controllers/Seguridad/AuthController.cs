@@ -1,35 +1,21 @@
 using Consulcon.Application.DTOs.Seguridad;
 using Consulcon.Application.Interfaces.Seguridad;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Consulcon.API.Controllers.Seguridad;
 
-[ApiController]
-[Route("api/[controller]")]
-public class AuthController : ControllerBase
+public class AuthController(IAuthService authService) : BaseController
 {
-    private readonly IAuthService _authService;
-
-    public AuthController(IAuthService authService)
-    {
-        _authService = authService;
-    }
-
     [AllowAnonymous]
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        var result = await _authService.LoginAsync(request.Username, request.Password);
+        var result = await authService.LoginAsync(request.Username, request.Password);
 
         if (result.IsFailure)
-        {
-            return Unauthorized(new { Message = result.Error });
-        }
+            return Unauthorized(new { message = result.Error });
 
-        return Ok(new 
-        { 
-            Message = "Login exitoso", 
-            Data = result.Value
-        });
+        return Ok(result.Value);
     }
 }

@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{baseUrl}}/api/providers?page=1&pageSize=20&term=limpieza"
+method: GET
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+queryParams:
+  - key: page
+    value: "1"
+  - key: pageSize
+    value: "20"
+  - key: term
+    value: limpieza
+    description: B├║squeda parcial en RazonSocial o NIT
+order: 2000

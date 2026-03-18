@@ -1,0 +1,17 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Accounts/1"
+method: PUT
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+        "name": "Banco Nacional",
+        "type": "BANCO",
+        "accountNumber": "1234567890",
+        "isActive": true
+    }
+order: 5000

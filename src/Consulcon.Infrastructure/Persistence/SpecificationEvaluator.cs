@@ -5,7 +5,7 @@ namespace Consulcon.Infrastructure.Persistence;
 
 public class SpecificationEvaluator<TEntity> where TEntity : class
 {
-    public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> inputQuery, ISpecification<TEntity> spec)
+    public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> inputQuery, ISpecification<TEntity> spec, bool applyPaging = true)
     {
         var query = inputQuery;
 
@@ -29,7 +29,7 @@ public class SpecificationEvaluator<TEntity> where TEntity : class
             query = query.OrderByDescending(spec.OrderByDescending);
         }
 
-        if (spec.IsPagingEnabled)
+        if (spec.IsPagingEnabled && applyPaging)
         {
             query = query.Skip(spec.Skip).Take(spec.Take);
         }

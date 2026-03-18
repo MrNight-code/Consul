@@ -1,0 +1,25 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Tesoreria/egresos"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+body:
+  type: text
+  content: |-
+    {
+        "IdEgreso": 1,
+        "IdCondominio": 1,
+        "IdProveedor": 1,
+        "IdPersonaBeneficiario": 1,
+        "IdAutorizacion": 1,
+        "IdBancoOrigen": 1,
+        "IdFormaPago": 1,
+        "Concepto": "test_data",
+        "MontoTotal": 10.5,
+        "FechaEgreso": "2024-01-01T12:00:00",
+        "NroFacturaProveedor": "test_data",
+        "IdUsuarioRegistro": 1
+    }
+order: 2000

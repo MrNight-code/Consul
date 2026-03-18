@@ -1,70 +1,32 @@
-using System.Threading.Tasks;
 using Consulcon.Application.DTOs.Financiero;
 using Consulcon.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Consulcon.API.Controllers.Financiero;
 
-[ApiController]
-[Route("api/[controller]")] // api/FinancialConfig
-public class FinancialConfigController : ControllerBase
+public class FinancialConfigController(IFinancialConfigService service) : BaseController
 {
-    private readonly IFinancialConfigService _service;
+    [HttpGet("penalties")]
+    public async Task<IActionResult> GetFinancialConfig() 
+        => HandleResult(await service.GetFinancialConfigAsync(CondominioId));
 
-    public FinancialConfigController(IFinancialConfigService service)
-    {
-        _service = service;
-    }
+    [HttpPut("penalties")]
+    public async Task<IActionResult> UpdateFinancialConfig([FromBody] UpdateFinancialConfigDto dto) 
+        => HandleResult(await service.UpdateFinancialConfigAsync(CondominioId, dto));
 
-    // --- Penalties / Financial Config ---
+    [HttpGet("concepts")]
+    public async Task<IActionResult> GetConcepts() 
+        => HandleResult(await service.GetChargeConceptsAsync(CondominioId));
 
-    [HttpGet("penalties/{condominiumId}")]
-    public async Task<IActionResult> GetFinancialConfig(int condominiumId)
-    {
-        var result = await _service.GetFinancialConfigAsync(condominiumId);
-        if (!result.IsSuccess) return BadRequest(result.Error);
-        return Ok(result.Value);
-    }
-
-    [HttpPut("penalties/{condominiumId}")]
-    public async Task<IActionResult> UpdateFinancialConfig(int condominiumId, [FromBody] UpdateFinancialConfigDto dto)
-    {
-        var result = await _service.UpdateFinancialConfigAsync(condominiumId, dto);
-        if (!result.IsSuccess) return BadRequest(result.Error);
-        return Ok(new { IsSuccess = true, Message = "Configuracion actualizada correctamente." });
-    }
-
-    // --- Charge Concepts ---
-
-    [HttpGet("concepts/{condominiumId}")]
-    public async Task<IActionResult> GetConcepts(int condominiumId)
-    {
-        var result = await _service.GetChargeConceptsAsync(condominiumId);
-        if (!result.IsSuccess) return BadRequest(result.Error);
-        return Ok(result.Value);
-    }
-
-    [HttpPost("concepts/{condominiumId}")]
-    public async Task<IActionResult> CreateConcept(int condominiumId, [FromBody] CreateChargeConceptDto dto)
-    {
-        var result = await _service.CreateChargeConceptAsync(condominiumId, dto);
-        if (!result.IsSuccess) return BadRequest(result.Error);
-        return CreatedAtAction(nameof(GetConcepts), new { condominiumId }, new { Id = result.Value });
-    }
+    [HttpPost("concepts")]
+    public async Task<IActionResult> CreateConcept([FromBody] CreateChargeConceptDto dto) 
+        => HandleResult(await service.CreateChargeConceptAsync(CondominioId, dto));
 
     [HttpPut("concepts/{id}")]
-    public async Task<IActionResult> UpdateConcept(int id, [FromBody] UpdateChargeConceptDto dto)
-    {
-        var result = await _service.UpdateChargeConceptAsync(id, dto);
-        if (!result.IsSuccess) return BadRequest(result.Error);
-        return Ok(new { IsSuccess = true, Message = "Concepto actualizado." });
-    }
+    public async Task<IActionResult> UpdateConcept(int id, [FromBody] UpdateChargeConceptDto dto) 
+        => HandleResult(await service.UpdateChargeConceptAsync(id, dto));
 
     [HttpDelete("concepts/{id}")]
-    public async Task<IActionResult> DeleteConcept(int id)
-    {
-        var result = await _service.DeleteChargeConceptAsync(id);
-        if (!result.IsSuccess) return BadRequest(result.Error);
-        return Ok(new { IsSuccess = true, Message = "Concepto eliminado (Soft Delete)." });
-    }
+    public async Task<IActionResult> DeleteConcept(int id) 
+        => HandleResult(await service.DeleteChargeConceptAsync(id));
 }

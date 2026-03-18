@@ -62,6 +62,10 @@ builder.Services.AddControllers(options =>
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
 
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("SuperAdminOnly", policy => 
+        policy.RequireClaim("EsSuperAdmin", "True"));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

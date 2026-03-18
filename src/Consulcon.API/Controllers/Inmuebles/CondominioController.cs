@@ -1,78 +1,46 @@
-using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Consulcon.Application.DTOs.Inmuebles;
+using Consulcon.Application.Interfaces.Inmuebles;
 
 namespace Consulcon.API.Controllers.Inmuebles;
 
-[ApiController]
-[Route("api/[controller]")]
-public class CondominioController(ICondominioService service) : ControllerBase
+public class CondominioController(ICondominioService service) : BaseController
 {
-    private readonly ICondominioService _service = service;
-
     [HttpGet]
-    public async Task<IActionResult> GetAll()
-    {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) ?? User.FindFirst("sub");
-        if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
-        {
-            return Unauthorized("User ID not found in token.");
-        }
-
-        var result = await _service.GetAllAsync(userId);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> GetAll() 
+        => HandleResult(await service.GetAllAsync(UserId));
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
-    {
-        var result = await _service.GetByIdAsync(id);
-        return result.IsSuccess ? Ok(result.Value) : NotFound(new { Message = result.Error });
-    }
+    public async Task<IActionResult> GetById(int id) 
+        => HandleResult(await service.GetByIdAsync(id));
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CondominioDto dto)
-    {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) ?? User.FindFirst("sub");
-        if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
-        {
-            return Unauthorized("User ID not found in token.");
-        }
-
-        var result = await _service.CreateAsync(dto, userId);
-        return result.IsSuccess ? CreatedAtAction(nameof(GetById), new { id = result.Value.IdCondominio }, result.Value) : BadRequest(result.Error);
-    }
+    [Authorize(Policy = "SuperAdminOnly")]
+    public async Task<IActionResult> Create([FromBody] CondominioDto dto) 
+        => HandleResult(await service.CreateAsync(dto, UserId));
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] CondominioDto dto)
-    {
-        var result = await _service.UpdateAsync(id, dto);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    [Authorize(Policy = "SuperAdminOnly")]
+    public async Task<IActionResult> Update(int id, [FromBody] CondominioDto dto) 
+        => HandleResult(await service.UpdateAsync(id, dto));
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
-    {
-        var result = await _service.DeleteAsync(id);
-        return result.IsSuccess ? NoContent() : BadRequest(result.Error);
-    }
+    [Authorize(Policy = "SuperAdminOnly")]
+    public async Task<IActionResult> Delete(int id) 
+        => HandleResult(await service.DeleteAsync(id));
 
     [HttpPost("{id}/usuarios")]
-    public async Task<IActionResult> AddUser(int id, [FromBody] AddUserToCondominioDto dto)
-    {
-        var result = await _service.AddUserAsync(id, dto);
-        return result.IsSuccess ? Ok(new { Message = "Usuario asignado correctamente" }) : BadRequest(result.Error);
-    }
+    [Authorize(Policy = "SuperAdminOnly")]
+    public async Task<IActionResult> AddUser(int id, [FromBody] AddUserToCondominioDto dto) 
+        => HandleResult(await service.AddUserAsync(id, dto));
 
     [HttpGet("{id}/usuarios")]
-    public async Task<IActionResult> GetUsers(int id)
-    {
-        var result = await _service.GetUsersAsync(id);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> GetUsers(int id) 
+        => HandleResult(await service.GetUsersAsync(id));
 
-    [HttpDelete("{id}/usuarios/{userId}")]
-    public async Task<IActionResult> RemoveUser(int id, int userId)
-    {
-        var result = await _service.RemoveUserAsync(id, userId);
-        return result.IsSuccess ? NoContent() : BadRequest(result.Error);
-    }
+    [HttpDelete("{id}/usuarios/{usuarioId}")]
+    [Authorize(Policy = "SuperAdminOnly")]
+    public async Task<IActionResult> RemoveUser(int id, int usuarioId) 
+        => HandleResult(await service.RemoveUserAsync(id, usuarioId));
 }

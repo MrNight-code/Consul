@@ -1,44 +1,24 @@
 using Consulcon.Application.DTOs.Contratos;
 using Consulcon.Application.Interfaces.Contratos;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Consulcon.API.Controllers.Contratos;
 
-[ApiController]
-[Route("api/[controller]")]
-public class CatalogoServicioController : ControllerBase
+public class CatalogoServicioController(ICatalogoServicioService service) : BaseController
 {
-    private readonly ICatalogoServicioService _service;
-
-    public CatalogoServicioController(ICatalogoServicioService service)
-    {
-        _service = service;
-    }
-
     [HttpGet]
-    public async Task<IActionResult> GetAll()
-    {
-        var result = await _service.GetAllAsync();
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> GetAll() 
+        => HandleResult(await service.GetAllAsync());
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CatalogoServicioDto dto)
-    {
-        var result = await _service.CreateAsync(dto);
-        return result.IsSuccess ? CreatedAtAction(nameof(GetAll), null, result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> Create([FromBody] CatalogoServicioDto dto) 
+        => HandleResult(await service.CreateAsync(dto));
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] CatalogoServicioDto dto)
-    {
-        var result = await _service.UpdateAsync(id, dto);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> Update(int id, [FromBody] CatalogoServicioDto dto) 
+        => HandleResult(await service.UpdateAsync(id, dto));
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
-    {
-        var result = await _service.DeleteAsync(id);
-        return result.IsSuccess ? NoContent() : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> Delete(int id) 
+        => HandleResult(await service.DeleteAsync(id));
 }

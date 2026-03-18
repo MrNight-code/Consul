@@ -1,0 +1,22 @@
+$kind: http-request
+url: "{{baseUrl}}/api/expenses"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+body:
+  type: text
+  content: |-
+    {
+      "condominioId": {{condominioId}},
+      "accountId": 1,
+      "amount": 150.00,
+      "description": "Compra de insumos reserva",
+      "expenseDate": "2026-02-05T14:30:00Z",
+      "categoryId": 1,
+      "paymentMethodId": 1,
+      "providerId": null,
+      "invoiceNumber": "F-999"
+    }
+order: 10000

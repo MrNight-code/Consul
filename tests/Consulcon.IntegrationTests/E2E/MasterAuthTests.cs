@@ -46,7 +46,7 @@ public class MasterAuthTests : IAsyncLifetime
         result.Should().NotBeNull();
         result!.Token.Should().NotBeNullOrEmpty();
         result.Username.Should().Be("admin");
-        result.Tenants.Should().NotBeNull(); 
+        result.CondominioIds.Should().NotBeNull();
     }
 
      [Fact]

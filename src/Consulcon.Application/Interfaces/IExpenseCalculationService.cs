@@ -9,6 +9,7 @@ namespace Consulcon.Application.Interfaces
         List<UnitDebtDistribution> CalculateDistribution(
             Egreso egreso,
             List<Propiedad> propiedades,
-            bool validarPorcentajeTotal = true);
+            bool validarPorcentajeTotal = true,
+            bool esMontoFijoPorUnidad = false);
     }
 }

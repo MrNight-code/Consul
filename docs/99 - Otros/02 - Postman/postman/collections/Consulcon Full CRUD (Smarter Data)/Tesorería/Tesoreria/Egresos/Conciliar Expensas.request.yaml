@@ -1,0 +1,20 @@
+$kind: http-request
+description: Concilia la distribución de expensas con los saldos disponibles de
+  unidades. Detecta excepciones y unidades sin propietario.
+url: "{{baseUrl}}/api/expenses/conciliar"
+method: POST
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "fkCondominio": "{{condominioId}}",
+      "montoTotal": 5000,
+      "concepto": "Conciliaci\u00f3n Expensas Abril 2026",
+      "esMontoFijoPorUnidad": false,
+      "distribucion": []
+    }
+order: 13000

@@ -9,14 +9,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Consulcon.Application.Services.Seguridad;
 
-public class JwtTokenGenerator : IJwtTokenGenerator
+public class JwtTokenGenerator(IOptions<JwtSettings> jwtOptions) : IJwtTokenGenerator
 {
-    private readonly JwtSettings _jwtSettings;
-
-    public JwtTokenGenerator(IOptions<JwtSettings> jwtOptions)
-    {
-        _jwtSettings = jwtOptions.Value;
-    }
+    private readonly JwtSettings _jwtSettings = jwtOptions.Value;
 
     public string GenerateToken(UserDto user)
     {
@@ -25,9 +20,9 @@ public class JwtTokenGenerator : IJwtTokenGenerator
 
         var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.UniqueName, user.Username)
+            new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new(JwtRegisteredClaimNames.UniqueName, user.Username)
         };
 
         if (user.RoleId.HasValue)
@@ -35,10 +30,12 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             claims.Add(new Claim("roleId", user.RoleId.Value.ToString()));
         }
 
-        if (!string.IsNullOrEmpty(user.FullName))
+        if (!string.IsNullOrEmpty(user.Email))
         {
-            claims.Add(new Claim("fullName", user.FullName));
+            claims.Add(new Claim("email", user.Email));
         }
+
+        claims.Add(new Claim("EsSuperAdmin", user.EsSuperAdmin.ToString()));
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {

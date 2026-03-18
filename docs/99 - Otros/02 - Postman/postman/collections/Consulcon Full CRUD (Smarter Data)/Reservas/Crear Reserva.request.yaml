@@ -1,0 +1,12 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Reserva"
+method: POST
+headers:
+  X-Condominio-Id: "{{condominioId}}"
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+body:
+  type: text
+  content: '{"idRecurso": 1, "idContrato": 1, "fechaInicio":
+    "2026-03-01T10:00:00", "fechaFin": "2026-03-01T14:00:00"}'
+order: 5000

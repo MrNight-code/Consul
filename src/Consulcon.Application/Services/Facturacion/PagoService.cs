@@ -7,11 +7,22 @@ public class PagoService : IPagoService
 {
     private readonly IRepository<TransaccionPago> _pagoRepository;
     private readonly IRepository<DeudaCabecera> _deudaRepository;
+    private readonly IRepository<Propiedad> _propiedadRepository;
+    private readonly IRepository<Banco> _bancoRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public PagoService(IRepository<TransaccionPago> pagoRepository, IRepository<DeudaCabecera> deudaRepository)
+    public PagoService(
+        IRepository<TransaccionPago> pagoRepository, 
+        IRepository<DeudaCabecera> deudaRepository,
+        IRepository<Propiedad> propiedadRepository,
+        IRepository<Banco> bancoRepository,
+        IUnitOfWork unitOfWork)
     {
         _pagoRepository = pagoRepository;
         _deudaRepository = deudaRepository;
+        _propiedadRepository = propiedadRepository;
+        _bancoRepository = bancoRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<IEnumerable<TransaccionPagoDto>>> GetByDeudaAsync(int deudaId)
@@ -22,42 +33,74 @@ public class PagoService : IPagoService
 
     public async Task<Result<TransaccionPagoDto>> RegistrarPagoAsync(CreatePagoDto dto)
     {
-        var deuda = await _deudaRepository.GetByIdAsync(dto.IdDeuda);
-        if (deuda == null) return Result.Fail<TransaccionPagoDto>("Deuda no encontrada");
-
-        if (deuda.EstadoPago == "PAGADO" || deuda.EstadoPago == "ANULADO")
-            return Result.Fail<TransaccionPagoDto>("La deuda ya está pagada o anulada");
-
-        var pago = new TransaccionPago
+        await _unitOfWork.BeginTransactionAsync();
+        try
         {
-            IdDeuda = dto.IdDeuda,
-            IdPersonaPagador = dto.IdPersonaPagador,
-            IdBancoDestino = dto.IdBancoDestino,
-            IdFormaPago = dto.IdFormaPago,
-            MontoAbonado = dto.MontoAbonado,
-            FechaPago = DateTime.Now,
-            NroComprobanteBanco = dto.NroComprobanteBanco,
-            Estado = "CONFIRMADO",
-            TipoCambio = 1
-        };
+            var deuda = await _deudaRepository.GetByIdAsync(dto.IdDeuda);
+            if (deuda == null) return Result.Fail<TransaccionPagoDto>("Deuda no encontrada");
 
-        await _pagoRepository.AddAsync(pago);
+            if (deuda.EstadoPago == "PAGADO" || deuda.EstadoPago == "ANULADO")
+                return Result.Fail<TransaccionPagoDto>("La deuda ya está pagada o anulada");
 
-        // Update user balance/debt status
-        deuda.TotalPagado = (deuda.TotalPagado ?? 0) + dto.MontoAbonado;
-        
-        if (deuda.TotalPagado >= deuda.TotalDeuda)
-        {
-            deuda.EstadoPago = "PAGADO";
+            var banco = await _bancoRepository.GetByIdAsync(dto.IdBancoDestino);
+            if (banco == null) return Result.Fail<TransaccionPagoDto>("Banco de destino no encontrado");
+
+            var pago = new TransaccionPago
+            {
+                IdDeuda = dto.IdDeuda,
+                IdPersonaPagador = dto.IdPersonaPagador,
+                IdBancoDestino = dto.IdBancoDestino,
+                IdFormaPago = dto.IdFormaPago,
+                MontoAbonado = dto.MontoAbonado,
+                FechaPago = DateTime.Now,
+                NroComprobanteBanco = dto.NroComprobanteBanco,
+                Estado = "CONFIRMADO",
+                TipoCambio = 1
+            };
+
+            await _pagoRepository.AddAsync(pago);
+
+            // Update user balance/debt status
+            deuda.TotalPagado = (deuda.TotalPagado ?? 0) + dto.MontoAbonado;
+            
+            if (deuda.TotalPagado >= deuda.TotalDeuda)
+            {
+                deuda.EstadoPago = "PAGADO";
+            }
+            else
+            {
+                deuda.EstadoPago = "PARCIAL";
+            }
+
+            await _deudaRepository.UpdateAsync(deuda);
+
+            // ACTUALIZAR SALDO DEUDOR EN PROPIEDAD
+            var deudasFull = await _deudaRepository.FindAsync(d => d.IdDeuda == dto.IdDeuda, includeProperties: "IdContratoNavigation");
+            var deudaEnt = deudasFull.FirstOrDefault();
+            if (deudaEnt?.IdContratoNavigation != null)
+            {
+                var propiedad = await _propiedadRepository.GetByIdAsync(deudaEnt.IdContratoNavigation.IdPropiedad);
+                if (propiedad != null)
+                {
+                    propiedad.SaldoDeudor -= dto.MontoAbonado;
+                    if (propiedad.SaldoDeudor < 0) propiedad.SaldoDeudor = 0;
+                    await _propiedadRepository.UpdateAsync(propiedad);
+                }
+            }
+
+            // ACTUALIZAR SALDO EN BANCO
+            banco.Saldo += dto.MontoAbonado;
+            await _bancoRepository.UpdateAsync(banco);
+
+            await _unitOfWork.CommitTransactionAsync();
+
+            return Result.Ok(MapToDto(pago));
         }
-        else
+        catch (Exception ex)
         {
-            deuda.EstadoPago = "PARCIAL";
+            await _unitOfWork.RollbackTransactionAsync();
+            return Result.Fail<TransaccionPagoDto>($"Error al registrar pago: {ex.Message}");
         }
-
-        await _deudaRepository.UpdateAsync(deuda);
-
-        return Result.Ok(MapToDto(pago));
     }
 
     private static TransaccionPagoDto MapToDto(TransaccionPago entity)

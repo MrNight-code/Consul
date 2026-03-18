@@ -1,0 +1,44 @@
+$kind: http-request
+url: "{{baseUrl}}/api/auth/login"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+        "username": "admin",
+        "password": "admin123"
+    }
+scripts:
+  - type: afterResponse
+    code: >-
+      var jsonData = pm.response.json();
+
+
+      if (jsonData.data && jsonData.data.token) {
+          pm.collectionVariables.set('authToken', jsonData.data.token);
+          console.log('Token saved!');
+      }
+
+
+      // Save first tenant ID if available
+
+      if (jsonData.data && jsonData.data.tenants && jsonData.data.tenants.length
+      > 0) {
+          var firstTenant = jsonData.data.tenants[0];
+          pm.collectionVariables.set('tenantId', firstTenant.tenantId);
+          console.log('Tenant ID saved: ' + firstTenant.tenantId);
+      }
+
+
+      // Save first condominio ID (int) from array for endpoints needing it
+
+      if (jsonData.data && jsonData.data.condominioIds &&
+      jsonData.data.condominioIds.length > 0) {
+          var firstCondoId = jsonData.data.condominioIds[0];
+          pm.collectionVariables.set('condominioId', firstCondoId);
+          console.log('Condominio ID (int) saved: ' + firstCondoId);
+      }
+    language: text/javascript
+order: 1000

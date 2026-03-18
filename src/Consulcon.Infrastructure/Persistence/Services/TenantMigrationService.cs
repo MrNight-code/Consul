@@ -181,7 +181,7 @@ namespace Consulcon.Infrastructure.Persistence.Services
                         {
                             UsuarioId = masterUser.Id,
                             CondominioId = condoMaster.Id,
-                            RolInicial = "Usuario" 
+                            IdRol = 3 // Operador
                         });
                         await masterContext.SaveChangesAsync();
                          _logger.LogInformation("Linked User {Username} to Tenant {TenantId}", username, tenantId);

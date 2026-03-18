@@ -1,0 +1,18 @@
+$kind: http-request
+url: "{{baseUrl}}/api/providers?page=1&pageSize=20"
+method: GET
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+queryParams:
+  - key: page
+    value: "1"
+    description: "N├║mero de p├ígina (default: 1)"
+  - key: pageSize
+    value: "20"
+    description: "Tama├▒o de p├ígina (default: 20, max: 100)"
+  - key: term
+    value: ""
+    disabled: true
+    description: T├⌐rmino de b├║squeda (busca en RazonSocial y NIT)
+order: 1000

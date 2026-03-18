@@ -1,0 +1,12 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Reserva/recursos"
+method: POST
+headers:
+  X-Condominio-Id: "{{condominioId}}"
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+body:
+  type: text
+  content: '{"nombre": "Sal├│n de eventos", "descripcion": "Sal├│n principal",
+    "idCondominio": 1, "precioReserva": 50.00}'
+order: 3000

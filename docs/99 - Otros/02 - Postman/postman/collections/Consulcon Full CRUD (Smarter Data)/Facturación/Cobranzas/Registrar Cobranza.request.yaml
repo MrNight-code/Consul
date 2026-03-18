@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{baseUrl}}/api/cobranzas"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+body:
+  type: text
+  content: |-
+    {
+      "unitId": 1,
+      "monto": 100.00,
+      "idFormaPago": 1,
+      "nroReferencia": "REF-123",
+      "observaciones": "Pago expensas",
+      "idBancoDestino": 1
+    }
+order: 1000

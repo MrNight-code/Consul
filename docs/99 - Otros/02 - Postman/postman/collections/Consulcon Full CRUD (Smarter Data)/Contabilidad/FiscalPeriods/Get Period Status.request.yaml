@@ -1,0 +1,8 @@
+$kind: http-request
+description: Verifica si un per├¡odo espec├¡fico (a├▒o/mes) est├í cerrado.
+url: "{{baseUrl}}/api/fiscal-periods/status/2026/1"
+method: GET
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+order: 4000

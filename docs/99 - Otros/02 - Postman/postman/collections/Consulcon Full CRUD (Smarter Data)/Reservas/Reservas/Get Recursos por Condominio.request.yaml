@@ -1,0 +1,8 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Reserva/recursos/condominio/{{condominioId}}"
+method: GET
+headers:
+  X-Condominio-Id: "{{condominioId}}"
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+order: 1000

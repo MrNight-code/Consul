@@ -18,6 +18,11 @@ public class DashboardCountersDto
 
     public decimal TotalMoraHistorica { get; set; }
 
+    public int TotalPersonas { get; set; }
+    public int TotalContratos { get; set; }
+    public int TotalEgresos { get; set; }
+    public int TotalEventos { get; set; }
+
     public string CondominioNombre { get; set; } = string.Empty;
 
     public DateTime UltimaActualizacion { get; set; }

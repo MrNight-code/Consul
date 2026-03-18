@@ -1,0 +1,16 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Usuario?PageNumber=1&PageSize=10&SearchTerm=&FromDate=&To\
+  Date=&SortBy=&SortDescending=false"
+method: GET
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+queryParams:
+  PageNumber: "1"
+  PageSize: "10"
+  SearchTerm: ""
+  FromDate: ""
+  ToDate: ""
+  SortBy: ""
+  SortDescending: "false"
+order: 1000

@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Accounts/1"
+method: DELETE
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+order: 6000

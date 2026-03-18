@@ -1,0 +1,17 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Accounts"
+method: POST
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+        "name": "Caja Chica",
+        "type": "EFECTIVO",
+        "accountNumber": null,
+        "isActive": true
+    }
+order: 4000

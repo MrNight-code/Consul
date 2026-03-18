@@ -1,0 +1,12 @@
+# Use this workspace to collaborate
+workspace:
+  id: 6c169de8-b7c5-4b47-8654-e01d30cd7e5b
+
+localResources:
+  collections:
+    - ..\postman_collection.json
+
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+cloudResources:
+  collections:
+    ..\postman\collections\Consulcon Full CRUD (Smarter Data): 27b8b5e8-af2b-4210-a05a-f733d6f676b0

@@ -3,24 +3,16 @@ using Consulcon.Application.Interfaces.Seguridad;
 
 namespace Consulcon.Application.Services.Seguridad;
 
-public class AuthService : IAuthService
+public class AuthService(
+    IMasterIdentityService masterIdentityService,
+    IJwtTokenGenerator jwtTokenGenerator,
+    IRepository<Usuario> usuarioRepository,
+    ICurrentTenantService tenantService) : IAuthService
 {
-    private readonly IRepository<Usuario> _usuarioRepository;
-    private readonly IJwtTokenGenerator _jwtTokenGenerator;
-    private readonly ICurrentTenantService _tenantService;
-    private readonly IMasterIdentityService _masterIdentityService;
-
-    public AuthService(
-        IRepository<Usuario> usuarioRepository, 
-        IJwtTokenGenerator jwtTokenGenerator,
-        ICurrentTenantService tenantService,
-        IMasterIdentityService masterIdentityService)
-    {
-        _usuarioRepository = usuarioRepository;
-        _jwtTokenGenerator = jwtTokenGenerator;
-        _tenantService = tenantService;
-        _masterIdentityService = masterIdentityService;
-    }
+    private readonly IMasterIdentityService _masterIdentityService = masterIdentityService;
+    private readonly IJwtTokenGenerator _jwtTokenGenerator = jwtTokenGenerator;
+    private readonly IRepository<Usuario> _usuarioRepository = usuarioRepository;
+    private readonly ICurrentTenantService _tenantService = tenantService;
 
     public async Task<Result<UserDto>> LoginAsync(string username, string password)
     {
@@ -28,7 +20,7 @@ public class AuthService : IAuthService
         if (string.IsNullOrEmpty(_tenantService.TenantId))
         {
             // Global Login -> Validation against Master DB
-            var (userId, userObjUsername, tenants) = await _masterIdentityService.ValidateUserAsync(username, password);
+            var (userId, userObjUsername, email, esSuperAdmin, tenants) = await _masterIdentityService.ValidateUserAsync(username, password);
              
             if (userId == null)
             {
@@ -51,10 +43,11 @@ public class AuthService : IAuthService
             {
                 Id = userId.Value,
                 Username = userObjUsername!,
-                FullName = "Global User",
-                RoleId = 0,
+                Email = email,
+                RoleId = esSuperAdmin == true ? 1 : 0,
+                EsSuperAdmin = esSuperAdmin ?? false,
                 Token = string.Empty,
-                Tenants = tenants 
+                CondominioIds = tenants?.Select(t => t.Id).ToList()
             };
 
             // Generate token for Global User
@@ -111,18 +104,10 @@ public class AuthService : IAuthService
         var dto = new UserDto
         {
             Id = user.IdUsuario,
-            Username = user.Username,
-            FullName = user.IdPersonaNavigation?.NombreCompleto ?? "Usuario Mock",
-            RoleId = user.IdRolPrincipal,
-            Token = _jwtTokenGenerator.GenerateToken(new UserDto 
-            { 
-                 Id = user.IdUsuario, 
-                 Username = user.Username, 
-                 RoleId = user.IdRolPrincipal,
-                 FullName = user.IdPersonaNavigation?.NombreCompleto ?? "Usuario",
-                 Token = string.Empty
-            })
+            Username = user.Username
         };
+        
+        dto.Token = _jwtTokenGenerator.GenerateToken(dto);
 
         return Result.Ok(dto);
     }

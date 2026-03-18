@@ -61,8 +61,8 @@ Para cualquier petición que requiera contexto de datos, se debe incluir el head
 | 21  | Deudas       | Get Pending Debts             | `GET /api/deuda/pendiente`                  | Consulta deudas impagas.                                |
 | 22  | Deudas       | Get by Contrato               | `GET /api/deuda/contrato/{id}`              | Historial de deudas de un contrato.                     |
 | 23  | Pagos        | Registrar Pago                | `POST /api/pago`                            | Registra el pago de una deuda.                          |
-| 24  | Pagos        | Generar Recibo                | `POST /api/pago/{id}/generar-recibo`        | Genera y congela el recibo PDF.                         |
-| 25  | Pagos        | Listar Recibos                | `GET /api/pago/recibos`                     | Lista recibos generados con filtros.                    |
+| 24  | Cobranzas    | Generar Recibo                | `POST /api/cobranzas/{id}/generar-recibo`   | Genera y congela el recibo PDF.                         |
+| 25  | Cobranzas    | Listar Recibos                | `GET /api/cobranzas/recibos`                | Lista recibos generados con filtros.                    |
 | 26  | Tesorería    | Get Bancos                    | `GET /api/tesoreria/bancos`                 | Lista cuentas bancarias del condominio.                 |
 | 27  | Tesorería    | Create Banco                  | `POST /api/tesoreria/bancos`                | Registra una nueva cuenta bancaria.                     |
 | 28  | Tesorería    | Registrar Egreso              | `POST /api/tesoreria/egresos`               | Registra un gasto/compra.                               |
@@ -79,6 +79,7 @@ Para cualquier petición que requiera contexto de datos, se debe incluir el head
 | 39  | Usuarios     | Get All Usuarios              | `GET /api/usuario`                          | Listado de usuarios del sistema.                        |
 | 40  | Config       | Cuentas (Destino)             | `GET /api/accounts`                         | Configuración de cuentas receptoras (CRUD).             |
 | 41  | Admin        | Migrar Tenant                 | `POST /api/maintenance/migrate/{id}`        | Ejecuta migraciones de DB manuales.                     |
+| 42  | Usuarios     | Get Roles                     | `GET /api/rol`                              | Listado de roles del sistema.                           |
 
 ---
 
@@ -163,15 +164,21 @@ Para cualquier petición que requiera contexto de datos, se debe incluir el head
 - **Pendientes**: `GET /api/deuda/pendiente`
 - **Por Contrato**: `GET /api/deuda/contrato/{contratoId}`
 
-### Pagos (Cobranza)
+### Pagos
 
 - **Registrar Pago**: `POST /api/pago`
   - Body: `{ idDeuda, idFormaPago, montoAbonado, ... }`
-- **Generar Recibo**: `POST /api/pago/{id}/generar-recibo`
+
+### Cobranzas
+
+- **Registrar Cobranza**: `POST /api/cobranzas`
+  - Body: `{ unitId, monto, idFormaPago, ... }`
+- **Historial de Cobranzas**: `GET /api/cobranzas/{unitId}`
+- **Generar Recibo**: `POST /api/cobranzas/{id}/generar-recibo`
   - Genera el PDF del recibo y lo almacena.
-- **Listar Recibos**: `GET /api/pago/recibos`
+- **Listar Recibos**: `GET /api/cobranzas/recibos`
   - Filtros: `FechaDesde`, `FechaHasta`, `PersonaId`.
-- **Descargar Recibo**: `GET /api/pago/recibos/{filename}`
+- **Descargar Recibo**: `GET /api/cobranzas/recibos/{filename}`
 
 ---
 
@@ -229,6 +236,11 @@ Para cualquier petición que requiera contexto de datos, se debe incluir el head
 
 - **Base**: `/api/usuario`
 - **Operaciones**: `GET`, `POST`, `DELETE`.
+
+### Roles
+
+- **Base**: `/api/rol`
+- **Operaciones**: `GET`.
 
 ---
 

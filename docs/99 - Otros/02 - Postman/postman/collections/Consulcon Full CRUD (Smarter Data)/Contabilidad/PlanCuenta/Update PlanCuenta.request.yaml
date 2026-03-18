@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{baseUrl}}/api/PlanCuenta/1"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+body:
+  type: text
+  content: |-
+    {
+        "IdCuenta": 1,
+        "CodigoCuenta": "test_data",
+        "Nombre": "test_data",
+        "IdCuentaPadre": 1,
+        "NivelJerarquia": 1,
+        "EsImputable": true
+    }
+order: 3000

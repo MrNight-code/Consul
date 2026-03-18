@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{baseUrl}}/api/attachments/{{attachmentId}}"
+method: GET
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+order: 7000

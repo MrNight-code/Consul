@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Contabilidad/asientos"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+body:
+  type: text
+  content: |-
+    {
+        "IdAsiento": 1,
+        "IdCondominio": 1,
+        "FechaContable": "2024-01-01T12:00:00",
+        "GlosaGeneral": "test_data",
+        "TipoAsiento": "T1",
+        "NroDocumentoRespaldo": "123456",
+        "IdTransaccionOrigenPago": 1,
+        "IdTransaccionOrigenEgreso": 1
+    }
+order: 2000

@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Condominio/{{condominioId}}/usuarios"
+method: GET
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+order: 6000

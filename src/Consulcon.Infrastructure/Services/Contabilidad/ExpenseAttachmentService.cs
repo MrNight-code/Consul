@@ -20,8 +20,13 @@ public class ExpenseAttachmentService(
     IFileStorageStrategy storageStrategy,
     ILogger<ExpenseAttachmentService> logger) : IExpenseAttachmentService
 {
-    public async Task<Result<ExpenseAttachmentDto>> UploadAttachmentAsync(int expenseId, UploadAttachmentDto dto, int userId)
+    public async Task<Result<ExpenseAttachmentDto>> UploadAttachmentAsync(int expenseId, UploadAttachmentDto dto, string username)
     {
+        var localUser = await context.Usuarios.FirstOrDefaultAsync(u => u.Username == username);
+        if (localUser == null)
+            return Result.Fail<ExpenseAttachmentDto>($"El usuario '{username}' no existe en este condominio.");
+        int userId = localUser.IdUsuario;
+        
         var expense = await context.Egresos.FindAsync(expenseId);
         if (expense == null)
             return Result.Fail<ExpenseAttachmentDto>("El gasto especificado no existe.");

@@ -1,44 +1,49 @@
 using Consulcon.Application.DTOs.Facturacion;
 using Consulcon.Application.Interfaces.Facturacion;
+using Consulcon.Application.Interfaces.Common;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Consulcon.API.Controllers.Facturacion;
 
-[ApiController]
-[Route("api/[controller]")]
-public class DeudaController : ControllerBase
+public class DeudaController(IDeudaService service) : BaseController
 {
-    private readonly IDeudaService _service;
-
-    public DeudaController(IDeudaService service)
-    {
-        _service = service;
-    }
-
     [HttpGet("pendiente")]
-    public async Task<IActionResult> GetPending()
-    {
-        var result = await _service.GetPendingAsync();
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> GetPending() 
+        => HandleResult(await service.GetPendingAsync());
 
     [HttpGet("contrato/{contratoId}")]
-    public async Task<IActionResult> GetByContrato(int contratoId)
-    {
-        var result = await _service.GetByContratoAsync(contratoId);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> GetByContrato(int contratoId) 
+        => HandleResult(await service.GetByContratoAsync(contratoId));
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
-    {
-        var result = await _service.GetByIdAsync(id);
-        return result.IsSuccess ? Ok(result.Value) : NotFound(new { Message = result.Error });
-    }
+    public async Task<IActionResult> GetById(int id) 
+        => HandleResult(await service.GetByIdAsync(id));
 
     [HttpPost("generar")]
-    public async Task<IActionResult> Generate([FromBody] GenerateDeudaDto dto)
+    public async Task<IActionResult> Generate([FromBody] GenerateDeudaDto dto) 
+        => HandleResult(await service.GenerateDeudaAsync(dto));
+
+    [HttpGet("pendiente/export")]
+    [Authorize]
+    public async Task<IActionResult> ExportarDeudasPendientes([FromServices] IExcelService excelService)
     {
-        var result = await _service.GenerateDeudaAsync(dto);
-        return result.IsSuccess ? CreatedAtAction(nameof(GetById), new { id = result.Value.Id }, result.Value) : BadRequest(result.Error);
+        var result = await service.GetPendingAsync();
+        
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        var dataList = result.Value.ToList();
+
+        var fileContent = excelService.GenerateExcel(dataList, "Deudas Pendientes");
+        
+        return File(
+            fileContent, 
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
+            $"Deudas_Pendientes_{DateTime.Now:yyyyMMdd_HHmm}.xlsx"
+        );
     }
 }

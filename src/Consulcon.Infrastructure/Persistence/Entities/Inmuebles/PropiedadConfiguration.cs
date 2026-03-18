@@ -45,6 +45,11 @@ public class PropiedadConfiguration : IEntityTypeConfiguration<Propiedad>
             .HasDefaultValueSql("'0.00'")
             .HasColumnName("saldo_deudor");
 
+        builder.Property(e => e.SaldoAFavor)
+            .HasPrecision(12, 2)
+            .HasDefaultValueSql("'0.00'")
+            .HasColumnName("saldo_a_favor");
+
         builder.HasOne(d => d.IdManzanoNavigation).WithMany(p => p.Propiedads)
             .HasForeignKey(d => d.IdManzano)
             .OnDelete(DeleteBehavior.ClientSetNull)

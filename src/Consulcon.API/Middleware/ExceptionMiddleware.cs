@@ -87,9 +87,6 @@ namespace Consulcon.API.Middleware
                 UnauthorizedAccessException => HttpStatusCode.Unauthorized,
                 
                 NotImplementedException    => HttpStatusCode.NotImplemented,
-                
-                // Add your custom exceptions here if any
-                // BusinessRuleException => HttpStatusCode.BadRequest,
 
                 _ => HttpStatusCode.InternalServerError
             };

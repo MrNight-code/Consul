@@ -1,0 +1,18 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Condominio"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+body:
+  type: text
+  content: |-
+    {
+        "Nombre": "Condominio Las Palmas",
+        "Direccion": "Av. Principal 123",
+        "SuperficieTotalM2": 1500.5,
+        "IdAdminPersona": 1,
+        "ConfigDiaCobro": "5",
+        "Logo": "https://example.com/logo.png"
+    }
+order: 2000

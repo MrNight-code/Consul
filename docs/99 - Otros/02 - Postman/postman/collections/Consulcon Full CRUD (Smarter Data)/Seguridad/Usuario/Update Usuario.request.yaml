@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Usuario/1"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+body:
+  type: text
+  content: |-
+    {
+        "IdUsuario": 1,
+        "IdPersona": 1,
+        "Username": "test_data",
+        "PasswordHash": "test_data",
+        "FechaCreacion": "2024-01-01T12:00:00",
+        "EstaHabilitado": true,
+        "IdRolPrincipal": 1
+    }
+order: 3000

@@ -1,0 +1,20 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Condominio/{{condominioId}}"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+body:
+  type: text
+  content: |-
+    {
+        "IdCondominio": 1,
+        "Codigo": "test_data",
+        "Nombre": "test_data",
+        "Direccion": "123456",
+        "SuperficieTotalM2": 10.5,
+        "IdAdminPersona": 1,
+        "ConfigDiaCobro": "5",
+        "Logo": "https://example.com/logo.png"
+    }
+order: 3000

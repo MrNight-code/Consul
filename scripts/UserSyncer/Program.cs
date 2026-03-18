@@ -9,15 +9,61 @@ namespace Scripts.UserSyncer
         static async Task Main(string[] args)
         {
             // Usage: UserSyncer.exe [host] [port] [user] [pass]
-            var host = "127.0.0.1";
-            var port = "3310"; // Default to external port for local dev
-            var user = "root"; // Needs root to access multiple DBs
-            var pass = "root";
+            string? host = null;
+            string? port = null;
+            string? user = null;
+            string? pass = null;
+            string? masterDbName = null;
+            string? internalHost = null;
+
+            try
+            {
+                var currentDir = Directory.GetCurrentDirectory();
+                while (currentDir != null)
+                {
+                    var envPath = Path.Combine(currentDir, ".env");
+                    if (File.Exists(envPath))
+                    {
+                        Console.WriteLine($"Loading defaults from .env...");
+                        foreach (var line in File.ReadAllLines(envPath))
+                        {
+                            if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#")) continue;
+                            var parts = line.Split('=', 2);
+                            if (parts.Length == 2)
+                            {
+                                var key = parts[0].Trim();
+                                var val = parts[1].Trim();
+                                if (key == "DB_HOST") 
+                                {
+                                    host ??= val;
+                                    internalHost ??= val;
+                                }
+                                if (key == "DB_PORT") port ??= val;
+                                if (key == "DB_USER") user ??= val;
+                                if (key == "DB_PASSWORD") pass ??= val;
+                                if (key == "DB_NAME") masterDbName ??= val;
+                            }
+                        }
+                        break;
+                    }
+                    currentDir = Directory.GetParent(currentDir)?.FullName;
+                }
+            }
+            catch { /* Ignore .env parsing errors */ }
 
             if (args.Length >= 1) host = args[0];
             if (args.Length >= 2) port = args[1];
             if (args.Length >= 3) user = args[2];
             if (args.Length >= 4) pass = args[3];
+
+            if (string.IsNullOrEmpty(host) || string.IsNullOrEmpty(port) || 
+                string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass) || 
+                string.IsNullOrEmpty(masterDbName) || string.IsNullOrEmpty(internalHost))
+            {
+                Console.WriteLine("Error: Missing database configuration. Ensure .env file exists or parameters are provided.");
+                Console.WriteLine("Usage: UserSyncer.exe [host] [port] [user] [pass]");
+                Environment.Exit(1);
+            }
 
             var connectionStringBase = $"Server={host};Port={port};User={user};Password={pass};TreatTinyAsBoolean=true";
             Console.WriteLine($"Connecting to {host}:{port}...");
@@ -30,7 +76,6 @@ namespace Scripts.UserSyncer
 
                 // 1. Identify Master DB
                 var databases = await conn.QueryAsync<string>("SHOW DATABASES");
-                string masterDbName = "db_consulcon_master"; // Hardcoded for now, or could search
                 if (!databases.Contains(masterDbName))
                 {
                     Console.WriteLine($"Master Database '{masterDbName}' not found. Aborting.");
@@ -45,7 +90,7 @@ namespace Scripts.UserSyncer
                         Console.WriteLine($"--- Processing Tenant DB: {db} ---");
                         try 
                         {
-                            await SyncTenantUsers(host, port, user, pass, db, masterDbName);
+                            await SyncTenantUsers(host, port, user, pass, db, masterDbName, internalHost);
                         }
                         catch (Exception inner)
                         {
@@ -61,7 +106,7 @@ namespace Scripts.UserSyncer
             }
         }
 
-        static async Task SyncTenantUsers(string host, string port, string user, string pass, string tenantDb, string masterDb)
+        static async Task SyncTenantUsers(string host, string port, string user, string pass, string tenantDb, string masterDb, string internalHost)
         {
             var connStr = $"Server={host};Port={port};User={user};Password={pass};TreatTinyAsBoolean=true"; // Connect to server, switch DBs in query
             using var conn = new MySqlConnection(connStr);
@@ -82,7 +127,7 @@ namespace Scripts.UserSyncer
             {
                 Console.WriteLine($"   Creating Condominio '{identifier}' in Master...");
                 // Insert
-                string defaultConnStr = $"Server=db;Database={tenantDb};User=root;Password=root";
+                string defaultConnStr = $"Server={internalHost};Database={tenantDb};User={user};Password={pass}";
                 
                 var insertSql = $@"
                     INSERT INTO {masterDb}.CondominiosMaster (Nombre, TenantId, ConnectionString, FechaRegistro) 
@@ -103,8 +148,10 @@ namespace Scripts.UserSyncer
             foreach(var u in users)
             {
                 var d = (IDictionary<string, object>)u;
-                string username = GetValue(d, "username", "usuario");
-                string passwordHash = GetValue(d, "password_hash", "PasswordHash") ?? GetValue(d, "contrasena", "password");
+                string? username = GetValue(d, "username", "usuario");
+                string? passwordHash = GetValue(d, "password_hash", "PasswordHash") ?? GetValue(d, "contrasena", "password");
+                string? idRolPrincipalStr = GetValue(d, "idrolprincipal", "IdRolPrincipal");
+                bool isSuperAdmin = idRolPrincipalStr == "1";
                 
                 if (string.IsNullOrEmpty(username)) continue;
                 
@@ -114,16 +161,22 @@ namespace Scripts.UserSyncer
                     
                 int idUsuarioMaster;
                 
+                int parsedIdRol = 3; // Operador Default
+                if (int.TryParse(idRolPrincipalStr, out int tempIdRol)) 
+                {
+                    parsedIdRol = tempIdRol;
+                }
+
                 if (masterUser == null)
                 {
                     Console.WriteLine($"   Creating User '{username}' in Master...");
-                    // Schema: Id, Username, PasswordHash, Email, FechaCreacion, EsSuperAdmin
+                    // Schema: Id, Username, PasswordHash, Email, FechaCreacion, EsSuperAdmin, IdRolPrincipal
                     var insertUserSql = $@"
-                        INSERT INTO {masterDb}.UsuariosMaster (Username, PasswordHash, EsSuperAdmin, FechaCreacion)
-                        VALUES (@Username, @PasswordHash, 0, NOW());
+                        INSERT INTO {masterDb}.UsuariosMaster (Username, PasswordHash, EsSuperAdmin, IdRolPrincipal, FechaCreacion)
+                        VALUES (@Username, @PasswordHash, @EsSuperAdmin, @IdRolPrincipal, NOW());
                         SELECT LAST_INSERT_ID();";
                         
-                    idUsuarioMaster = await conn.ExecuteScalarAsync<int>(insertUserSql, new { Username = username, PasswordHash = passwordHash });
+                    idUsuarioMaster = await conn.ExecuteScalarAsync<int>(insertUserSql, new { Username = username, PasswordHash = passwordHash, EsSuperAdmin = isSuperAdmin, IdRolPrincipal = parsedIdRol });
                 }
                 else
                 {
@@ -131,17 +184,17 @@ namespace Scripts.UserSyncer
                 }
                 
                 // 4. Link User to Condominio (UsuarioCondominio)
-                // Schema: Id, UsuarioId, CondominioId, RolInicial
+                // Schema: Id, UsuarioId, CondominioId, IdRol
                 var link = await conn.QueryFirstOrDefaultAsync(
                     $"SELECT * FROM {masterDb}.UsuarioCondominio WHERE UsuarioId = @u AND CondominioId = @c",
                     new { u = idUsuarioMaster, c = idCondominio });
                     
                 if (link == null)
                 {
-                     Console.WriteLine($"   Linking User '{username}' to '{identifier}'.");
+                     Console.WriteLine($"   Linking User '{username}' to '{identifier}' with Role {parsedIdRol}.");
                      await conn.ExecuteAsync(
-                         $"INSERT INTO {masterDb}.UsuarioCondominio (UsuarioId, CondominioId, RolInicial) VALUES (@u, @c, 'Usuario')",
-                         new { u = idUsuarioMaster, c = idCondominio });
+                         $"INSERT INTO {masterDb}.UsuarioCondominio (UsuarioId, CondominioId, IdRol) VALUES (@u, @c, @r)",
+                         new { u = idUsuarioMaster, c = idCondominio, r = parsedIdRol });
                 }
             }
         }

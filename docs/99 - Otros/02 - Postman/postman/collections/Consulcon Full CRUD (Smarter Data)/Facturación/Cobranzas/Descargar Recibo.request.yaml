@@ -1,0 +1,9 @@
+$kind: http-request
+url: "{{baseUrl}}/api/cobranzas/recibos/:filename"
+method: GET
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+pathVariables:
+  filename: Recibo_Name.pdf
+order: 5000

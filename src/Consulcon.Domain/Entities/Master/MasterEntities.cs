@@ -24,8 +24,13 @@ public class UsuarioMaster
 
     public bool EsSuperAdmin { get; set; }
 
+    public int? IdRolPrincipal { get; set; }
+
+    [ForeignKey("IdRolPrincipal")]
+    public virtual RolMaster? RolPrincipal { get; set; }
+
     // Navigation properties
-    public virtual ICollection<UsuarioCondominio> Condominios { get; set; } = new List<UsuarioCondominio>();
+    public virtual ICollection<UsuarioCondominio> Condominios { get; set; } = [];
 }
 
 [Table("CondominiosMaster")]
@@ -48,7 +53,7 @@ public class CondominioMaster
     public DateTime FechaRegistro { get; set; } = DateTime.UtcNow;
 
     // Navigation properties
-    public virtual ICollection<UsuarioCondominio> Usuarios { get; set; } = new List<UsuarioCondominio>();
+    public virtual ICollection<UsuarioCondominio> Usuarios { get; set; } = [];
 }
 
 [Table("UsuarioCondominio")]
@@ -61,10 +66,40 @@ public class UsuarioCondominio
 
     public int CondominioId { get; set; }
 
-    [MaxLength(50)]
-    public string RolInicial { get; set; } = "Usuario";
+    public int IdRol { get; set; } = 3; // Default to Operador
+
+    [ForeignKey("IdRol")]
+    public virtual RolMaster Rol { get; set; } = null!;
 
     // Navigation properties
     public virtual UsuarioMaster Usuario { get; set; } = null!;
     public virtual CondominioMaster Condominio { get; set; } = null!;
+}
+
+[Table("RolesMaster")]
+public class RolMaster
+{
+    [Key]
+    public int IdRol { get; set; }
+
+    [Required]
+    [MaxLength(50)]
+    public string Nombre { get; set; } = null!;
+
+    public virtual ICollection<UsuarioMaster> Usuarios { get; set; } = [];
+
+    public virtual ICollection<PermisoMaster> Permisos { get; set; } = [];
+}
+
+[Table("PermisosMaster")]
+public class PermisoMaster
+{
+    [Key]
+    public int IdPermiso { get; set; }
+
+    [Required]
+    [MaxLength(100)]
+    public string Descripcion { get; set; } = null!;
+
+    public virtual ICollection<RolMaster> Roles { get; set; } = [];
 }

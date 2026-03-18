@@ -90,22 +90,23 @@ namespace Consulcon.Infrastructure.Services
                     return Result.Fail<bool>("No se encontró un titular/pagador asociado a la unidad para registrar el cobro.");
 
                 // Validate Banco Exists
-                var bancoExists = await _context.Bancos.AnyAsync(b => b.IdBanco == request.IdBancoDestino.Value && b.Activo == true);
-                if (!bancoExists)
+                var banco = await _context.Bancos.FirstOrDefaultAsync(b => b.IdBanco == request.IdBancoDestino.Value && b.Activo == true);
+                if (banco == null)
                     return Result.Fail<bool>("La cuenta de destino especificada no existe o no está activa.");
 
-                // 4. Update Transactional Balance
-                propiedad.SaldoDeudor -= request.Monto;
-                if (propiedad.SaldoDeudor < 0) propiedad.SaldoDeudor = 0; 
+                // 4. Update Bank Balance
+                banco.Saldo += request.Monto;
 
                 // 5. FIFO Logic
                 var activeDebts = await _context.DeudaCabeceras
                     .Include(d => d.IdContratoNavigation)
                     .Where(d => d.IdContratoNavigation.IdPropiedad == request.UnitId 
-                             && d.EstadoPago != "PAGADO")
+                             && d.EstadoPago != "PAGADO"
+                             && d.EstadoPago != "ANULADO")
                     .OrderBy(d => d.FechaVencimiento) 
                     .ToListAsync();
 
+                decimal amountApplied = 0;
                 decimal remainingAmount = request.Monto;
 
                 foreach (var deuda in activeDebts)
@@ -115,8 +116,11 @@ namespace Consulcon.Infrastructure.Services
                     decimal deudaTotal = deuda.TotalDeuda ?? 0;
                     decimal pagadoPrevio = deuda.TotalPagado ?? 0;
                     decimal pendiente = deudaTotal - pagadoPrevio;
+                    
+                    if (pendiente <= 0) continue;
 
                     decimal aPagar = Math.Min(remainingAmount, pendiente);
+                    amountApplied += aPagar;
 
                     // Update Debt Header
                     deuda.TotalPagado = pagadoPrevio + aPagar;
@@ -133,7 +137,7 @@ namespace Consulcon.Infrastructure.Services
                         IdPersonaPagador = idPersonaPagador.Value, 
                         IdBancoDestino = request.IdBancoDestino.Value,
                         IdFormaPago = request.IdFormaPago,
-                        FechaPago = DateTime.UtcNow, 
+                        FechaPago = DateTime.Now, 
                         MontoAbonado = aPagar,
                         NroComprobanteBanco = request.NroReferencia,
                         Observaciones = request.Observaciones,
@@ -143,6 +147,16 @@ namespace Consulcon.Infrastructure.Services
                     _context.TransaccionPagos.Add(pago);
 
                     remainingAmount -= aPagar;
+                }
+
+                // 6. Update Transactional Balance (Only what was applied to deudas)
+                propiedad.SaldoDeudor -= amountApplied;
+                if (propiedad.SaldoDeudor < 0) propiedad.SaldoDeudor = 0;
+
+                // 7. Add leftover to SaldoAFavor
+                if (remainingAmount > 0)
+                {
+                    propiedad.SaldoAFavor += remainingAmount;
                 }
                 
                 // Save Changes

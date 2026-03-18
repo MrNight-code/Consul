@@ -1,0 +1,17 @@
+$kind: http-request
+description: Obtiene el historial de saldos diarios. Si la fecha final es hoy,
+  el sistema proyecta el saldo real.
+url: "{{baseUrl}}/api/Accounts/{{accountId}}/balance-history?from=2024-01-01&to\
+  =2026-12-31"
+method: GET
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+queryParams:
+  - key: from
+    value: 2024-01-01
+    description: Fecha inicio (opcional)
+  - key: to
+    value: 2026-12-31
+    description: Fecha fin (opcional, si es hoy proyecta saldo actual)
+order: 1000

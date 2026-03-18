@@ -1,0 +1,8 @@
+$kind: http-request
+description: Obtiene los saldos actuales de las unidades del condominio.
+url: "{{baseUrl}}/api/expenses/saldos-unidades/{{condominioId}}"
+method: GET
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+order: 12000

@@ -4,8 +4,17 @@ public class UserDto
 {
     public int Id { get; set; }
     public required string Username { get; set; }
-    public required string FullName { get; set; }
+    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public string? Email { get; set; }
+
+    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
     public int? RoleId { get; set; }
-    public required string Token { get; set; } // Placeholder for future JWT
-    public List<Consulcon.Application.Interfaces.Seguridad.TenantDto>? Tenants { get; set; }
+
+    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public string? Token { get; set; }
+    
+    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public List<int>? CondominioIds { get; set; }
+
+    public bool EsSuperAdmin { get; set; }
 }

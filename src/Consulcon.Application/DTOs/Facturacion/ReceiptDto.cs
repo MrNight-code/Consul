@@ -9,4 +9,6 @@ public class ReceiptDto
     public DateTime? FechaRecibo { get; set; }
     public decimal MontoAbonado { get; set; }
     public string? NombrePersona { get; set; }
+    public string? MetodoPago { get; set; }
+    public string? CodigoUnidad { get; set; }
 }

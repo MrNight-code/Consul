@@ -209,6 +209,35 @@ if ($SkipSchemaInit) {
     }
 }
 
+# 5.5 Pre-Migration Schema Fixes (For Legacy Scripts Compat)
+Write-Host "`n4.5. Applying Pre-Migration Legacy Patches to $TargetDbName..." -ForegroundColor Yellow
+$LegacyPatchSql = @'
+CREATE TABLE IF NOT EXISTS `rol` (`id_rol` int, `nombre` varchar(255));
+CREATE TABLE IF NOT EXISTS `permiso` (`id_permiso` int, `descripcion` varchar(255));
+CREATE TABLE IF NOT EXISTS `rol_permiso` (`id_rol` int, `id_permiso` int);
+
+SET @dbname = DATABASE();
+SET @tablename = 'usuario';
+SET @columnname = 'id_rol_principal';
+SET @preparedStatement = (SELECT IF(
+  (
+    SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE (table_name = @tablename) AND (table_schema = @dbname) AND (column_name = @columnname)
+  ) > 0,
+  'SELECT 1',
+  'ALTER TABLE usuario ADD id_rol_principal int;'
+));
+PREPARE alterIfNotExists FROM @preparedStatement;
+EXECUTE alterIfNotExists;
+DEALLOCATE PREPARE alterIfNotExists;
+'@
+try {
+    Invoke-MySqlCmd -Database $TargetDbName -Query $LegacyPatchSql
+    Write-Host "Legacy patches applied successfully." -ForegroundColor Green
+} catch {
+    Write-Warning "Legacy patches applied with warnings: $_"
+}
+
 
 # 6. Execute Transformation
 Write-Host "`n5. Executing Transformation to $TargetDbName..." -ForegroundColor Yellow

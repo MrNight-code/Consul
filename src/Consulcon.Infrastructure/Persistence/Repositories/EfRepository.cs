@@ -65,16 +65,22 @@ namespace Consulcon.Infrastructure.Persistence.Repositories
 
         public async Task<PagedResult<T>> GetPagedAsync(ISpecification<T> spec, int pageNumber, int pageSize)
         {
+            // 1. Obtener la cuenta total SIN paginación
+            var countQuery = SpecificationEvaluator<T>.GetQuery(_dbSet.AsQueryable(), spec);
+            var totalRecords = await countQuery.CountAsync();
+
+            // 2. Obtener los items CON paginación (si la especificación la tiene)
             var query = SpecificationEvaluator<T>.GetQuery(_dbSet.AsQueryable(), spec);
 
-            var totalRecords = await query.CountAsync();
+            // 3. Si la especificación NO define paginación, la aplicamos aquí basándonos en los parámetros
+            if (!spec.IsPagingEnabled)
+            {
+                query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+            }
 
-            var items = await query
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+            var items = await query.ToListAsync();
 
-            return new PagedResult<T>(items, totalRecords, pageNumber, pageSize);
+            return new PagedResult<T>(items, pageNumber, pageSize, totalRecords);
         }
     }
 }

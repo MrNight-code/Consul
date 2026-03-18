@@ -122,8 +122,8 @@ INSERT INTO manzano (id_manzano, id_condominio, codigo, nombre)
 SELECT pk_manzano, IFNULL(fk_condominio, 1), codigo, nombre
 FROM {{SOURCE_DB}}.manzano;
 
-INSERT INTO propiedad (id_propiedad, id_manzano, codigo_unidad, nombre_funcional, superficie_m2, expensa_base_defecto, tipo, activo, saldo_deudor)
-SELECT pk_propiedad, fk_manzano, codigo, IFNULL(nombre, CONCAT('Unidad ', codigo)), m2, expensa, tipo, 1, 0
+INSERT INTO propiedad (id_propiedad, id_manzano, codigo_unidad, nombre_funcional, superficie_m2, expensa_base_defecto, tipo, activo, saldo_deudor, saldo_a_favor)
+SELECT pk_propiedad, fk_manzano, codigo, IFNULL(nombre, CONCAT('Unidad ', codigo)), m2, expensa, tipo, 1, 0, 0
 FROM {{SOURCE_DB}}.propiedad;
 
 -- ------------------------------------------------------------------------------

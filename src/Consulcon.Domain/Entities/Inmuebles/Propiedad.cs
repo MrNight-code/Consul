@@ -34,6 +34,11 @@ public partial class Propiedad
     /// </summary>
     public decimal SaldoDeudor { get; set; }
 
+    /// <summary>
+    /// Saldo a favor actual de la unidad (Pagos anticipados / excedentes)
+    /// </summary>
+    public decimal SaldoAFavor { get; set; }
+
     public virtual ICollection<Contrato> Contratos { get; set; } = new List<Contrato>();
 
     public virtual Manzano IdManzanoNavigation { get; set; } = null!;

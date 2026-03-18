@@ -4,7 +4,7 @@ namespace Consulcon.Application.Interfaces.Seguridad;
 
 public interface IMasterIdentityService
 {
-    Task<(int? UserId, string? Username, List<TenantDto>? Tenants)> ValidateUserAsync(string username, string password);
+    Task<(int? UserId, string? Username, string? Email, bool? EsSuperAdmin, List<TenantDto>? Tenants)> ValidateUserAsync(string username, string password);
 }
 
 public class TenantDto

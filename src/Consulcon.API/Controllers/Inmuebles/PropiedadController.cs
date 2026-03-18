@@ -1,94 +1,63 @@
 using Consulcon.Application.DTOs.Inmuebles;
+using Consulcon.Application.Interfaces.Facturacion;
 using Consulcon.Application.Interfaces.Inmuebles;
 using Consulcon.Domain.Common;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Consulcon.API.Controllers.Inmuebles;
 
-[ApiController]
-[Route("api/[controller]")]
-public class PropiedadController(IPropiedadService service) : ControllerBase
+public class PropiedadController(IPropiedadService service, IDeudaService deudaService) : BaseController
 {
-    private readonly IPropiedadService _service = service;
+    private readonly IDeudaService _deudaService = deudaService;
     private static readonly string[] OwnerExpand = ["owner"];
+
+    [HttpGet("{id}/estado-cuenta")]
+    public async Task<IActionResult> GetEstadoCuenta(int id)
+    {
+        var result = await _deudaService.GetEstadoCuentaByPropiedadAsync(id);
+        if (!result.IsSuccess) return NotFound(new { Message = result.Error });
+        return Ok(result.Value);
+    }
 
     /// <summary>
     /// Obtiene todas las propiedades. Use expand=owner para incluir propietarios.
     /// </summary>
-    /// <param name="expand">Campos a expandir (ej: "owner")</param>
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] string? expand = null)
-    {
-        var expandFields = ParseExpandParameter(expand);
-        var result = await _service.GetAllAsync(expandFields);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> GetAll([FromQuery] string? expand = null) 
+        => HandleResult(await service.GetAllAsync(ParseExpandParameter(expand)));
 
     /// Obtiene propiedades por condominio. Use expand=owner para incluir propietarios.
-    [HttpGet("condominio/{condominioId}")]
-    public async Task<IActionResult> GetByCondominio(int condominioId, [FromQuery] string? expand = null)
-    {
-        var expandFields = ParseExpandParameter(expand);
-        var result = await _service.GetByCondominioAsync(condominioId, expandFields);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    [HttpGet("condominio")]
+    public async Task<IActionResult> GetByCondominio([FromQuery] string? expand = null) 
+        => HandleResult(await service.GetByCondominioAsync(CondominioId, ParseExpandParameter(expand)));
 
-    /// Endpoint de conveniencia: Obtiene propiedades por condominio con propietarios incluidos.
-    [HttpGet("condominio/{condominioId}/with-owners")]
-    public async Task<IActionResult> GetByCondominioWithOwners(int condominioId)
-    {
-        // Alias conveniente que siempre incluye owner
-        var result = await _service.GetByCondominioAsync(condominioId, OwnerExpand);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    [HttpGet("condominio/with-owners")]
+    public async Task<IActionResult> GetByCondominioWithOwners() 
+        => HandleResult(await service.GetByCondominioAsync(CondominioId, OwnerExpand));
 
-    /// Obtiene una propiedad por ID. Use expand=owner para incluir propietario.
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id, [FromQuery] string? expand = null)
-    {
-        var expandFields = ParseExpandParameter(expand);
-        var result = await _service.GetByIdAsync(id, expandFields);
-        return result.IsSuccess ? Ok(result.Value) : NotFound(new { Message = result.Error });
-    }
+    public async Task<IActionResult> GetById(int id, [FromQuery] string? expand = null) 
+        => HandleResult(await service.GetByIdAsync(id, ParseExpandParameter(expand)));
+
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] CreatePropiedadDto dto) 
+        => HandleResult(await service.CreateAsync(dto));
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, [FromBody] CreatePropiedadDto dto) 
+        => HandleResult(await service.UpdateAsync(id, dto));
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id) 
+        => HandleResult(await service.DeleteAsync(id));
+
+    [HttpGet("paged")]
+    public async Task<IActionResult> GetPaged([FromQuery] PaginationParams parameters) 
+        => HandleResult(await service.GetPagedAsync(CondominioId, parameters));
 
     private static string[] ParseExpandParameter(string? expand)
     {
-        if (string.IsNullOrWhiteSpace(expand))
-            return [];
-
+        if (string.IsNullOrWhiteSpace(expand)) return [];
         return [.. expand.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim())];
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreatePropiedadDto dto)
-    {
-        var result = await _service.CreateAsync(dto);
-        return result.IsSuccess ? CreatedAtAction(nameof(GetById), new { id = result.Value.Id }, result.Value) : BadRequest(result.Error);
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] CreatePropiedadDto dto)
-    {
-        var result = await _service.UpdateAsync(id, dto);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
-    {
-        var result = await _service.DeleteAsync(id);
-        return result.IsSuccess ? NoContent() : BadRequest(result.Error);
-    }
-
-    [HttpGet("condominio/{condominioId}/paged")]
-    public async Task<IActionResult> GetPaged(int condominioId, [FromQuery] PaginationParams parameters)
-    {
-        var result = await _service.GetPagedAsync(condominioId, parameters);
-        
-        if (result.IsFailure)
-        {
-            return BadRequest(result.Error);
-        }
-
-        return Ok(result.Value);
     }
 }

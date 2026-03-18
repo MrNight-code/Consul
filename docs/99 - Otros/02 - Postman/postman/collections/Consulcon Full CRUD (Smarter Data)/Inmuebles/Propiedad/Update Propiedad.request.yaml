@@ -1,0 +1,20 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Propiedad/{{propiedadId}}"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+body:
+  type: text
+  content: |-
+    {
+      "idManzano": 1,
+      "codigoUnidad": "A-101",
+      "nombreFuncional": "Depto A-101 Updated",
+      "superficieM2": 85.50,
+      "porcentajeParticipacion": 0.05,
+      "expensaBaseDefecto": 550.00,
+      "tipo": "Departamento"
+    }
+order: 5000

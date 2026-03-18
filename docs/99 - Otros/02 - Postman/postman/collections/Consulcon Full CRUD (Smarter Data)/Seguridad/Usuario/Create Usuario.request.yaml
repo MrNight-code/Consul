@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Usuario"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+body:
+  type: text
+  content: |-
+    {
+        "username": "nuevo_usuario",
+        "password": "Password123",
+        "email": "usuario@email.com"
+    }
+order: 2000

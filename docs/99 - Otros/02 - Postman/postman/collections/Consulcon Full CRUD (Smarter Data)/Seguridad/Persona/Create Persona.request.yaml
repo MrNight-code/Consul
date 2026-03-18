@@ -1,0 +1,26 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Persona"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+body:
+  type: text
+  content: |-
+    {
+      "ci": "12345678",
+      "nombreCompleto": "Juan Perez",
+      "fechaNacimiento": "1990-01-01",
+      "sexo": "M",
+      "estadoCivil": "Soltero",
+      "esActivo": true,
+      "medioContactos": [
+        {
+          "tipo": "Celular",
+          "valor": "77712345",
+          "esPrincipal": true
+        }
+      ]
+    }
+order: 3000

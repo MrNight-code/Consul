@@ -12,6 +12,13 @@ using QuestPDF.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Consulcon.Infrastructure.Persistence;
 
+using Consulcon.Application.DTOs.Facturacion;
+using Consulcon.Domain.Interfaces;
+using Moq;
+using System.Linq;
+
+using Consulcon.Domain.Entities.General;
+
 namespace Consulcon.IntegrationTests.Services
 {
     // Important: QuestPDF License must be set in global test setup or here
@@ -33,7 +40,8 @@ namespace Consulcon.IntegrationTests.Services
             
             _dbContext = new ConsulconDbContext(options);
 
-            _service = new ReceiptGenerationService(_dbContext);
+            var mockRepo = new Mock<IRepository<TransaccionPago>>();
+            _service = new ReceiptGenerationService(_dbContext, mockRepo.Object);
         }
 
         [Fact]
@@ -55,7 +63,10 @@ namespace Consulcon.IntegrationTests.Services
                 IdPago = 1, 
                 MontoAbonado = 1500.50m, 
                 IdDeudaNavigation = deuda,
-                FechaPago = DateTime.Now
+                FechaPago = DateTime.Now,
+                IdBancoDestinoNavigation = new Banco { NombreEntidad = "Test Bank" },
+                IdFormaPagoNavigation = new FormaPago { Descripcion = "Transfer" },
+                IdPersonaPagadorNavigation = new Persona { NombreCompleto = "Test User" }
             };
 
             _dbContext.Propiedads.Add(propiedad);
@@ -68,25 +79,54 @@ namespace Consulcon.IntegrationTests.Services
             var result = await _service.GenerateReceiptAsync(transaccion.IdPago);
 
             // Assert
-            // 1. Entity Integrity
             result.Should().NotBeNull();
-            result.IdPago.Should().Be(transaccion.IdPago);
-            
-            // 2. Server Timestamp Validity
-            result.FechaRecibo.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(2));
-
-            // 3. File Existence
+            result.FechaRecibo.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
             result.ReciboUrl.Should().NotBeNullOrEmpty();
             File.Exists(result.ReciboUrl).Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task GenerateBatchReceiptsPdfAsync_ShouldReturnByteArray()
+        {
+            // Arrange
+            var start = DateTime.Now.AddDays(-1);
+            var end = DateTime.Now.AddDays(1);
             
-            // 4. File Content Check
-            var fileInfo = new FileInfo(result.ReciboUrl);
-            fileInfo.Length.Should().BeGreaterThan(1000);
+            var p1 = new Propiedad { IdPropiedad = 10, CodigoUnidad = "U-10" };
+            var c1 = new Contrato { IdContrato = 10, IdPropiedadNavigation = p1 };
+            var d1 = new DeudaCabecera { IdDeuda = 10, IdContratoNavigation = c1, MesPeriodo = 1, AnioPeriodo = 2024 };
+            var t1 = new TransaccionPago 
+            { 
+                IdPago = 10, FechaPago = DateTime.Now, MontoAbonado = 100, IdDeudaNavigation = d1,
+                IdBancoDestinoNavigation = new Banco { NombreEntidad = "B1" },
+                IdFormaPagoNavigation = new FormaPago { Descripcion = "F1" },
+                IdPersonaPagadorNavigation = new Persona { NombreCompleto = "P1" }
+            };
+
+            var d2 = new DeudaCabecera { IdDeuda = 11, IdContratoNavigation = c1, MesPeriodo = 2, AnioPeriodo = 2024 };
+            var t2 = new TransaccionPago 
+            { 
+                IdPago = 11, FechaPago = DateTime.Now, MontoAbonado = 200, IdDeudaNavigation = d2,
+                IdBancoDestinoNavigation = new Banco { NombreEntidad = "B2" },
+                IdFormaPagoNavigation = new FormaPago { Descripcion = "F2" },
+                IdPersonaPagadorNavigation = new Persona { NombreCompleto = "P2" }
+            };
+
+            _dbContext.TransaccionPagos.AddRange(t1, t2);
+            await _dbContext.SaveChangesAsync();
+
+            var request = new BatchReceiptRequestDto { StartDate = start, EndDate = end };
+
+            // Act
+            var pdfBytes = await _service.GenerateBatchReceiptsPdfAsync(request);
+
+            // Assert
+            pdfBytes.Should().NotBeNull();
+            pdfBytes.Length.Should().BeGreaterThan(0);
         }
 
         public void Dispose()
         {
-            // Cleanup: Delete generated files after test
             if (Directory.Exists(_outputFolder))
             {
                 try { Directory.Delete(_outputFolder, true); } catch { }

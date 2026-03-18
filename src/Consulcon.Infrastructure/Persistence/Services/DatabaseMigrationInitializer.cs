@@ -1,5 +1,6 @@
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MySqlConnector;
@@ -32,8 +33,111 @@ namespace Consulcon.Infrastructure.Persistence.Services
                 // Initializer is usually run at startup. So no HttpContext. So TenantId is null.
                 // So ConsulconDbContext defaults to Master DB.
                 
-                var masterContext = scope.ServiceProvider.GetRequiredService<ConsulconDbContext>();
+                var defaultContext = scope.ServiceProvider.GetRequiredService<ConsulconDbContext>();
+                var defaultConnString = defaultContext.Database.GetConnectionString();
+                
+                var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+                var masterDbName = config["DB_MASTER_NAME"] ?? "db_consulcon_master";
+                var builder = new MySqlConnector.MySqlConnectionStringBuilder(defaultConnString ?? string.Empty)
+                {
+                    Database = masterDbName
+                };
+                var masterConnString = builder.ConnectionString;
+                
+                var optionsBuilder = new DbContextOptionsBuilder<ConsulconDbContext>();
+                optionsBuilder.UseMySql(masterConnString, ServerVersion.AutoDetect(masterConnString));
+
+                await using var masterContext = new ConsulconDbContext(optionsBuilder.Options);
                 await masterContext.Database.EnsureCreatedAsync();
+                
+                // --- Start raw schema update for Master DB ---
+                if (!string.IsNullOrEmpty(masterConnString) && defaultContext.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
+                {
+                    using var connection = new MySqlConnection(masterConnString);
+                    await connection.OpenAsync();
+
+                    await connection.ExecuteAsync(@"
+                        CREATE TABLE IF NOT EXISTS `RolesMaster` (
+                            `IdRol` int NOT NULL AUTO_INCREMENT,
+                            `Nombre` varchar(50) NOT NULL,
+                            PRIMARY KEY (`IdRol`)
+                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+                        CREATE TABLE IF NOT EXISTS `PermisosMaster` (
+                            `IdPermiso` int NOT NULL AUTO_INCREMENT,
+                            `Descripcion` varchar(150) NOT NULL,
+                            PRIMARY KEY (`IdPermiso`)
+                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+                        CREATE TABLE IF NOT EXISTS `PermisoMasterRolMaster` (
+                            `PermisosIdPermiso` int NOT NULL,
+                            `RolesIdRol` int NOT NULL,
+                            PRIMARY KEY (`PermisosIdPermiso`, `RolesIdRol`),
+                            CONSTRAINT `FK_PermisoMasterRolMaster_PermisosMaster_PermisosIdPermiso` FOREIGN KEY (`PermisosIdPermiso`) REFERENCES `PermisosMaster` (`IdPermiso`) ON DELETE CASCADE,
+                            CONSTRAINT `FK_PermisoMasterRolMaster_RolesMaster_RolesIdRol` FOREIGN KEY (`RolesIdRol`) REFERENCES `RolesMaster` (`IdRol`) ON DELETE CASCADE
+                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+                    ");
+
+                    // Ensure basic roles exist: Super Admin, Administrador, Operador
+                    var basicRolesQuery = @"
+                        INSERT IGNORE INTO `RolesMaster` (`IdRol`, `Nombre`) VALUES 
+                        (1, 'Super Admin'),
+                        (2, 'Administrador'),
+                        (3, 'Operador');
+                    ";
+                    await connection.ExecuteAsync(basicRolesQuery);
+
+                    var columnExists = await connection.ExecuteScalarAsync<long>(@"
+                        SELECT COUNT(1) 
+                        FROM information_schema.COLUMNS 
+                        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'UsuariosMaster' AND COLUMN_NAME = 'IdRolPrincipal'
+                    ");
+
+                    if (columnExists == 0)
+                    {
+                        await connection.ExecuteAsync(@"
+                            ALTER TABLE `UsuariosMaster` 
+                            ADD COLUMN `IdRolPrincipal` int NULL;
+                        ");
+                        
+                        try 
+                        {
+                            await connection.ExecuteAsync(@"
+                                ALTER TABLE `UsuariosMaster`
+                                ADD CONSTRAINT `FK_UsuariosMaster_RolesMaster_IdRolPrincipal` FOREIGN KEY (`IdRolPrincipal`) REFERENCES `RolesMaster` (`IdRol`) ON DELETE SET NULL;
+                            ");
+                        } 
+                        catch (Exception ex) 
+                        {
+                            _logger.LogWarning(ex, "Could not add FK for IdRolPrincipal in UsuariosMaster.");
+                        }
+
+                        await connection.ExecuteAsync(@"
+                            UPDATE `UsuariosMaster` SET `IdRolPrincipal` = 1, `EsSuperAdmin` = 1 WHERE `Username` = 'admin';
+                        ");
+                    }
+
+                    // -- Patch UsuarioCondominio Schema --
+                    var ucColumnExists = await connection.ExecuteScalarAsync<long>(@"
+                        SELECT COUNT(1) 
+                        FROM information_schema.COLUMNS 
+                        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'UsuarioCondominio' AND COLUMN_NAME = 'RolInicial'
+                    ");
+
+                    if (ucColumnExists > 0)
+                    {
+                        // Needs refactor from string to foreign key ID
+                        await connection.ExecuteAsync(@"
+                            ALTER TABLE `UsuarioCondominio`
+                            DROP COLUMN `RolInicial`,
+                            ADD COLUMN `IdRol` int NOT NULL DEFAULT 3;
+                            
+                            ALTER TABLE `UsuarioCondominio`
+                            ADD CONSTRAINT `FK_UsuarioCondominio_RolesMaster_IdRol` FOREIGN KEY (`IdRol`) REFERENCES `RolesMaster` (`IdRol`) ON DELETE RESTRICT;
+                        ");
+                    }
+                }
+                // --- End raw schema update for Master DB ---
                 
                 // Seed Super Admin
                 if (!await masterContext.UsuariosMaster.AnyAsync())
@@ -45,6 +149,7 @@ namespace Consulcon.Infrastructure.Persistence.Services
                         PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin123"),
                         Email = "admin@consulcon.com",
                         EsSuperAdmin = true,
+                        IdRolPrincipal = 1,
                         FechaCreacion = DateTime.UtcNow
                     };
                     masterContext.UsuariosMaster.Add(adminUser);

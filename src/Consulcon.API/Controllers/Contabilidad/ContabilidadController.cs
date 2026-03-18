@@ -1,66 +1,36 @@
 using Consulcon.Application.DTOs.Contabilidad;
 using Consulcon.Application.Interfaces.Contabilidad;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Consulcon.API.Controllers.Contabilidad;
 
-[ApiController]
-[Route("api/[controller]")]
-public class ContabilidadController(IContabilidadService service) : ControllerBase
+public class ContabilidadController(IContabilidadService service) : BaseController
 {
     [HttpGet("plancuentas")]
-    public async Task<IActionResult> GetPlanCuentas()
-    {
-        var result = await service.GetPlanCuentasAsync();
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> GetPlanCuentas() 
+        => HandleResult(await service.GetPlanCuentasAsync());
 
     [HttpPost("plancuentas")]
-    public async Task<IActionResult> CreateCuenta([FromBody] PlanCuentaDto dto)
-    {
-        var result = await service.CreateCuentaAsync(dto);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> CreateCuenta([FromBody] PlanCuentaDto dto) 
+        => HandleResult(await service.CreateCuentaAsync(dto));
 
-    [HttpGet("asientos/condominio/{condominioId}")]
-    public async Task<IActionResult> GetAsientos(int condominioId)
-    {
-        var result = await service.GetAsientosByCondominioAsync(condominioId);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    [HttpGet("asientos")]
+    public async Task<IActionResult> GetAsientos() 
+        => HandleResult(await service.GetAsientosByCondominioAsync(CondominioId));
 
     [HttpPost("asientos")]
-    public async Task<IActionResult> RegistrarAsiento([FromBody] CreateAsientoDto dto)
-    {
-        var result = await service.RegistrarAsientoAsync(dto);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> RegistrarAsiento([FromBody] CreateAsientoDto dto) 
+        => HandleResult(await service.RegistrarAsientoAsync(dto));
 
     [HttpGet("autorizaciones")]
-    public async Task<IActionResult> GetAutorizaciones()
-    {
-        var result = await service.GetAutorizacionesAsync();
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> GetAutorizaciones() 
+        => HandleResult(await service.GetAutorizacionesAsync());
 
     [HttpPost("autorizaciones")]
-    public async Task<IActionResult> CreateAutorizacion([FromBody] AutorizacionGastoDto dto)
-    {
-        var result = await service.CreateAutorizacionAsync(dto);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> CreateAutorizacion([FromBody] AutorizacionGastoDto dto) 
+        => HandleResult(await service.CreateAutorizacionAsync(dto));
 
     [HttpPost("/api/expenses/{id}/void")]
-    public async Task<IActionResult> VoidExpense(int id, [FromBody] VoidExpenseRequest request)
-    {
-        var result = await service.VoidExpenseAsync(id, request);
-
-        if (result.IsFailure)
-        {
-            return BadRequest(new { message = result.Error });
-        }
-
-        return Ok(new { message = "Gasto anulado exitosamente y saldo revertido." });
-    }
+    public async Task<IActionResult> VoidExpense(int id, [FromBody] VoidExpenseRequest request) 
+        => HandleResult(await service.VoidExpenseAsync(id, request));
 }
-
-

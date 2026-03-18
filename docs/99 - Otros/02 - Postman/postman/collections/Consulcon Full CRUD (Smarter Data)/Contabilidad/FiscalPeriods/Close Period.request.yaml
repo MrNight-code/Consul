@@ -1,0 +1,16 @@
+$kind: http-request
+description: Cierra un per├¡odo fiscal. Infiere el condominio del header X-Condominio-Id.
+url: "{{baseUrl}}/api/fiscal-periods/close"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+body:
+  type: text
+  content: |-
+    {
+      "year": 2026,
+      "month": 1
+    }
+order: 1000

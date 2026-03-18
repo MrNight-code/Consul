@@ -1,40 +1,45 @@
-using Consulcon.Application.DTOs;
-using Consulcon.Application.Interfaces;
+using Consulcon.Application.DTOs.Facturacion;
+using Consulcon.Application.Interfaces.Common;
+using Consulcon.Application.Interfaces.Facturacion;
 using Consulcon.Domain.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.IO;
 
 namespace Consulcon.API.Controllers.Facturacion;
 
-[ApiController]
-[Route("api/cobranzas")]
-public class CobranzaController(ICobranzaService service) : ControllerBase
+public class CobranzaController(ICobranzaService service) : BaseController
 {
-    private readonly ICobranzaService _service = service;
-
     [HttpPost]
-    public async Task<IActionResult> RegistrarCobranza([FromBody] CobranzaRequest request)
-    {
-        var result = await _service.RegistrarCobranzaAsync(request);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> RegistrarCobranza([FromBody] CobranzaRequest request) 
+        => HandleResult(await service.RegistrarCobranzaAsync(request));
 
     [HttpGet("{unitId}")]
-    public async Task<IActionResult> ObtenerHistorial(int unitId)
-    {
-        var result = await _service.ObtenerHistorialAsync(unitId);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> ObtenerHistorial(int unitId) 
+        => HandleResult(await service.ObtenerHistorialAsync(unitId));
 
-    [HttpGet("condominio/{idCondominio}")]
-    public async Task<IActionResult> GetPaged(int idCondominio, [FromQuery] PaginationParams parameters)
+    [HttpGet]
+    public async Task<IActionResult> GetPaged([FromQuery] PaginationParams parameters) 
+        => HandleResult(await service.GetPagedAsync(CondominioId, parameters));
+
+    [HttpGet("{unitId}/export")]
+    [Authorize]
+    public async Task<IActionResult> ExportarHistorial(int unitId, [FromServices] IExcelService excelService)
     {
-        var result = await _service.GetPagedAsync(idCondominio, parameters);
+        var result = await service.ObtenerHistorialAsync(unitId);
         
-        if (result.IsFailure)
-        {
+        if (!result.IsSuccess)
             return BadRequest(result.Error);
-        }
 
-        return Ok(result.Value);
+        var dataList = result.Value;
+
+        var fileContent = excelService.GenerateExcel(dataList, $"Historial_{unitId}");
+        
+        return File(
+            fileContent, 
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
+            $"Historial_Cobranzas_Unidad_{unitId}_{DateTime.Now:yyyyMMdd_HHmm}.xlsx"
+        );
     }
 }

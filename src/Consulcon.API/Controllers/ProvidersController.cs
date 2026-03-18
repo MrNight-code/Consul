@@ -1,163 +1,100 @@
 using Consulcon.Application.DTOs.Contabilidad;
+using Consulcon.Application.Interfaces.Common;
 using Consulcon.Application.Interfaces.Contabilidad;
 using Consulcon.Domain.Common;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Consulcon.API.Controllers;
 
-/// API para gestión de proveedores (limpieza, seguridad, servicios públicos)
-[ApiController]
+
 [Route("api/providers")]
 [Authorize]
-public class ProvidersController : ControllerBase
+public class ProvidersController(
+    IProveedorService service,
+    IValidator<CreateProviderDto> createValidator,
+    IValidator<UpdateProviderDto> updateValidator) : BaseController
 {
-    private readonly IProveedorService _service;
-    private readonly IValidator<CreateProviderDto> _createValidator;
-    private readonly IValidator<UpdateProviderDto> _updateValidator;
-
-    public ProvidersController(
-        IProveedorService service,
-        IValidator<CreateProviderDto> createValidator,
-        IValidator<UpdateProviderDto> updateValidator)
-    {
-        _service = service;
-        _createValidator = createValidator;
-        _updateValidator = updateValidator;
-    }
-
-    /// Obtiene lista paginada de proveedores con búsqueda opcional
     [HttpGet]
     [ProducesResponseType(typeof(PagedResult<ProviderDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPaged(
-        [FromQuery] int page = 1,
-        [FromQuery] int pageSize = 20,
-        [FromQuery] string? term = null,
-        CancellationToken cancellationToken = default)
-    {
-        var result = await _service.GetPagedAsync(page, pageSize, term, cancellationToken);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+        [FromQuery] int page = 1, [FromQuery] int pageSize = 20, [FromQuery] string? term = null, CancellationToken cancellationToken = default) 
+        => HandleResult(await service.GetPagedAsync(page, pageSize, term, cancellationToken));
 
-    /// Obtiene un proveedor por su ID
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(ProviderDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken = default)
-    {
-        var result = await _service.GetProviderByIdAsync(id, cancellationToken);
-        
-        if (!result.IsSuccess)
-            return NotFound(new { Message = result.Error });
-            
-        return Ok(result.Value);
-    }
+    public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken = default) 
+        => HandleResult(await service.GetProviderByIdAsync(id, cancellationToken));
 
-    /// Crea un nuevo proveedor
     [HttpPost]
     [ProducesResponseType(typeof(Result<int>), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public async Task<IActionResult> Create(
-        [FromBody] CreateProviderDto dto,
-        CancellationToken cancellationToken = default)
+    public async Task<IActionResult> Create([FromBody] CreateProviderDto dto, CancellationToken cancellationToken = default)
     {
-        // Validación con FluentValidation
-        var validationResult = await _createValidator.ValidateAsync(dto, cancellationToken);
-        if (!validationResult.IsValid)
-        {
-            // Si el error es por NIT duplicado, retornar 409 Conflict
-            var duplicateError = validationResult.Errors
-                .FirstOrDefault(e => e.ErrorMessage.Contains("ya existe"));
-            
-            if (duplicateError != null)
-            {
-                return Conflict(new { Message = duplicateError.ErrorMessage });
-            }
+        var validation = await createValidator.ValidateAsync(dto, cancellationToken);
+        if (!validation.IsValid) return HandleValidationErrors(validation);
 
-            return BadRequest(new
-            {
-                Message = "Errores de validación",
-                Errors = validationResult.Errors.Select(e => new
-                {
-                    Field = e.PropertyName,
-                    Error = e.ErrorMessage
-                })
-            });
-        }
+        var result = await service.CreateProviderAsync(dto, cancellationToken);
 
-        var result = await _service.CreateProviderAsync(dto, cancellationToken);
+        if (!result.IsSuccess && result.Error.Contains("ya existe"))
+            return Conflict(new { message = result.Error });
 
-        if (!result.IsSuccess)
-        {
-            // Verificar si es error de duplicado (por si pasa la validación pero falla en el servicio)
-            if (result.Error.Contains("ya existe"))
-                return Conflict(new { Message = result.Error });
-
-            return BadRequest(new { Message = result.Error });
-        }
-
-        return CreatedAtAction(
-            nameof(GetById),
-            new { id = result.Value },
-            Result.Ok(result.Value));
+        return HandleResult(result);
     }
 
-    /// Actualiza un proveedor existente
     [HttpPut("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Update(
-        int id,
-        [FromBody] UpdateProviderDto dto,
-        CancellationToken cancellationToken = default)
+    public async Task<IActionResult> Update(int id, [FromBody] UpdateProviderDto dto, CancellationToken cancellationToken = default)
     {
-        // Validación con FluentValidation
-        var validationResult = await _updateValidator.ValidateAsync(dto, cancellationToken);
-        if (!validationResult.IsValid)
-        {
-            return BadRequest(new
-            {
-                Message = "Errores de validación",
-                Errors = validationResult.Errors.Select(e => new
-                {
-                    Field = e.PropertyName,
-                    Error = e.ErrorMessage
-                })
-            });
-        }
+        var validation = await updateValidator.ValidateAsync(dto, cancellationToken);
+        if (!validation.IsValid) return HandleValidationErrors(validation);
 
-        var result = await _service.UpdateProviderAsync(id, dto, cancellationToken);
-
-        if (!result.IsSuccess)
-        {
-            if (result.Error.Contains("no encontrado"))
-                return NotFound(new { Message = result.Error });
-
-            return BadRequest(new { Message = result.Error });
-        }
-
-        return NoContent();
+        return HandleResult(await service.UpdateProviderAsync(id, dto, cancellationToken));
     }
 
-    /// Elimina (soft delete) un proveedor
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default) 
+        => HandleResult(await service.DeleteProviderAsync(id, cancellationToken));
+
+    private IActionResult HandleValidationErrors(FluentValidation.Results.ValidationResult validationResult)
     {
-        var result = await _service.DeleteProviderAsync(id, cancellationToken);
+        var duplicateError = validationResult.Errors.FirstOrDefault(e => e.ErrorMessage.Contains("ya existe"));
+        
+        if (duplicateError != null)
+            return Conflict(new { message = duplicateError.ErrorMessage });
 
-        if (!result.IsSuccess)
+        return BadRequest(new
         {
-            if (result.Error.Contains("no encontrado"))
-                return NotFound(new { Message = result.Error });
+            message = "Errores de validación",
+            errors = validationResult.Errors.Select(e => new { field = e.PropertyName, error = e.ErrorMessage })
+        });
+    }
+    /// Exporta lista de proveedores a Excel
+    [HttpGet("export")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> Export(
+        [FromQuery] string? term = null,
+        [FromServices] IExcelService excelService = null!,
+        CancellationToken cancellationToken = default)
+    {
+        // Omitir paginación para traer todo el query filtrado
+        var result = await service.GetPagedAsync(1, int.MaxValue, term, cancellationToken);
+        
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
 
-            return BadRequest(new { Message = result.Error });
-        }
+        var dataList = result.Value.Items.ToList();
 
-        return NoContent();
+        var fileContent = excelService.GenerateExcel(dataList, "Proveedores");
+        
+        return File(
+            fileContent, 
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
+            $"Proveedores_{DateTime.Now:yyyyMMdd_HHmm}.xlsx"
+        );
     }
 }

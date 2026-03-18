@@ -6,6 +6,7 @@ using Consulcon.Infrastructure.Persistence.Repositories;
 using Consulcon.Infrastructure.Persistence.Services;
 using Consulcon.Domain.Interfaces;
 using Consulcon.Application.Interfaces;
+using Consulcon.Application.Interfaces.Common;
 using MySqlConnector;
 
 namespace Consulcon.Infrastructure
@@ -138,6 +139,9 @@ namespace Consulcon.Infrastructure
             // Financial Config
             services.AddScoped<IFinancialConfigService, Services.FinancialConfigService>();
 
+            // Security / Roles (Direct Master Db Query)
+            services.AddScoped<Consulcon.Application.Interfaces.Seguridad.IRolService, Consulcon.Infrastructure.Services.Seguridad.RolService>();
+
             // Ownership (Property Assignment & History)
             services.AddScoped<Consulcon.Application.Interfaces.Inmuebles.IOwnershipService, Services.Inmuebles.OwnershipService>();
 
@@ -170,6 +174,9 @@ namespace Consulcon.Infrastructure
             // Fiscal Period Closure (In-Memory)
             services.AddSingleton<Consulcon.Infrastructure.Services.Contabilidad.InMemoryFiscalPeriodStore>();
             services.AddScoped<Consulcon.Application.Interfaces.Contabilidad.IFiscalPeriodService, Consulcon.Infrastructure.Services.Contabilidad.FiscalPeriodService>();
+
+            // Common Services
+            services.AddScoped<IExcelService, Consulcon.Infrastructure.Services.Common.ExcelService>();
             return services;
         }
     }

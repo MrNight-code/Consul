@@ -1,0 +1,9 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Tesoreria/egresos/:id/comprobante"
+method: GET
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+pathVariables:
+  id: "1"
+order: 9000

@@ -8,4 +8,5 @@ public interface IDeudaService
     Task<Result<IEnumerable<DeudaDto>>> GetPendingAsync(); 
     Task<Result<DeudaDto>> GenerateDeudaAsync(GenerateDeudaDto dto);
     Task<Result<DeudaDto>> GetByIdAsync(int id);
+    Task<Result<Consulcon.Application.DTOs.Expensas.EstadoCuentaUnidadResponseDto>> GetEstadoCuentaByPropiedadAsync(int propiedadId);
 }

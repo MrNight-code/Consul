@@ -12,7 +12,8 @@ namespace Consulcon.Application.Services
         public List<UnitDebtDistribution> CalculateDistribution(
             Egreso egreso,
             List<Propiedad> propiedades,
-            bool validarPorcentajeTotal = true)
+            bool validarPorcentajeTotal = true,
+            bool esMontoFijoPorUnidad = false)
         {
             // Validaciones básicas
             if (egreso == null)
@@ -40,10 +41,12 @@ namespace Consulcon.Application.Services
                     throw new ArgumentException($"El porcentaje no puede ser mayor a 100%. Unidad: {prop.CodigoUnidad}");
             }
 
-            // 3. Validar suma de porcentajes
-            if (validarPorcentajeTotal)
+            // 3. Validar suma de porcentajes (Ignorar si es monto fijo)
+            var totalPercentage = propiedadesActivas.Sum(p => p.PorcentajeParticipacion ?? 0m);
+            bool usarDistribucionEquitativa = totalPercentage < 0.01m;
+
+            if (!esMontoFijoPorUnidad && validarPorcentajeTotal && !usarDistribucionEquitativa)
             {
-                var totalPercentage = propiedadesActivas.Sum(p => p.PorcentajeParticipacion ?? 0m);
                 const decimal tolerance = 0.01m;
                 const decimal expected = 100m;
 
@@ -63,28 +66,38 @@ namespace Consulcon.Application.Services
             // Ordenar para consistencia determinística
             var orderedProps = propiedadesActivas.OrderBy(p => p.CodigoUnidad).ToList();
             var lastIndex = orderedProps.Count - 1;
+            
+            decimal porcentajeEquitativo = usarDistribucionEquitativa ? (100m / orderedProps.Count) : 0m;
 
             for (int i = 0; i < orderedProps.Count; i++)
             {
                 var prop = orderedProps[i];
                 decimal calculatedAmount;
-                decimal porcentaje = prop.PorcentajeParticipacion ?? 0m;
+                decimal porcentaje = usarDistribucionEquitativa ? porcentajeEquitativo : (prop.PorcentajeParticipacion ?? 0m);
 
-                if (i == lastIndex)
+                if (esMontoFijoPorUnidad)
                 {
-                    // Última unidad recibe el remanente para asegurar suma exacta
-                    calculatedAmount = remainingAmount;
+                    calculatedAmount = egreso.MontoTotal; // A todas se les cobra exactamente este monto
+                    porcentaje = 0m; // Carece de sentido un porcentaje
                 }
                 else
                 {
-                    // Calcular proporción exacta
-                    decimal exactAmount = egreso.MontoTotal * (porcentaje / 100m);
-                    
-                    // Redondear a 2 decimales (hacia el par más cercano o estándar)
-                    calculatedAmount = Math.Round(exactAmount, 2, MidpointRounding.ToEven);
-                    
-                    // Asegurar no negativo (por si acaso)
-                    calculatedAmount = Math.Max(calculatedAmount, 0);
+                    if (i == lastIndex)
+                    {
+                        // Última unidad recibe el remanente para asegurar suma exacta
+                        calculatedAmount = remainingAmount;
+                    }
+                    else
+                    {
+                        // Calcular proporción exacta
+                        decimal exactAmount = egreso.MontoTotal * (porcentaje / 100m);
+                        
+                        // Redondear a 2 decimales (hacia el par más cercano o estándar)
+                        calculatedAmount = Math.Round(exactAmount, 2, MidpointRounding.ToEven);
+                        
+                        // Asegurar no negativo (por si acaso)
+                        calculatedAmount = Math.Max(calculatedAmount, 0);
+                    }
                 }
 
                 var dist = new UnitDebtDistribution(
@@ -100,12 +113,15 @@ namespace Consulcon.Application.Services
                 remainingAmount = egreso.MontoTotal - distributedTotal;
             }
 
-            // 5. Validación final de integridad (sanity check)
-            var finalSum = distributions.Sum(d => d.MontoCalculado);
-            if (Math.Abs(finalSum - egreso.MontoTotal) > 0.01m)
+            // 5. Validación final de integridad (sanity check), ignorar en Monto Fijo porque la suma será num_unidades * monto
+            if (!esMontoFijoPorUnidad)
             {
-               throw new InvalidOperationException(
-                   $"Error interno en distribución. Total Gasto: {egreso.MontoTotal}, Distribuido: {finalSum}");
+                var finalSum = distributions.Sum(d => d.MontoCalculado);
+                if (Math.Abs(finalSum - egreso.MontoTotal) > 0.01m)
+                {
+                   throw new InvalidOperationException(
+                       $"Error interno en distribución. Total Gasto: {egreso.MontoTotal}, Distribuido: {finalSum}");
+                }
             }
 
             return distributions;

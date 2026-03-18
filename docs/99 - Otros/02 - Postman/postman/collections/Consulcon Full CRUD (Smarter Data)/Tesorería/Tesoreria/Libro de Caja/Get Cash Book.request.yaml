@@ -1,0 +1,27 @@
+$kind: http-request
+url: "{{baseUrl}}/api/cashbook?startDate=2026-01-01&endDate=2026-01-31&financia\
+  lAccountId=&includeVoided=false&page=1&pageSize=50"
+method: GET
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+queryParams:
+  - key: startDate
+    value: 2026-01-01
+    description: Start date for the report (required)
+  - key: endDate
+    value: 2026-01-31
+    description: End date for the report (required)
+  - key: financialAccountId
+    value: ""
+    description: "Optional: Filter by specific account (Banco) ID"
+  - key: includeVoided
+    value: "false"
+    description: Include voided transactions (shown but not affecting balance)
+  - key: page
+    value: "1"
+    description: Page number
+  - key: pageSize
+    value: "50"
+    description: Records per page (max 500)
+order: 1000

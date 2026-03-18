@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Condominio/{{condominioId}}/usuarios"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+body:
+  type: text
+  content: |-
+    {
+      "userId": 1
+    }
+order: 5000

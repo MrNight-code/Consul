@@ -1,37 +1,24 @@
 using Consulcon.Application.DTOs.Comunicacion;
 using Consulcon.Application.Interfaces.Comunicacion;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Consulcon.API.Controllers.Comunicacion;
 
-[ApiController]
-[Route("api/[controller]")]
-public class ComunicacionController : ControllerBase
+public class ComunicacionController : BaseController
 {
     private readonly IComunicacionService _service;
 
-    public ComunicacionController(IComunicacionService service)
-    {
-        _service = service;
-    }
+    public ComunicacionController(IComunicacionService service) => _service = service;
 
-    [HttpGet("condominio/{condominioId}")]
-    public async Task<IActionResult> GetComunicados(int condominioId)
-    {
-        var result = await _service.GetComunicadosByCondominioAsync(condominioId);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    [HttpGet]
+    public async Task<IActionResult> GetComunicados() 
+        => HandleResult(await _service.GetComunicadosByCondominioAsync(CondominioId));
 
     [HttpPost]
-    public async Task<IActionResult> CreateComunicado([FromBody] CreateComunicadoDto dto)
-    {
-        var result = await _service.CreateComunicadoAsync(dto);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> CreateComunicado([FromBody] CreateComunicadoDto dto) 
+        => HandleResult(await _service.CreateComunicadoAsync(dto));
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
-    {
-        var result = await _service.DeleteComunicadoAsync(id);
-        return result.IsSuccess ? NoContent() : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> Delete(int id) 
+        => HandleResult(await _service.DeleteComunicadoAsync(id));
 }

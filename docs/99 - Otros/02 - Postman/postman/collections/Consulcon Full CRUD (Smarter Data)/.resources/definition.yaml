@@ -1,0 +1,26 @@
+$kind: collection
+variables:
+  - key: baseUrl
+    value: http://localhost:5000
+    disabled: false
+  - key: authToken
+    value: ""
+    disabled: false
+  - key: condominioId
+    value: ""
+    disabled: false
+  - key: condominioId
+    value: ""
+    disabled: false
+  - key: propiedadId
+    value: "1"
+    disabled: false
+  - key: proveedorId
+    value: "1"
+    disabled: false
+  - key: manzanoId
+    value: "1"
+    disabled: false
+  - key: providerId
+    value: "1"
+    disabled: false

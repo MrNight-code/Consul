@@ -1,48 +1,28 @@
 using Consulcon.Application.DTOs.Contabilidad;
 using Consulcon.Application.Interfaces.Contabilidad;
 using Microsoft.AspNetCore.Mvc;
-using Consulcon.Domain.Common;
 
 namespace Consulcon.API.Controllers.Contabilidad;
 
-[ApiController]
-[Route("api/[controller]")]
-public class ProveedorController(IProveedorService service) : ControllerBase
+public class ProveedorController(IProveedorService service) : BaseController
 {
-    private readonly IProveedorService _service = service;
-
     [HttpGet]
-    public async Task<IActionResult> GetAll()
-    {
-        var result = await _service.GetAllAsync();
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> GetAll() 
+        => HandleResult(await service.GetAllAsync());
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
-    {
-        var result = await _service.GetByIdAsync(id);
-        return result.IsSuccess ? Ok(result.Value) : NotFound(new { Message = result.Error });
-    }
+    public async Task<IActionResult> GetById(int id) 
+        => HandleResult(await service.GetByIdAsync(id));
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] ProveedorDto dto)
-    {
-        var result = await _service.CreateAsync(dto);
-        return result.IsSuccess ? CreatedAtAction(nameof(GetById), new { id = result.Value.IdProveedor }, result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> Create([FromBody] ProveedorDto dto) 
+        => HandleResult(await service.CreateAsync(dto));
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] ProveedorDto dto)
-    {
-        var result = await _service.UpdateAsync(id, dto);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> Update(int id, [FromBody] ProveedorDto dto) 
+        => HandleResult(await service.UpdateAsync(id, dto));
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
-    {
-        var result = await _service.DeleteAsync(id);
-        return result.IsSuccess ? NoContent() : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> Delete(int id) 
+        => HandleResult(await service.DeleteAsync(id));
 }

@@ -1,0 +1,16 @@
+$kind: http-request
+url: "{{baseUrl}}/api/reports/receipts-batch"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+body:
+  type: text
+  content: |-
+    {
+      "StartDate": "2026-03-01",
+      "EndDate": "2026-03-31",
+      "UnitId": null
+    }
+order: 1000

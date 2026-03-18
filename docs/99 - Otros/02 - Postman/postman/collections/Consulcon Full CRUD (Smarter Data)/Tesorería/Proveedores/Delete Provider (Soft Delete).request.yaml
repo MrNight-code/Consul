@@ -1,0 +1,9 @@
+$kind: http-request
+description: Elimina (soft delete) un proveedor. Marca activo=false en lugar de
+  eliminar f├¡sicamente.
+url: "{{baseUrl}}/api/providers/{{providerId}}"
+method: DELETE
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+order: 7000

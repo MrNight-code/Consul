@@ -29,11 +29,11 @@ public class ManzanoService(IRepository<Manzano> repository) : IManzanoService
         return Result.Ok(MapToDto(entity));
     }
 
-    public async Task<Result<ManzanoDto>> CreateAsync(ManzanoDto dto)
+    public async Task<Result<ManzanoDto>> CreateAsync(CreateManzanoDto dto, int condominioId)
     {
         var entity = new Manzano
         {
-            IdCondominio = dto.IdCondominio,
+            IdCondominio = condominioId,
             Codigo = dto.Codigo,
             Nombre = dto.Nombre
         };
@@ -42,15 +42,16 @@ public class ManzanoService(IRepository<Manzano> repository) : IManzanoService
         return Result.Ok(MapToDto(entity));
     }
 
-    public async Task<Result<ManzanoDto>> UpdateAsync(int id, ManzanoDto dto)
+    public async Task<Result<ManzanoDto>> UpdateAsync(int id, CreateManzanoDto dto, int condominioId)
     {
         var entity = await _repository.GetByIdAsync(id);
         if (entity == null) return Result.Fail<ManzanoDto>("Manzano no encontrado");
+        
+        if (entity.IdCondominio != condominioId)
+            return Result.Fail<ManzanoDto>("Manzano no pertenece al condominio activo");
 
         entity.Codigo = dto.Codigo;
         entity.Nombre = dto.Nombre;
-        // Not allowing updating IdCondominio typically, or if needed:
-        // entity.IdCondominio = dto.IdCondominio; 
 
         await _repository.UpdateAsync(entity);
         return Result.Ok(MapToDto(entity));

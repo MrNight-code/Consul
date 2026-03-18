@@ -1,0 +1,40 @@
+$kind: http-request
+description: |-
+  Crea un nuevo proveedor. Retorna 201 Created con el ID.
+
+  **Validaciones:**
+  - taxId: Solo n├║meros, m├íximo 20 caracteres
+  - legalName: Requerido, m├íximo 150 caracteres
+  - email: Formato v├ílido si se proporciona
+
+  **Respuestas:**
+  - 201: Proveedor creado exitosamente
+  - 400: Errores de validaci├│n
+  - 409: NIT duplicado en este condominio
+url: "{{baseUrl}}/api/providers"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+body:
+  type: text
+  content: |-
+    {
+      "taxId": "1234567890",
+      "legalName": "Empresa de Limpieza S.R.L.",
+      "phoneNumber": "77712345",
+      "email": "contacto@limpieza.com",
+      "address": "Av. Principal #123"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      var jsonData = pm.response.json();
+
+      if (jsonData.value) {
+          pm.collectionVariables.set('providerId', jsonData.value);
+          console.log('Provider ID saved: ' + jsonData.value);
+      }
+    language: text/javascript
+order: 4000

@@ -1,0 +1,19 @@
+$kind: http-request
+description: Simula la distribución de expensas entre las propiedades del
+  condominio según coeficientes.
+url: "{{baseUrl}}/api/expenses/simular"
+method: POST
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "fkCondominio": "{{condominioId}}",
+      "montoTotal": 5000,
+      "concepto": "Expensas Abril 2026",
+      "esMontoFijoPorUnidad": false
+    }
+order: 11000

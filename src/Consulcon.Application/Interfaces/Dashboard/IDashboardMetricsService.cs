@@ -17,4 +17,9 @@ public interface IDashboardMetricsService
     /// <param name="condominioId">ID del condominio (Tenant).</param>
     /// <returns>DTO con los contadores financieros y operativos.</returns>
     Task<Result<DashboardCountersDto>> ObtenerMetricasAsync(int condominioId);
+
+    /// <summary>
+    /// Obtiene el resumen de gastos agrupado por concepto/categoría.
+    /// </summary>
+    Task<Result<IEnumerable<CategoryTotalDto>>> GetExpensesByCategoryAsync(int condominioId, int mes, int anio);
 }

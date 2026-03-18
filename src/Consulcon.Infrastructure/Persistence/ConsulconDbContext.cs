@@ -33,6 +33,8 @@ public partial class ConsulconDbContext : DbContext
     public virtual DbSet<UsuarioMaster> UsuariosMaster { get; set; } = null!;
     public virtual DbSet<CondominioMaster> CondominiosMaster { get; set; } = null!;
     public virtual DbSet<UsuarioCondominio> UsuarioCondominios { get; set; } = null!;
+    public virtual DbSet<RolMaster> RolesMaster { get; set; } = null!;
+    public virtual DbSet<PermisoMaster> PermisosMaster { get; set; } = null!;
 
     // Financiero Entities
     public virtual DbSet<ChargeConcept> ChargeConcepts { get; set; } = null!;
@@ -60,14 +62,12 @@ public partial class ConsulconDbContext : DbContext
     public virtual DbSet<LecturaServicio> LecturaServicios { get; set; } = null!;
     public virtual DbSet<Manzano> Manzanos { get; set; } = null!;
     public virtual DbSet<MedioContacto> MedioContactos { get; set; } = null!;
-    public virtual DbSet<Permiso> Permisos { get; set; } = null!;
     public virtual DbSet<Persona> Personas { get; set; } = null!;
     public virtual DbSet<PlanCuenta> PlanCuentas { get; set; } = null!;
     public virtual DbSet<Propiedad> Propiedads { get; set; } = null!;
     public virtual DbSet<Proveedor> Proveedors { get; set; } = null!;
     public virtual DbSet<RecursoComun> RecursoComuns { get; set; } = null!;
     public virtual DbSet<Reserva> Reservas { get; set; } = null!;
-    public virtual DbSet<Rol> Rols { get; set; } = null!;
     public virtual DbSet<TransaccionPago> TransaccionPagos { get; set; } = null!;
     public virtual DbSet<Usuario> Usuarios { get; set; } = null!;
     public DbSet<AccountDailyBalance> AccountDailyBalances { get; set; }

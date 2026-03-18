@@ -1,0 +1,12 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Deuda/generar"
+method: POST
+headers:
+  X-Condominio-Id: "{{condominioId}}"
+  Content-Type: application/json
+  Authorization: Bearer {{authToken}}
+body:
+  type: text
+  content: '{"contratoId": 1, "monto": 100.00, "concepto": "Cuota mensual",
+    "fechaVencimiento": "2026-03-01"}'
+order: 4000

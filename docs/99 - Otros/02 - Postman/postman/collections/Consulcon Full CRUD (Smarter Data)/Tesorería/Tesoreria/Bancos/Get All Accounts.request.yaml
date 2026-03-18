@@ -1,0 +1,26 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Accounts?activeOnly=true&PageNumber=1&PageSize=10&SearchT\
+  erm=&FromDate=&ToDate=&SortBy=&SortDescending=false"
+method: GET
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+queryParams:
+  - key: activeOnly
+    value: "true"
+    description: Filtrar solo activas
+  - key: PageNumber
+    value: "1"
+  - key: PageSize
+    value: "10"
+  - key: SearchTerm
+    value: ""
+  - key: FromDate
+    value: ""
+  - key: ToDate
+    value: ""
+  - key: SortBy
+    value: ""
+  - key: SortDescending
+    value: "false"
+order: 2000

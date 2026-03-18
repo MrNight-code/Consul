@@ -1,64 +1,34 @@
 using Consulcon.Application.DTOs.Contratos;
 using Consulcon.Application.Interfaces.Contratos;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Consulcon.API.Controllers.Contratos;
 
-[ApiController]
-[Route("api/[controller]")]
-public class ContratoController : ControllerBase
+public class ContratoController(IContratoService service) : BaseController
 {
-    private readonly IContratoService _service;
-
-    public ContratoController(IContratoService service)
-    {
-        _service = service;
-    }
-
     [HttpGet]
-    public async Task<IActionResult> GetAll()
-    {
-        var result = await _service.GetAllAsync();
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> GetAll() 
+        => HandleResult(await service.GetAllAsync());
 
     [HttpGet("propiedad/{propiedadId}")]
-    public async Task<IActionResult> GetByPropiedad(int propiedadId)
-    {
-        var result = await _service.GetByPropiedadAsync(propiedadId);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> GetByPropiedad(int propiedadId) 
+        => HandleResult(await service.GetByPropiedadAsync(propiedadId));
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
-    {
-        var result = await _service.GetByIdAsync(id);
-        return result.IsSuccess ? Ok(result.Value) : NotFound(new { Message = result.Error });
-    }
+    public async Task<IActionResult> GetById(int id) 
+        => HandleResult(await service.GetByIdAsync(id));
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateContratoDto dto)
-    {
-        var result = await _service.CreateAsync(dto);
-        return result.IsSuccess ? CreatedAtAction(nameof(GetById), new { id = result.Value.Id }, result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> Create([FromBody] CreateContratoDto dto) 
+        => HandleResult(await service.CreateAsync(dto));
 
     [HttpPost("{id}/participante")]
-    public async Task<IActionResult> AddParticipante(int id, [FromBody] CreateContratoParticipanteDto dto)
-    {
-        var result = await _service.AddParticipanteAsync(id, dto);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+    public async Task<IActionResult> AddParticipante(int id, [FromBody] CreateContratoParticipanteDto dto) 
+        => HandleResult(await service.AddParticipanteAsync(id, dto));
 
     [HttpPut("{id}/finalizar")]
     public async Task<IActionResult> Terminate(int id, [FromBody] TerminateRequest request) 
-    {
-        var result = await _service.TerminateAsync(id, request.Motivo, request.FechaFin);
-        return result.IsSuccess ? NoContent() : BadRequest(result.Error);
-    }
+        => HandleResult(await service.TerminateAsync(id, request.Motivo, request.FechaFin));
 }
 
-public class TerminateRequest
-{
-    public string Motivo { get; set; } = string.Empty;
-    public DateOnly FechaFin { get; set; }
-}
+public record TerminateRequest(string Motivo, DateOnly FechaFin);

@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{baseUrl}}/api/attachments?ExpenseId=&UploadedFrom=&UploadedTo=&ContentT\
+  ype=&PageNumber=1&PageSize=20"
+method: GET
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+queryParams:
+  ExpenseId: ""
+  UploadedFrom: ""
+  UploadedTo: ""
+  ContentType: ""
+  PageNumber: "1"
+  PageSize: "20"
+order: 8000

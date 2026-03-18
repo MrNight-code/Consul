@@ -6,5 +6,5 @@ public class CondominioUserDto
     public string Username { get; set; } = null!;
     public string? FullName { get; set; }
     public string? Email { get; set; }
-    public string RolInicial { get; set; } = "Usuario";
+    public int IdRol { get; set; }
 }

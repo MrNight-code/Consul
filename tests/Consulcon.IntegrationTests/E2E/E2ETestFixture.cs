@@ -190,11 +190,8 @@ public class E2ETestFixture : IAsyncLifetime
 
         await using var context = new ConsulconDbContext(optionsBuilder.Options);
         
-        // Create Rol
-        var rol = new Consulcon.Domain.Entities.Seguridad.Rol { Nombre = "Admin" };
-        context.Rols.Add(rol);
-        await context.SaveChangesAsync();
-        TestRolId = rol.IdRol;
+        // Roles are now global in Master DB, so we don't create them here in the tenant context
+        TestRolId = 1;
         
         // Create Persona
         var persona = new Consulcon.Domain.Entities.General.Persona
@@ -214,7 +211,6 @@ public class E2ETestFixture : IAsyncLifetime
             Username = "testadmin",
             PasswordHash = BCrypt.Net.BCrypt.HashPassword("test123"),
             IdPersona = persona.IdPersona,
-            IdRolPrincipal = rol.IdRol,
             EstaHabilitado = true,
             FechaCreacion = DateTime.UtcNow
         };

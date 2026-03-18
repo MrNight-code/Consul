@@ -1,0 +1,9 @@
+$kind: http-request
+description: Obtiene la lista de per├¡odos cerrados para el condominio
+  especificado en el header.
+url: "{{baseUrl}}/api/fiscal-periods"
+method: GET
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+order: 3000

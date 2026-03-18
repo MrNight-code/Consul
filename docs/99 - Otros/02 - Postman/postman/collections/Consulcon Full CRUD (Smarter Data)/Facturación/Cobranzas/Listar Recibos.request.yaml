@@ -1,0 +1,20 @@
+$kind: http-request
+url: "{{baseUrl}}/api/cobranzas/recibos?FechaDesde=&FechaHasta=&PersonaId=&Page\
+  Number=1&PageSize=10&SearchTerm=&FromDate=&ToDate=&SortBy=&SortDescending=fal\
+  se"
+method: GET
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+queryParams:
+  FechaDesde: ""
+  FechaHasta: ""
+  PersonaId: ""
+  PageNumber: "1"
+  PageSize: "10"
+  SearchTerm: ""
+  FromDate: ""
+  ToDate: ""
+  SortBy: ""
+  SortDescending: "false"
+order: 6000

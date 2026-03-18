@@ -105,7 +105,7 @@ namespace Consulcon.Infrastructure.Persistence.Services
 
                 var tenantCondominio = new Domain.Entities.Inmuebles.Condominio
                 {
-                    // Don't set IdCondominio - let DB auto-generate it
+                    IdCondominio = initialData.IdCondominio,
                     Nombre = initialData.Nombre,
                     Direccion = initialData.Direccion,
                     SuperficieTotalM2 = initialData.SuperficieTotalM2,

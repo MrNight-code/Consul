@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{baseUrl}}/api/expenses/{{egresoId}}/attachments"
+method: POST
+headers:
+  Authorization: Bearer {{authToken}}
+  X-Condominio-Id: "{{condominioId}}"
+body:
+  type: formdata
+  content:
+    - type: file
+      key: File
+      src: []
+order: 6000

@@ -8,7 +8,7 @@ public class MasterIdentityService(ConsulconDbContext context) : IMasterIdentity
 {
     private readonly ConsulconDbContext _context = context;
 
-    public async Task<(int? UserId, string? Username, List<TenantDto>? Tenants)> ValidateUserAsync(string username, string password)
+    public async Task<(int? UserId, string? Username, string? Email, bool? EsSuperAdmin, List<TenantDto>? Tenants)> ValidateUserAsync(string username, string password)
     {
         var user = await _context.UsuariosMaster
             .Include(u => u.Condominios)
@@ -18,7 +18,7 @@ public class MasterIdentityService(ConsulconDbContext context) : IMasterIdentity
 
         if (user == null)
         {
-            return (null, null, null);
+            return (null, null, null, null, null);
         }
 
         bool isValid = false;
@@ -39,7 +39,7 @@ public class MasterIdentityService(ConsulconDbContext context) : IMasterIdentity
 
         if (!isValid)
         {
-            return (null, null, null);
+            return (null, null, null, null, null);
         }
 
         var tenants = user.Condominios.Select(uc => new TenantDto
@@ -49,6 +49,6 @@ public class MasterIdentityService(ConsulconDbContext context) : IMasterIdentity
             Nombre = uc.Condominio.Nombre
         }).ToList();
 
-        return (user.Id, user.Username, tenants);
+        return (user.Id, user.Username, user.Email, user.EsSuperAdmin, tenants);
     }
 }
